@@ -1,0 +1,133 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  studentId Int     @id @default(autoincrement())
+  subject   String?
+  grade     String?
+  semester  String?
+  year      Int?
+
+  academicRecords AcademicRecord[]
+  attendance      AttendanceRecord[]
+  predictions     DropoutPrediction[]
+  interventions   Intervention[]
+  demographic     DemographicInfo?
+
+  @@map("Student")
+}
+
+model AcademicRecord {
+  recordId Int    @id @default(autoincrement())
+  subject  String
+  grade    String
+  semester String
+  year     Int
+
+  studentId Int
+  student   Student @relation(fields: [studentId], references: [studentId])
+
+  @@map("AcademicRecord")
+}
+
+model AttendanceRecord {
+  attendanceId Int      @id @default(autoincrement())
+  date         DateTime
+  status       String
+
+  studentId Int
+  student   Student @relation(fields: [studentId], references: [studentId])
+
+  @@map("AttendanceRecord")
+}
+
+model DropoutPrediction {
+  predictionId    Int      @id @default(autoincrement())
+  predictionScore Float
+  date            DateTime
+  riskLevel       String
+
+  studentId Int
+  student   Student @relation(fields: [studentId], references: [studentId])
+
+  @@map("DropoutPrediction")
+}
+
+model Intervention {
+  interventionId Int      @id @default(autoincrement())
+  type           String
+  date           DateTime
+  outcome        String
+  studentId      Int
+  student        Student  @relation(fields: [studentId], references: [studentId])
+
+  @@map("Intervention")
+}
+
+model DemographicInfo {
+  demoId          Int    @id @default(autoincrement())
+  parentName      String
+  parentContact   String
+  householdIncome Float
+  ethnicity       String
+
+  studentId Int     @unique
+  student   Student @relation(fields: [studentId], references: [studentId])
+
+  @@map("DemographicInfo")
+}
+
+model User {
+  userId        String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  roleId        Int
+  role          Role      @relation(fields: [roleId], references: [roleId])
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  accounts      Account[]
+
+  @@map("User")
+}
+
+model Role {
+  roleId   Int    @id @default(autoincrement())
+  roleName String
+  users User[]
+
+  @@map("Roles")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userd             String
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userd], references: [userId], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
