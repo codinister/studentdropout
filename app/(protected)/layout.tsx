@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import '../globals.css';
 import Sidebar from '@/components/Sidebar';
 import Footer from '@/components/Footer';
+import AppProvider from '@/state/redux/Provider';
+import Modal from '@/components/Modal';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,6 +32,7 @@ export default function RootLayout({
         cz-shortcut-listen="true"
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <AppProvider>
         <div className="flex min-h-screen bg-gray-100">
           <Sidebar />
           <main className="flex-1 p-6 relative">
@@ -39,6 +42,8 @@ export default function RootLayout({
             <Footer />
           </main>
         </div>
+          <Modal />
+        </AppProvider>
       </body>
     </html>
   );

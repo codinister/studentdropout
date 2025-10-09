@@ -91,7 +91,7 @@ model DemographicInfo {
 }
 
 model User {
-  userId        String    @id @default(cuid())
+  userId        Int    @id @default(autoincrement())
   name          String
   email         String    @unique
   password      String
@@ -99,7 +99,6 @@ model User {
   role          Role      @relation(fields: [roleId], references: [roleId])
   emailVerified DateTime? @map("email_verified")
   image         String?
-  accounts      Account[]
 
   @@map("User")
 }
@@ -110,24 +109,4 @@ model Role {
   users User[]
 
   @@map("Roles")
-}
-
-model Account {
-  id                String  @id @default(cuid())
-  userd             String
-  type              String
-  provider          String
-  providerAccountId String  @map("provider_account_id")
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userd], references: [userId], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-  @@map("accounts")
 }

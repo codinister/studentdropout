@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -115,6 +115,98 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground relative min-h-screen;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    letter-spacing: -1%;
+  }
+
+  h1 {
+    font-size: 280px;
+    line-height: 340px;
+  }
+
+  h2 {
+    font-size: 170px;
+    line-height: 210px;
+  }
+
+  h3 {
+    font-size: 110px;
+    line-height: 13px;
+  }
+
+  h4 {
+    font-size: 68px;
+    line-height: 80px;
+  }
+
+  h5 {
+    font-size: 42px;
+    line-height: 50px;
+  }
+
+  h6 {
+    font-size: 26px;
+    line-height: 30px;
+  }
+
+  p {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+.modal {
+  &.show {
+    display: block;
+  }
+  &.hide {
+    display: none;
+  }
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: none;
+  & + div {
+    &.show {
+      display: block;
+    }
+    &.hide {
+      display: none;
+    }
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+  }
+}
+
+.alert-box {
+  @apply bg-white w-100 rounded-2xl px-6 
+    py-10 text-center;
+  .success-svg {
+    @apply rounded-full bg-green-500 text-white text-5xl mx-auto border-solid border-green-500 border-12;
+  }
+
+  p{
+    @apply mb-6
+  }
+  .success-title {
+    @apply text-green-500 mt-4;
+  }
+
+  .warning-svg {
+    @apply rounded-full bg-red-500 text-white text-5xl mx-auto border-solid border-red-500 border-12;
+  }
+  .warning-title {
+    @apply text-red-500 mt-4;
   }
 }
