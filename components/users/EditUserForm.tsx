@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
-import { registrationSchema } from '@/state/schemas/schemas';
+import { EditUserFormType } from '@/state/schemas/schemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
@@ -22,60 +22,40 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { useTransition, useState } from 'react';
-import registerUser from '@/state/actions/registerUser';
-import { useDispatch } from 'react-redux';
-import {
-  fetchUsers,
-  modalHide,
-  modalShow,
-} from '@/state/redux/slice/appReducer';
+import { fetchUsers, modalShow } from '@/state/redux/slice/appReducer';
 import SuccessMessage from '../SuccessMessage';
 import WarningMessage from '../WarningMessage';
 import { BeatLoader } from 'react-spinners';
 import useDispatchselector from '@/state/redux/useDispatchselector';
+import updateUser from '@/state/actions/updateUser';
+import useFormSubmitResult from '@/utils/useFormSubmitResult';
 
-const UserForm = () => {
+const EditUserForm = ({ data }: { data: z.infer<typeof EditUserFormType> }) => {
   const { dispatch } = useDispatchselector();
 
-  const form = useForm<z.infer<typeof registrationSchema>>({
-    resolver: zodResolver(registrationSchema),
+  const { successResult, errorResult } = useFormSubmitResult();
+
+  const form = useForm<z.infer<typeof EditUserFormType>>({
+    resolver: zodResolver(EditUserFormType),
     defaultValues: {
-      name: '',
-      roleId: 1,
+      userId: data.userId,
+      name: data.name,
+      roleId: data.roleId,
       password: '',
-      email: '',
+      email: data.email,
     },
   });
 
   const [pending, startTransition] = useTransition();
 
-  const handleSubmit = (data: z.infer<typeof registrationSchema>) => {
+  const handleSubmit = (data: z.infer<typeof EditUserFormType>) => {
     startTransition(() => {
-      registerUser(data)
+      updateUser(data)
         .then((res) => {
           if (res.success) {
-            const Success = () => {
-              return (
-                <SuccessMessage title="User Added" subtitle={res.success} />
-              );
-            };
-
-            dispatch(fetchUsers());
-
-            dispatch(
-              modalShow({
-                component: Success,
-              })
-            );
+            successResult(res.success);
           } else if (res.error) {
-            const Error = () => {
-              return <WarningMessage title="Error" subtitle={res.error} />;
-            };
-            dispatch(
-              modalShow({
-                component: Error,
-              })
-            );
+            errorResult(res.error);
           }
         })
         .catch((err) => console.log(err));
@@ -179,4 +159,4 @@ const UserForm = () => {
   );
 };
 
-export default UserForm;
+export default EditUserForm;

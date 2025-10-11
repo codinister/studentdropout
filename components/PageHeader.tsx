@@ -23,7 +23,7 @@ const PageHeader = ({
   const [getstatus, setStatus] = useState('hide');
   const dispatch = useDispatch();
   const fnShow = () => {
-    dispatch(modalShow({ status: 'show', component }));
+    dispatch(modalShow({  component }));
     document.body.style.overflow = 'hidden';
   };
 

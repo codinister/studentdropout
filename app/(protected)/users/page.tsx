@@ -1,14 +1,31 @@
 'use client';
 
 import PageHeader from '@/components/PageHeader';
-import Modal from '@/components/Modal';
-import SuccessMessage from '@/components/SuccessMessage';
 import UserForm from '@/components/users/UserForm';
+import DataTable from '@/components/DataTable';
+import { useEffect, useState } from 'react';
+import useDispatchselector from '@/state/redux/useDispatchselector';
+import { fetchUsers } from '@/state/redux/slice/appReducer';
+import { tableType, UserType } from '@/types/types';
+import useUserColumns from '@/components/tableColumns/useUserColumns';
+
+import {z} from 'zod'
 
 const Users = () => {
+
+const {userColumns} = useUserColumns()
+
   const pdfFn = () => {};
 
+  const { dispatch, selector } = useDispatchselector();
 
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
+
+  const users = selector((state) => state?.users);
+
+  const data: tableType[]  = users;
 
   return (
     <>
@@ -19,9 +36,9 @@ const Users = () => {
           pdfFn={pdfFn}
           pageTitle="Users"
         />
-      </div>
 
-   
+        <DataTable columns={userColumns} data={data} />
+      </div>
     </>
   );
 };

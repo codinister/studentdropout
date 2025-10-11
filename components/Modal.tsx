@@ -1,25 +1,33 @@
 'use client';
 
 import { modalHide } from '@/state/redux/slice/appReducer';
+import useDispatchselector from '@/state/redux/useDispatchselector';
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import selectors from '@/state/redux/useSelectors';
 
 const ModalContent = () => {
-  const status = selectors()?.modalstatus;
-  const ModalComponent = selectors()?.modalcomponent;
 
-  const dispatch = useDispatch();
+  const { dispatch,selector } = useDispatchselector();
+
+
+  const status = selector(
+    (state: { modalStatus: string }) => state.modalStatus
+  );
+  const ModalComponent = selector(
+    (state: { modalComponent: React.ElementType | null }) => state.modalComponent
+  );
+
+
+
+  const hideModalFn = () => {
+    dispatch(modalHide());
+    document.body.style.overflow = 'scroll';
+  };
+
   return (
     <>
-      <div
-        className={`modal ${status}`}
-        onClick={() => dispatch(modalHide({ status: 'hide', component: null }))}
-      ></div>
-      <div className={status}>
-        {ModalComponent ? <ModalComponent /> : '' }
-      </div>
+      <div className={`modal ${status}`} onClick={hideModalFn}></div>
+      <div className={status}>{ModalComponent ? <ModalComponent /> : ''}</div>
     </>
   );
 };
@@ -34,7 +42,7 @@ const Modal = () => {
   if (pageReady) {
     return createPortal(
       <ModalContent />,
-      document.querySelector('body') as HTMLElement
+      document.querySelector('.modal-root') as HTMLElement
     );
   }
 
