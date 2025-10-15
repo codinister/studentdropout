@@ -12,3 +12,12 @@ export type UserType = {
   roleId: number;
   passwrod: string;
 };
+
+export type userSchema = {
+  name: string;
+  email: string;
+  image: string | null;
+  emailVerified: Date | null;
+  password: string;
+  roleId: number;
+} | null;

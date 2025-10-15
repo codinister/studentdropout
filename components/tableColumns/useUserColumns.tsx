@@ -18,12 +18,16 @@ import { FaEdit } from 'react-icons/fa';
 import { GoTrash } from 'react-icons/go';
 import getUserById from '@/state/actions/getUserById';
 import useDispatchselector from '@/state/redux/useDispatchselector';
-import { modalShow } from '@/state/redux/slice/appReducer';
+import { fetchUsers, modalShow } from '@/state/redux/slice/appReducer';
 import EditUserForm from '../users/EditUserForm';
 import { EditUserFormType } from '@/state/schemas/schemas';
 import { z } from 'zod';
+import useFormSubmitResult from '@/utils/useFormSubmitResult';
+import DialogueBox from '../DialogueBox';
+import deleteUserById from '@/state/actions/deleteUserById';
 
 const useUserColumns = () => {
+  const { showModal, closeModal } = useFormSubmitResult();
   const { dispatch } = useDispatchselector();
 
   const editItemFn = async (id: number) => {
@@ -33,17 +37,21 @@ const useUserColumns = () => {
       return <EditUserForm data={user} />;
     };
 
-    dispatch(
-      modalShow({
-        component: EditUserFn,
-      })
-    );
-
-    document.body.style.overflow = 'hidden';
+    showModal(EditUserFn);
   };
 
   const deleteItemFn = (id: number) => {
-    alert(id);
+    const DeleteFnComponent = () => {
+      const deleteFn = async () => {
+        await deleteUserById(id);
+        closeModal();
+        dispatch(fetchUsers());
+      };
+
+      return <DialogueBox deleteItemFn={deleteFn} />;
+    };
+
+    showModal(DeleteFnComponent);
   };
 
   const userColumns: ColumnDef<tableType>[] = [
@@ -133,12 +141,10 @@ const useUserColumns = () => {
                 <FaEdit /> Edit=
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <GoTrash
-                  onClick={() => alert(result.userId)}
-                  className="text-red-600"
-                />{' '}
-                Delete
+              <DropdownMenuItem
+                onClick={() => deleteItemFn(Number(result.userId))}
+              >
+                <GoTrash className="text-red-600" /> Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

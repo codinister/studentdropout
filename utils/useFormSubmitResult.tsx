@@ -1,41 +1,51 @@
-'use client'
+'use client';
 
 import useDispatchselector from '@/state/redux/useDispatchselector';
 import SuccessMessage from '@/components/SuccessMessage';
 import WarningMessage from '@/components/WarningMessage';
-import { fetchUsers, modalShow } from '@/state/redux/slice/appReducer';
+import {
+  fetchUsers,
+  modalHide,
+  modalShow,
+} from '@/state/redux/slice/appReducer';
 
 const useFormSubmitResult = () => {
   const { dispatch } = useDispatchselector();
 
-  const successResult = (val: string) => {
-    const Success = () => {
-      return <SuccessMessage title="User Updated" subtitle={val} />;
-    };
+  const closeModal = () => {
+    dispatch(modalHide());
+    document.body.style.overflow = 'scroll';
+  };
 
-    dispatch(fetchUsers());
-
+  const showModal = (Component: React.ElementType) => {
     dispatch(
       modalShow({
-        component: Success,
+        component: Component,
       })
     );
+    document.body.style.overflow = 'hidden';
+  };
+
+  const successResult = (val: string, title: string) => {
+    const Success = () => {
+      return <SuccessMessage title={title} subtitle={val} />;
+    };
+    dispatch(fetchUsers());
+    showModal(Success);
   };
 
   const errorResult = (val: string) => {
     const Error = () => {
       return <WarningMessage title="Error" subtitle={val} />;
     };
-    dispatch(
-      modalShow({
-        component: Error,
-      })
-    );
+    showModal(Error);
   };
 
   return {
     successResult,
     errorResult,
+    closeModal,
+    showModal,
   };
 };
 

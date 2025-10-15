@@ -1,5 +1,6 @@
 'use server';
 import { db } from '@/db';
+
 const getUserByEmail = async (email: string) => {
   try {
     const user = await db.user.findFirst({

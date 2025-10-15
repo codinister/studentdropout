@@ -33,6 +33,7 @@ import SuccessMessage from '../SuccessMessage';
 import WarningMessage from '../WarningMessage';
 import { BeatLoader } from 'react-spinners';
 import useDispatchselector from '@/state/redux/useDispatchselector';
+import useFormSubmitResult from '@/utils/useFormSubmitResult';
 
 const UserForm = () => {
   const { dispatch } = useDispatchselector();
@@ -47,6 +48,8 @@ const UserForm = () => {
     },
   });
 
+  const { successResult, errorResult } = useFormSubmitResult();
+
   const [pending, startTransition] = useTransition();
 
   const handleSubmit = (data: z.infer<typeof registrationSchema>) => {
@@ -54,28 +57,9 @@ const UserForm = () => {
       registerUser(data)
         .then((res) => {
           if (res.success) {
-            const Success = () => {
-              return (
-                <SuccessMessage title="User Added" subtitle={res.success} />
-              );
-            };
-
-            dispatch(fetchUsers());
-
-            dispatch(
-              modalShow({
-                component: Success,
-              })
-            );
+            successResult(res.success, 'User Added');
           } else if (res.error) {
-            const Error = () => {
-              return <WarningMessage title="Error" subtitle={res.error} />;
-            };
-            dispatch(
-              modalShow({
-                component: Error,
-              })
-            );
+            errorResult(res.error);
           }
         })
         .catch((err) => console.log(err));

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 
 import { Eye, EyeOff } from "lucide-react";
+import {userLogin} from "@/state/actions/userLogin";
 
 // ✅ Validation schema
 
@@ -29,9 +30,16 @@ export default function LoginPage() {
     },
   });
 
+  const [isPending,startTransition] = useTransition()
+
   const onSubmit = (values: LoginFormValues) => {
-    console.log("Login Data:", values);
-    // 🔗 Replace with API call
+    startTransition(()=>{
+      userLogin(values)
+      .then(data => {
+        console.log('Result;', data)
+      })
+      .catch(err => console.log(err))
+    })
   };
 
   return (
@@ -91,7 +99,7 @@ export default function LoginPage() {
             </CardContent>
 
             <CardFooter className="flex flex-col gap-3">
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full mt-6">
                 Sign In
               </Button>
 

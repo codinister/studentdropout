@@ -7,6 +7,7 @@ import { FaArrowLeft } from 'react-icons/fa6';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { modalShow } from '@/state/redux/slice/appReducer';
+import useFormSubmitResult from '@/utils/useFormSubmitResult';
 
 type PageHeaderType = {
   modalButtonName: string;
@@ -20,11 +21,12 @@ const PageHeader = ({
   pdfFn,
   pageTitle,
 }: PageHeaderType) => {
-  const [getstatus, setStatus] = useState('hide');
-  const dispatch = useDispatch();
+const {showModal} = useFormSubmitResult()
+
+
+
   const fnShow = () => {
-    dispatch(modalShow({  component }));
-    document.body.style.overflow = 'hidden';
+    showModal(component)
   };
 
   return (

@@ -21,17 +21,12 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { useTransition, useState } from 'react';
-import { fetchUsers, modalShow } from '@/state/redux/slice/appReducer';
-import SuccessMessage from '../SuccessMessage';
-import WarningMessage from '../WarningMessage';
+import { useTransition} from 'react';
 import { BeatLoader } from 'react-spinners';
-import useDispatchselector from '@/state/redux/useDispatchselector';
 import updateUser from '@/state/actions/updateUser';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-
 const EditUserForm = ({ data }: { data: z.infer<typeof EditUserFormType> }) => {
-  const { dispatch } = useDispatchselector();
+
 
   const { successResult, errorResult } = useFormSubmitResult();
 
@@ -53,7 +48,7 @@ const EditUserForm = ({ data }: { data: z.infer<typeof EditUserFormType> }) => {
       updateUser(data)
         .then((res) => {
           if (res.success) {
-            successResult(res.success);
+            successResult(res.success, 'User Updated');
           } else if (res.error) {
             errorResult(res.error);
           }
