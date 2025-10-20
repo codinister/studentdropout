@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { PrismaAdapter } from '@auth/prisma-adapter';
 import { db } from '@/db';
 import authConfig from './auth.config';
 import getUserByEmail from './state/actions/getUserByEmail';
