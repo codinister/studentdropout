@@ -1,3 +1,4 @@
+const runtime = 'nodejs'
 
 
 import NextAuth from 'next-auth';
