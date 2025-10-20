@@ -57,7 +57,7 @@ const UserForm = () => {
       registerUser(data)
         .then((res) => {
           if (res.success) {
-            successResult(res.success, 'User Added');
+            successResult(res.success, 'User Added', fetchUsers);
           } else if (res.error) {
             errorResult(res.error);
           }

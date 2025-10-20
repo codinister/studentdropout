@@ -4,7 +4,6 @@ import useDispatchselector from '@/state/redux/useDispatchselector';
 import SuccessMessage from '@/components/SuccessMessage';
 import WarningMessage from '@/components/WarningMessage';
 import {
-  fetchUsers,
   modalHide,
   modalShow,
 } from '@/state/redux/slice/appReducer';
@@ -26,11 +25,11 @@ const useFormSubmitResult = () => {
     document.body.style.overflow = 'hidden';
   };
 
-  const successResult = (val: string, title: string) => {
+  const successResult = (val: string, title: string, fetchFn: any) => {
     const Success = () => {
       return <SuccessMessage title={title} subtitle={val} />;
     };
-    dispatch(fetchUsers());
+    dispatch(fetchFn());
     showModal(Success);
   };
 

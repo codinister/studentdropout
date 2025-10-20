@@ -1,37 +1,42 @@
 import authConfig from './auth.config';
 import NextAuth from 'next-auth';
 import {
-  loginPageRoute,
   apiProvidersRoute,
   DEFAULT_REDIRECT_ROUTE,
+  loginPageRoute
 } from '@/routes';
+import {  NextResponse } from 'next/server';
 
 const { auth } = NextAuth(authConfig);
 
 export default auth((req) => {
   const isLoggedIn = !!req.auth;
   const { nextUrl } = req;
+  const { pathname } = nextUrl;
 
   const apiProviders = nextUrl.pathname.startsWith(apiProvidersRoute);
-  const loginPage = nextUrl.pathname.startsWith(loginPageRoute);
+
+
 
   if (apiProviders) return null;
 
-  if (loginPage) {
+  if (pathname === loginPageRoute) {
     if (isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_REDIRECT_ROUTE, nextUrl));
+      const urlPath = new URL(DEFAULT_REDIRECT_ROUTE, nextUrl);
+      return NextResponse.redirect(urlPath);
+    }
+  }
+
+  
+    if (!isLoggedIn && pathname !== loginPageRoute) {
+      return NextResponse.redirect(new URL(loginPageRoute, nextUrl));
     }
 
-    return null;
-  }
-
-  if (!loginPage) {
-    return Response.redirect(new URL('/', nextUrl));
-  }
-
-  return null;
+  
+  return null
 });
 
 export const config = {
-  matcher: ['/((?!.+\\.[\\w]+%|_next).*)', '/', '/(api|trpc)(.*)'],
+  matcher: ["/((?!api|_next|static|favicon.ico).*)"],
 };
+

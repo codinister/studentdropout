@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import LogoutButton from './logoutButton';
 
 const menuItems = [
   { name: 'Dashboard', path: '/dashboard' },
@@ -18,6 +19,7 @@ const menuItems = [
 ];
 
 function Sidebar() {
+
   return (
     <aside className="w-64 bg-blue-800 text-white min-h-screen p-6">
       <Image
@@ -35,6 +37,9 @@ function Sidebar() {
               <Link href={item.path}>{item.name}</Link>
             </li>
           ))}
+          <li>
+            <LogoutButton />
+          </li>
         </ul>
       </nav>
     </aside>

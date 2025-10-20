@@ -2,7 +2,7 @@
 
 import PageHeader from '@/components/PageHeader';
 import UserForm from '@/components/users/UserForm';
-import DataTable from '@/components/DataTable';
+import DataTable from '@/components/tableRows/DataTable';
 import { useEffect, useState } from 'react';
 import useDispatchselector from '@/state/redux/useDispatchselector';
 import { fetchUsers } from '@/state/redux/slice/appReducer';

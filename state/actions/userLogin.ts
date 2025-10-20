@@ -4,16 +4,12 @@ import { z } from 'zod';
 import { loginSchema } from '../schemas/schemas';
 import { auth, signIn } from '@/auth';
 import { AuthError } from 'next-auth';
+import { DEFAULT_REDIRECT_ROUTE } from '@/routes';
 
 
 export async function userLogin(values: z.infer<typeof loginSchema>) {
 
   const loguser = await auth()
-
-
-  console.log(loguser)
-
-
 
   // Validate input
   const parsed = loginSchema.safeParse(values);
@@ -28,7 +24,7 @@ export async function userLogin(values: z.infer<typeof loginSchema>) {
     await signIn('credentials', {
       email,
       password,
-      redirectTo: '/dashboard',
+      redirectTo: DEFAULT_REDIRECT_ROUTE,
     });
 
   } catch (error) {

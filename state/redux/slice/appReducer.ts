@@ -1,10 +1,10 @@
 
 
 import getUsers from '@/state/actions/getUsers';
-import { registrationSchema } from '@/state/schemas/schemas';
-import { tableType } from '@/types/types';
+import getStudents from '@/state/actions/students/getStudents';
+import { studentTableType, tableType } from '@/types/types';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { z } from 'zod';
+
 
 // Infer type from Zod schema
 
@@ -13,6 +13,7 @@ interface AppState {
   modalStatus: 'show' | 'hide';
   modalComponent: React.ElementType | null;
   users: tableType[];
+  students: studentTableType[];
   error?: string | null;
 }
 
@@ -20,6 +21,7 @@ const initialState: AppState = {
   modalStatus: 'hide',
   modalComponent: null,
   users: [],
+  students: [],
   error: null,
 };
 
@@ -30,6 +32,19 @@ export const fetchUsers = createAsyncThunk<tableType[], void, { rejectValue: str
     try {
       const users = await getUsers();
       return users as tableType[];
+    } catch (error: any) {
+      return rejectWithValue(error?.message || 'Failed to fetch users');
+    }
+  }
+);
+
+
+export const fetchStudents = createAsyncThunk<studentTableType[], void, { rejectValue: string }>(
+  'app/fetchStudents',
+  async (_, { rejectWithValue }) => {
+    try {
+      const users = await getStudents();
+      return users as studentTableType[];
     } catch (error: any) {
       return rejectWithValue(error?.message || 'Failed to fetch users');
     }
@@ -63,7 +78,22 @@ const appSlice = createSlice({
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.error = action.payload || 'Something went wrong';
-      });
+      })
+
+      .addCase(fetchStudents.pending, (state) => {
+        state.students = [];
+        state.error = null;
+      })
+      .addCase(fetchStudents.fulfilled, (state, action) => {
+        state.students = action.payload;
+      })
+      .addCase(fetchStudents.rejected, (state, action) => {
+        state.error = action.payload || 'Something went wrong';
+      })
+
+
+
+
   },
 });
 

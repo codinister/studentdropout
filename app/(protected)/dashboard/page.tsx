@@ -5,11 +5,17 @@ import AnalyticsCards from '@/components/AnalyticsCards';
 import Charts from '@/components/Charts';
 import InfoSections from '@/components/InfoSections';
 import StudentTable from '@/components/StudentTable';
+import { useSession } from 'next-auth/react';
+
 
 function DashboardPage() {
   const [role, setRole] = useState('Administrators');
   const [grade, setGrade] = useState('All');
   const [search, setSearch] = useState('');
+
+  const {status, data: session} = useSession()
+
+  console.log(status, session)
 
   return (
     <>

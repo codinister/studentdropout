@@ -15,7 +15,3 @@ export const apiProvidersRoute = '/api/auth';
  * @type {string}
  */
 export const DEFAULT_REDIRECT_ROUTE = '/dashboard';
-
-
-
-

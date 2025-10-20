@@ -5,6 +5,8 @@ import Sidebar from '@/components/Sidebar';
 import Footer from '@/components/Footer';
 import AppProvider from '@/state/redux/Provider'; // ✅ Redux Provider wrapper
 import Modal from '@/components/Modal';
+import { auth } from '@/auth';
+import SessionProviderWrapper from '@/state/SessionProviderWrapper';
 
 // Font setup
 const geistSans = Geist({
@@ -24,13 +26,20 @@ export const metadata: Metadata = {
 };
 
 // ✅ Root Layout (server component)
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
+
+  const session = await auth()
+
+
+
   return (
       <AppProvider>
+        <SessionProviderWrapper session={session}>
         <div className="flex min-h-screen">
           <Sidebar />
           <main className="flex-1 p-6 relative">
@@ -40,6 +49,7 @@ export default function RootLayout({
         </div>
         <Modal />
         <div className="modal-root"></div>
+        </SessionProviderWrapper>
       </AppProvider>
   );
 }
