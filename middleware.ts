@@ -1,4 +1,4 @@
-import authConfig from './auth.config';
+import authConfig from '@/auth.config';
 import NextAuth from 'next-auth';
 import {
   apiProvidersRoute,
@@ -9,7 +9,7 @@ import {  NextResponse } from 'next/server';
 
 const { auth } = NextAuth(authConfig);
 
-export default auth((req) => {
+export default auth((req: any) => {
   const isLoggedIn = !!req.auth;
   const { nextUrl } = req;
   const { pathname } = nextUrl;
