@@ -63,7 +63,7 @@ const UserForm = () => {
             errorResult(res.error);
           }
         })
-        .catch((err) => setErr(err));
+        .catch((err) => setErr(err.message));
     });
   };
 
