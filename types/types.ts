@@ -5,6 +5,8 @@ export type tableType = {
   email: string;
 };
 
+
+
 export type studentTableType = {
   studentId: string;
   studentName: string;

@@ -7,9 +7,7 @@ export const revalidate = 0;
 export async function GET() {
   try {
     const result = await db.user.findMany();
-    const users = result || [];
-
-    return NextResponse.json({ success: users });
+    return NextResponse.json(result);
   } catch (error) {
     console.log(error);
   }

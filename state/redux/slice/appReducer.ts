@@ -1,8 +1,6 @@
 
-
-import getUsers from '@/state/actions/getUsers';
 import getStudents from '@/state/actions/students/getStudents';
-import useGetQuery from '@/state/query/useGetQuery';
+import fetchApi from '@/state/query/fetchApi';
 import { studentTableType, tableType } from '@/types/types';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -15,7 +13,7 @@ interface AppState {
   modalComponent: React.ElementType | null;
   users: tableType[];
   students: studentTableType[];
-  error?: string | null;
+  error?: any;
 }
 
 const initialState: AppState = {
@@ -27,14 +25,15 @@ const initialState: AppState = {
 };
 
 // Async thunk to fetch users
-export const fetchUsers = createAsyncThunk<tableType[], void, { rejectValue: string }>(
+export const fetchUsers = createAsyncThunk(
   'app/fetchUsers',
-  async (_, { rejectWithValue }) => {
+  async () => {
     try {
-      const users = await useGetQuery('getUsers', '/get-users');
-      return users as tableType[];
+      const users = await fetchApi({url: '/get-users'})
+
+      return users.data || []
     } catch (error: any) {
-      return rejectWithValue(error?.message || 'Failed to fetch users');
+      return error
     }
   }
 );

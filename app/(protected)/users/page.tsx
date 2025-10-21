@@ -10,6 +10,7 @@ import { tableType, UserType } from '@/types/types';
 import useUserColumns from '@/components/tableColumns/useUserColumns';
 
 import {z} from 'zod'
+import useGetQuery from '@/state/query/useGetQuery';
 
 const Users = () => {
 
