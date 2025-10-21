@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,8 +24,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Eye, EyeOff } from 'lucide-react';
-import { userLogin } from '@/state/actions/userLogin';
 import { BeatLoader } from 'react-spinners';
+import fetchApi from '@/state/query/fetchApi';
+import { useSession } from 'next-auth/react';
+import {useRouter} from 'next/navigation'
+import { userLogin } from '@/state/actions/userLogin';
 
 
 
@@ -33,6 +36,14 @@ import { BeatLoader } from 'react-spinners';
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
+
+
+  const {status,data: session} = useSession()
+
+  const router = useRouter()
+
+
+
   const [showPassword, setShowPassword] = useState(false);
   const [getError,setError] = useState('')
 
@@ -48,15 +59,15 @@ export default function LoginPage() {
 
   const onSubmit = (values: LoginFormValues) => {
     startTransition(() => {
-      userLogin(values)
+     userLogin(values)
         .then((data) => {
-        if(data?.error){
-
-          setError(data?.error)
-
+        
+        if(data.error){
+          setError(data.error)
         }
+
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
     });
   };
 

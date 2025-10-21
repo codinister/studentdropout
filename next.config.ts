@@ -1,7 +1,13 @@
-import { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    serverActions: {
+      allowedOrigins: ['*'],
+    },
+  },
+  serverRuntimeConfig: {
+    runtime: 'nodejs',
+  },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

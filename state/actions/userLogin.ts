@@ -9,7 +9,6 @@ import { DEFAULT_REDIRECT_ROUTE } from '@/routes';
 
 export async function userLogin(values: z.infer<typeof loginSchema>) {
 
-  const loguser = await auth()
 
   // Validate input
   const parsed = loginSchema.safeParse(values);
@@ -27,13 +26,15 @@ export async function userLogin(values: z.infer<typeof loginSchema>) {
       redirectTo: DEFAULT_REDIRECT_ROUTE,
     });
 
+    return {success: 'Successful', error: null}
+
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
-          return { error: 'Invalid email or password' };
+          return { error: 'Invalid email or password', success: null };
         default:
-          return { error: 'Authentication failed' };
+          return { error: 'Authentication failed' , success: null};
       }
     }
 
