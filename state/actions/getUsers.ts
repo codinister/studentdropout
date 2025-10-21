@@ -1,6 +1,6 @@
 
 'use server';
-export const runtime = 'nodejs';
+
 
 import { db } from '@/db';
 

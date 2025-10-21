@@ -2,6 +2,7 @@
 
 import getUsers from '@/state/actions/getUsers';
 import getStudents from '@/state/actions/students/getStudents';
+import useGetQuery from '@/state/query/useGetQuery';
 import { studentTableType, tableType } from '@/types/types';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -30,7 +31,7 @@ export const fetchUsers = createAsyncThunk<tableType[], void, { rejectValue: str
   'app/fetchUsers',
   async (_, { rejectWithValue }) => {
     try {
-      const users = await getUsers();
+      const users = await useGetQuery('getUsers', '/get-users');
       return users as tableType[];
     } catch (error: any) {
       return rejectWithValue(error?.message || 'Failed to fetch users');

@@ -7,6 +7,7 @@ import AppProvider from '@/state/redux/Provider'; // ✅ Redux Provider wrapper
 import Modal from '@/components/Modal';
 import { auth } from '@/auth';
 import SessionProviderWrapper from '@/state/SessionProviderWrapper';
+import QueryProviderWrapper from '@/state/query/QueryProviderWrapper';
 
 
 
@@ -31,6 +32,7 @@ export default async function RootLayout({
 
   return (
       <AppProvider>
+        <QueryProviderWrapper>
         <SessionProviderWrapper session={session}>
         <div className="flex min-h-screen">
           <Sidebar />
@@ -42,6 +44,7 @@ export default async function RootLayout({
         <Modal />
         <div className="modal-root"></div>
         </SessionProviderWrapper>
+        </QueryProviderWrapper>
       </AppProvider>
   );
 }

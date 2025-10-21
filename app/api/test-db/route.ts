@@ -1,13 +1,9 @@
+// app/api/users/route.ts
+export const runtime = 'nodejs';
 
-import { NextResponse } from "next/server";
-
-import { db } from "@/db";
+import getUsers from '@/state/actions/getUsers';
 
 export async function GET() {
-  try {
-    const result = await db.user.findMany()
-    return NextResponse.json({ success: true, result });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, message: error.message });
-  }
+  const result = await getUsers();
+  return Response.json(result);
 }
