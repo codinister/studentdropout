@@ -8,13 +8,11 @@ import useDispatchselector from '@/state/redux/useDispatchselector';
 import { fetchUsers } from '@/state/redux/slice/appReducer';
 import { tableType, UserType } from '@/types/types';
 import useUserColumns from '@/components/tableColumns/useUserColumns';
-
-import {z} from 'zod'
-import useGetQuery from '@/state/query/useGetQuery';
+import useProtectedPage from '@/utils/useProtectedPage';
 
 const Users = () => {
-
-const {userColumns} = useUserColumns()
+  useProtectedPage();
+  const { userColumns } = useUserColumns();
 
   const pdfFn = () => {};
 
@@ -26,7 +24,7 @@ const {userColumns} = useUserColumns()
 
   const users = selector((state) => state?.users);
 
-  const data: tableType[]  = users;
+  const data: tableType[] = users;
 
   return (
     <>

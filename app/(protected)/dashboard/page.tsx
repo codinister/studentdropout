@@ -6,9 +6,11 @@ import Charts from '@/components/Charts';
 import InfoSections from '@/components/InfoSections';
 import StudentTable from '@/components/StudentTable';
 import { useSession } from 'next-auth/react';
+import useProtectedPage from '@/utils/useProtectedPage';
 
 
 function DashboardPage() {
+    useProtectedPage();
   const [role, setRole] = useState('Administrators');
   const [grade, setGrade] = useState('All');
   const [search, setSearch] = useState('');

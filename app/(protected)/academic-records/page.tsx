@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { academicrecorddata } from '@/data/mockData';
+import useProtectedPage from '@/utils/useProtectedPage';
 
 // ✅ Schema definition
 const academicSchema = z.object({
@@ -25,9 +26,10 @@ interface AcademicRecord extends AcademicForm {
 }
 
 function AcademicRecordsPage(): React.ReactElement {
+  useProtectedPage();
   const [records, setRecords] = useState<AcademicRecord[]>([]);
 
-  const academicdata = records.length > 0 ? records : academicrecorddata
+  const academicdata = records.length > 0 ? records : academicrecorddata;
 
   const {
     register,
