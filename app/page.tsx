@@ -28,7 +28,6 @@ import { BeatLoader } from 'react-spinners';
 import fetchApi from '@/state/query/fetchApi';
 import { useSession } from 'next-auth/react';
 import {useRouter} from 'next/navigation'
-import { userLogin } from '@/state/actions/userLogin';
 
 
 
@@ -59,13 +58,19 @@ export default function LoginPage() {
 
   const onSubmit = (values: LoginFormValues) => {
     startTransition(() => {
-     userLogin(values)
+     fetchApi({
+        method: 'Post', 
+        url: '/auth/login',
+        data: values
+      })
         .then((data) => {
         
-        if(data.error){
-          setError(data.error)
+        if(data.status !== 200){
+          setError('Invalid Email or Password')
         }
-
+        else if(data.status === 200){
+          router.push('/dashboard')
+        }
         })
         .catch((err) => console.log(err))
     });

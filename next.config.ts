@@ -1,13 +1,7 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    serverActions: {
-      allowedOrigins: ['*'],
-    },
-  },
-  serverRuntimeConfig: {
-    runtime: 'nodejs',
-  },
+import { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+
 };
 
 export default nextConfig;
