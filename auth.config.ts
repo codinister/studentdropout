@@ -1,7 +1,7 @@
 import Credentials from 'next-auth/providers/credentials';
 import type { NextAuthConfig } from 'next-auth';
 
-import bcrypt from 'bcryptjs';
+import { comparePassword } from './utils/passwordCrypt';
 
 import getUserByEmail from './state/actions/getUserByEmail';
 import { loginSchema } from './state/schemas/schemas';
@@ -18,7 +18,7 @@ const authConfig: NextAuthConfig = {
         // Fetch user from database
         const user = (await getUserByEmail(email)) as userSchema;
         if (!user || !user?.password) return null;
-        const compared = bcrypt.compare(user.password, password);
+        const compared = await comparePassword(password,user.password);
         if (!compared) return null;
         return user;
       },

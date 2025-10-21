@@ -3,7 +3,7 @@ import { db } from '@/db';
 import z from 'zod';
 import { EditUserFormType } from '../schemas/schemas';
 import { fromZodError } from 'zod-validation-error';
-import bcrypt from 'bcryptjs';
+import { hashPassword } from '@/utils/passwordCrypt';
 
 const updateUser = async (data: z.infer<typeof EditUserFormType>) => {
   const result = EditUserFormType.safeParse(data);
@@ -31,7 +31,7 @@ const updateUser = async (data: z.infer<typeof EditUserFormType>) => {
   try {
     let user;
     if (password) {
-      const pass = await bcrypt.hash(password, 10);
+      const pass = await hashPassword(password);
       user = db.user.update({
         where: { userId },
         data: {

@@ -3,7 +3,7 @@ import { db } from '@/db';
 import z from 'zod';
 import { registrationSchema } from '../schemas/schemas';
 import { fromZodError } from 'zod-validation-error';
-import bcrypt from 'bcryptjs'
+import { hashPassword } from '@/utils/passwordCrypt';
 
 const registerUser = async (data: z.infer<typeof registrationSchema>) => {
   const result = registrationSchema.safeParse(data);
@@ -29,7 +29,7 @@ const registerUser = async (data: z.infer<typeof registrationSchema>) => {
   };
   }
 
-  const pass = await bcrypt.hash(password, 10)
+  const pass = await hashPassword(password)
 
   try {
     const user = await db.user.create({
