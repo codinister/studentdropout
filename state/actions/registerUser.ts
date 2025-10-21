@@ -41,6 +41,7 @@ const registerUser = async (data: z.infer<typeof registrationSchema>) => {
       },
     });
 
+
     return {
       success: `${name} has been added successfully!`,
       data: user,
