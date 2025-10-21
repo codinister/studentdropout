@@ -51,6 +51,7 @@ const UserForm = () => {
   const { successResult, errorResult } = useFormSubmitResult();
 
   const [pending, startTransition] = useTransition();
+  const [err,setErr] = useState('no-error')
 
   const handleSubmit = (data: z.infer<typeof registrationSchema>) => {
     startTransition(() => {
@@ -62,7 +63,7 @@ const UserForm = () => {
             errorResult(res.error);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => setErr(err));
     });
   };
 
@@ -74,7 +75,7 @@ const UserForm = () => {
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-4"
           >
-            {/* Role Select */}
+            {err}
             <FormField
               control={form.control}
               name="roleId"
