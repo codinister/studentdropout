@@ -10,7 +10,7 @@ import useProtectedPage from '@/utils/useProtectedPage';
 
 
 function DashboardPage() {
-    useProtectedPage();
+    //useProtectedPage();
   const [role, setRole] = useState('Administrators');
   const [grade, setGrade] = useState('All');
   const [search, setSearch] = useState('');

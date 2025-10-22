@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '@/state/schemas/schemas';
+import { useEffect } from 'react';
 
 import {
   Card,
@@ -25,26 +26,21 @@ import {
 } from '@/components/ui/form';
 import { Eye, EyeOff } from 'lucide-react';
 import { BeatLoader } from 'react-spinners';
-import fetchApi from '@/state/query/fetchApi';
-import { useSession } from 'next-auth/react';
-import {useRouter} from 'next/navigation'
-
-
-
+import { useRouter } from 'next/navigation';
+import useMutations from '@/state/query/useMutations';
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
+  const { isSuccess, isError, isPending, mutate, error } = useMutations({
+    key: 'login',
+    url: '/auth/login',
+  });
 
-
-  const {status,data: session} = useSession()
-
-  const router = useRouter()
-
-
+  const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [getError,setError] = useState('')
+  const [getError, setError] = useState('');
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -54,31 +50,20 @@ export default function LoginPage() {
     },
   });
 
-  const [isPending, startTransition] = useTransition();
-
   const onSubmit = (values: LoginFormValues) => {
-    startTransition(() => {
-     fetchApi({
-        method: 'Post', 
-        url: '/auth/login',
-        data: values
-      })
-        .then((data) => {
-        
-        if(data.status !== 200){
-          setError('Invalid Email or Password')
-        }
-        else if(data.status === 200){
-          router.push('/dashboard')
-        }
-        })
-        .catch((err) => console.log(err))
-    });
+    mutate(values);
   };
 
-
-
-
+  useEffect(() => {
+    if (isError) {
+      const message = error?.message || '';
+      setError(message);
+    }
+    if (isSuccess) {
+      setError('');
+      router.push('/dashboard');
+    }
+  }, [isSuccess, isError]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-blue-700">
@@ -145,18 +130,21 @@ export default function LoginPage() {
             </CardContent>
 
             <CardFooter className="flex flex-col gap-3">
-
-
               <div className="mt-6 w-full text-center">
-
-                {isPending ? (<BeatLoader />) : getError? <div className="bg-red-500 w-full text-white text-center py-2 rounded-[8px] px-10">{getError}</div> : ''}
+                {isPending ? (
+                  <BeatLoader />
+                ) : getError ? (
+                  <div className="bg-red-500 w-full text-white text-center py-2 rounded-[8px] px-10">
+                    {getError}
+                  </div>
+                ) : (
+                  ''
+                )}
               </div>
-
 
               <Button type="submit" className="w-full">
                 Sign In
               </Button>
-
 
               <div className="flex justify-between w-full text-sm text-gray-500">
                 {/* <a href="#" className="hover:underline">
