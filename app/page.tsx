@@ -41,6 +41,7 @@ export default function LoginPage() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [getError, setError] = useState('');
+  const [redirect, setRedirect] = useState(false);
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -61,6 +62,7 @@ export default function LoginPage() {
     }
     if (isSuccess) {
       setError('');
+      setRedirect(true);
       router.push('/dashboard');
     }
   }, [isSuccess, isError]);
@@ -137,6 +139,8 @@ export default function LoginPage() {
                   <div className="bg-red-500 w-full text-white text-center py-2 rounded-[8px] px-10">
                     {getError}
                   </div>
+                ) : redirect ? (
+                   <BeatLoader />
                 ) : (
                   ''
                 )}

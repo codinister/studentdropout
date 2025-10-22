@@ -12,7 +12,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { dropoutdata } from "@/data/mockData";
-import useProtectedPage from "@/utils/useProtectedPage";
+
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -32,7 +32,6 @@ interface DropoutRecord {
 // ---------------- Component ----------------
 const DropoutPrediction: React.FC = () => {
 
-  useProtectedPage();
 
 
   const [records] = useState<DropoutRecord[]>([]);

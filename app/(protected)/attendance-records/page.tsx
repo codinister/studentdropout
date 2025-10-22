@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { attendancedata } from '@/data/mockData';
-import useProtectedPage from '@/utils/useProtectedPage';
+
 
 // --- Types & Validation ---
 const attendanceSchema = z.object({
@@ -43,7 +43,7 @@ const uid = () => Math.random().toString(36).slice(2, 9);
 // --- Component ---
 export default function AttendanceRecords() {
 
-  useProtectedPage();
+
 
   const [records, setRecords] = useState<AttendanceRecord[]>([]);
 

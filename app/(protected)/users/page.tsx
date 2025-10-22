@@ -8,10 +8,9 @@ import useDispatchselector from '@/state/redux/useDispatchselector';
 import { fetchUsers } from '@/state/redux/slice/appReducer';
 import { tableType, UserType } from '@/types/types';
 import useUserColumns from '@/components/tableColumns/useUserColumns';
-import useProtectedPage from '@/utils/useProtectedPage';
 
 const Users = () => {
-useProtectedPage();
+
   const { userColumns } = useUserColumns();
 
   const pdfFn = () => {};

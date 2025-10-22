@@ -8,13 +8,9 @@ import useDispatchselector from '@/state/redux/useDispatchselector';
 import { fetchStudents } from '@/state/redux/slice/appReducer';
 import { studentTableType} from '@/types/types';
 import useStudentColumn from '@/components/tableColumns/useStudentColumn';
-import useProtectedPage from '@/utils/useProtectedPage';
-
 
 
 const StudentsPage = () => {
-
-    useProtectedPage();
 
 const {studentColumn} = useStudentColumn()
 

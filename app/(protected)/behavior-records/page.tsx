@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { academicrecorddata } from "@/data/mockData";
-import useProtectedPage from "@/utils/useProtectedPage";
 
 // ✅ Define schema
 const behaviorSchema = z.object({
@@ -24,7 +23,7 @@ interface BehaviorRecord extends BehaviorForm {
 
 function BehaviorRecordsPage(): React.ReactElement {
 
-  useProtectedPage();
+
 
   const [records, setRecords] = useState<BehaviorRecord[]>([]);
 

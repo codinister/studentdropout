@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { interventionrecords } from '@/data/mockData';
-import useProtectedPage from '@/utils/useProtectedPage';
 
 // ✅ Validation schema
 const interventionSchema = z.object({
@@ -22,7 +21,7 @@ type InterventionFormData = z.infer<typeof interventionSchema>;
 type InterventionRecord = InterventionFormData & { id: number };
 
 function InterventionsPage() {
-  useProtectedPage();
+
 
   const [records, setRecords] = useState<InterventionRecord[]>([]);
 

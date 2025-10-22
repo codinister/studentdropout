@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { financialrecords } from "@/data/mockData";
-import useProtectedPage from "@/utils/useProtectedPage";
 
 // ✅ Define schema
 const financialSchema = z.object({
@@ -24,7 +23,6 @@ interface FinancialRecord extends FinancialForm {
 
 function FinancialStatusPage(): React.ReactElement {
 
-    useProtectedPage();
 
 
   const [records, setRecords] = useState<FinancialRecord[]>([]);
