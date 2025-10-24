@@ -21,15 +21,15 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { useTransition} from 'react';
 import { BeatLoader } from 'react-spinners';
-import updateUser from '@/state/actions/updateUser';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
+import useMutations from '@/state/query/useMutations';
+import { useEffect } from 'react';
 import { fetchUsers } from '@/state/redux/slice/appReducer';
 const EditUserForm = ({ data }: { data: z.infer<typeof EditUserFormType> }) => {
-
-
   const { successResult, errorResult } = useFormSubmitResult();
+
+
 
   const form = useForm<z.infer<typeof EditUserFormType>>({
     resolver: zodResolver(EditUserFormType),
@@ -42,20 +42,25 @@ const EditUserForm = ({ data }: { data: z.infer<typeof EditUserFormType> }) => {
     },
   });
 
-  const [pending, startTransition] = useTransition();
+  const { mutate, isPending, isSuccess, isError, error } = useMutations({
+    key: 'update-user',
+    url: '/users/update-user/',
+    method: 'PUT'
+  });
+
+  useEffect(() => {
+    if (isError) {
+      const message = error?.message || '';
+      errorResult(message);
+    }
+    if (isSuccess) {
+      errorResult('');
+      successResult('User updated successfully!', 'User Updated', fetchUsers);
+    }
+  }, [isError, isSuccess]);
 
   const handleSubmit = (data: z.infer<typeof EditUserFormType>) => {
-    startTransition(() => {
-      updateUser(data)
-        .then((res) => {
-          if (res.success) {
-            successResult(res.success, 'User Updated', fetchUsers);
-          } else if (res.error) {
-            errorResult(res.error);
-          }
-        })
-        .catch((err) => console.log(err));
-    });
+    mutate(data);
   };
 
   return (
@@ -144,9 +149,9 @@ const EditUserForm = ({ data }: { data: z.infer<typeof EditUserFormType> }) => {
               )}
             />
 
-            <Button disabled={pending} variant="default">
+            <Button disabled={isPending} variant="default">
               {' '}
-              Save user {pending ? <BeatLoader /> : ''}
+              Save user {isPending ? <BeatLoader /> : ''}
             </Button>
           </form>
         </Form>

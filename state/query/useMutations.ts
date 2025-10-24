@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import fetchApi from './fetchApi';
 import { useQueryClient } from '@tanstack/react-query';
 
-const useMutaions = ({ ...options }) => {
+const useMutations = ({ ...options }) => {
   const { key, method = '', url } = options;
   const fn = async (data: {}) => {
     const res = await fetchApi({
@@ -16,8 +16,10 @@ const useMutaions = ({ ...options }) => {
     if (res.status === 200) {
       return res;
     } else {
-      const message = Object.values(res.response?.data).join('') || '';
-      throw new Error(message);
+      if (res) {
+        const message = Object.values(res?.response?.data).join('') || '';
+        throw new Error(message);
+      }
     }
   };
 
@@ -31,4 +33,4 @@ const useMutaions = ({ ...options }) => {
   return { isPending, isSuccess, isError, error, mutate };
 };
 
-export default useMutaions;
+export default useMutations;

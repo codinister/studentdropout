@@ -21,14 +21,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { useTransition } from 'react';
-import addStudent from '@/state/actions/students/addStudent';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import { fetchStudents } from '@/state/redux/slice/appReducer';
+import { fetchStudents, fetchUsers } from '@/state/redux/slice/appReducer';
+import { isPending } from '@reduxjs/toolkit';
+import useMutations from '@/state/query/useMutations';
+import { useEffect } from 'react';
 
-const UserForm = () => {
-
+const StudentForm = () => {
   const form = useForm<z.infer<typeof studentSchema>>({
     resolver: zodResolver(studentSchema),
     defaultValues: {
@@ -40,22 +40,24 @@ const UserForm = () => {
   });
 
   const { successResult, errorResult } = useFormSubmitResult();
+  const { isError, isSuccess, isPending, error, mutate } = useMutations({
+    key: 'add-student',
+    url: '/students/add-student',
+  });
 
-  const [pending, startTransition] = useTransition();
+  useEffect(() => {
+    if (isError) {
+      const message = error?.message || '';
+      errorResult(message);
+    }
+    if (isSuccess) {
+      errorResult('');
+      successResult('Student added successfully!', 'Student Added', fetchStudents);
+    }
+  }, [isError, isSuccess]);
 
   const handleSubmit = (data: z.infer<typeof studentSchema>) => {
-    startTransition(() => {
-
-      addStudent(data)
-        .then((res) => {
-          if (res.success) {
-            successResult(res.success, 'Sudent Added', fetchStudents);
-          } else if (res.error) {
-            errorResult(res.error);
-          }
-        })
-        .catch((err) => console.log(err));
-    });
+    mutate(data);
   };
 
   return (
@@ -141,9 +143,9 @@ const UserForm = () => {
               )}
             />
 
-            <Button disabled={pending} variant="default">
+            <Button disabled={isPending} variant="default">
               {' '}
-              Save student {pending ? <BeatLoader /> : ''}
+              Save student {isPending ? <BeatLoader /> : ''}
             </Button>
           </form>
         </Form>
@@ -152,4 +154,4 @@ const UserForm = () => {
   );
 };
 
-export default UserForm;
+export default StudentForm;

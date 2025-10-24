@@ -1,5 +1,5 @@
 
-import getStudents from '@/state/actions/students/getStudents';
+
 import fetchApi from '@/state/query/fetchApi';
 import { studentTableType, tableType } from '@/types/types';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
@@ -29,7 +29,7 @@ export const fetchUsers = createAsyncThunk(
   'app/fetchUsers',
   async () => {
     try {
-      const users = await fetchApi({url: '/get-users'})
+      const users = await fetchApi({url: '/users/get-users'})
 
       return users.data || []
     } catch (error: any) {
@@ -39,14 +39,14 @@ export const fetchUsers = createAsyncThunk(
 );
 
 
-export const fetchStudents = createAsyncThunk<studentTableType[], void, { rejectValue: string }>(
+export const fetchStudents = createAsyncThunk(
   'app/fetchStudents',
-  async (_, { rejectWithValue }) => {
+  async () => {
     try {
-      const users = await getStudents();
-      return users as studentTableType[];
+      const students = await fetchApi({url: '/students/get-students'})
+      return students.data || []
     } catch (error: any) {
-      return rejectWithValue(error?.message || 'Failed to fetch users');
+      return error.message
     }
   }
 );

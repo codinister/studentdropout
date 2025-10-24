@@ -1,18 +1,19 @@
-'use server';
 import { db } from '@/db';
-import z from 'zod';
-import { studentSchema } from '../../schemas/schemas';
+import { studentSchema } from '@/state/schemas/schemas';
 import { fromZodError } from 'zod-validation-error';
+import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0 
 
-const addStudent = async (data: z.infer<typeof studentSchema>) => {
-  const result = studentSchema.safeParse(data);
+export async function POST(req: NextRequest){
+  const request = await req.json()
+  const result = studentSchema.safeParse(request);
 
   if (!result.success) {
-    return {
+    return NextResponse.json({
       error: fromZodError(result.error).toString(),
-      success: '',
-    };
+    }, {status: 400})
   }
 
   const { studentName, level, totalAttendance, score } = result.data;
@@ -22,14 +23,13 @@ const addStudent = async (data: z.infer<typeof studentSchema>) => {
   });
 
   if (checkStudentName) {
-    return {
-      success: '',
+    return NextResponse.json({
       error: `${studentName} is already in use!`,
-    };
+    }, {status: 400})
   }
 
   try {
-    const user = await db.student.create({
+     await db.student.create({
       data: {
         studentName: studentName,
         level,
@@ -38,18 +38,15 @@ const addStudent = async (data: z.infer<typeof studentSchema>) => {
       },
     });
 
-    return {
-      success: `${studentName} has been added successfully!`,
-      data: user,
-      error: '',
-    };
+    return NextResponse.json({
+      success: ` has been added successfully!`
+    }, {status: 200})
   } catch (err) {
     console.log(err);
   }
-  return {
-    success: '',
+  return NextResponse.json({
     error: 'An error occured',
-  };
+  }, {status: 400})
 };
 
-export default addStudent;
+

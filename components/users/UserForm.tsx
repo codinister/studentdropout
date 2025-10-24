@@ -21,22 +21,20 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { useTransition, useState } from 'react';
-import registerUser from '@/state/actions/registerUser';
-import { useDispatch } from 'react-redux';
+import {  useEffect } from 'react';
 import {
-  fetchUsers,
-  modalHide,
-  modalShow,
+  fetchUsers
 } from '@/state/redux/slice/appReducer';
-import SuccessMessage from '../SuccessMessage';
-import WarningMessage from '../WarningMessage';
 import { BeatLoader } from 'react-spinners';
-import useDispatchselector from '@/state/redux/useDispatchselector';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
+import useMutations from '@/state/query/useMutations';
 
 const UserForm = () => {
-  const { dispatch } = useDispatchselector();
+
+  const { mutate, isPending, isSuccess, isError, error } = useMutations({
+    key: 'add-user',
+    url: '/users/add-user',
+  });
 
   const form = useForm<z.infer<typeof registrationSchema>>({
     resolver: zodResolver(registrationSchema),
@@ -50,21 +48,22 @@ const UserForm = () => {
 
   const { successResult, errorResult } = useFormSubmitResult();
 
-  const [pending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (isError) {
+      const message = error?.message || '';
+      errorResult(message);
+    }
+    if (isSuccess) {
+      errorResult('');
+      successResult('A new user has been added', 'User Added', fetchUsers);
+    }
+  }, [isSuccess, isError]);
 
   const handleSubmit = (data: z.infer<typeof registrationSchema>) => {
-    startTransition(() => {
-      registerUser(data)
-        .then((res) => {
-          if (res.success) {
-            successResult(res.success, 'User Added', fetchUsers);
-          } else if (res.error) {
-            errorResult(res.error);
-          }
-        })
-        .catch((err) => console.log(err));
-    });
+    mutate(data);
   };
+
 
   return (
     <>
@@ -152,9 +151,9 @@ const UserForm = () => {
               )}
             />
 
-            <Button disabled={pending} variant="default">
+            <Button disabled={isPending} variant="default">
               {' '}
-              Save user {pending ? <BeatLoader /> : ''}
+              Save user {isPending ? <BeatLoader /> : ''}
             </Button>
           </form>
         </Form>

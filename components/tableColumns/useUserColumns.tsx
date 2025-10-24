@@ -16,7 +16,6 @@ import { ColumnDef } from '@tanstack/react-table';
 import { tableType } from '@/types/types';
 import { FaEdit } from 'react-icons/fa';
 import { GoTrash } from 'react-icons/go';
-import getUserById from '@/state/actions/getUserById';
 import useDispatchselector from '@/state/redux/useDispatchselector';
 import { fetchUsers, modalShow } from '@/state/redux/slice/appReducer';
 import EditUserForm from '../users/EditUserForm';
@@ -24,26 +23,33 @@ import { EditUserFormType } from '@/state/schemas/schemas';
 import { z } from 'zod';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
 import DialogueBox from '../DialogueBox';
-import deleteUserById from '@/state/actions/deleteUserById';
+import useMutaions from '@/state/query/useMutations';
+import useGetQuery from '@/state/query/useGetQuery';
+import fetchApi from '@/state/query/fetchApi';
 
 const useUserColumns = () => {
   const { showModal, closeModal } = useFormSubmitResult();
   const { dispatch } = useDispatchselector();
 
   const editItemFn = async (id: number) => {
-    const user = (await getUserById(id)) as z.infer<typeof EditUserFormType>;
+    
+    const {data} = await fetchApi({
+      url: '/users/get-user-by-id/'+id
+    })
 
     const EditUserFn = () => {
-      return <EditUserForm data={user} />;
+      return <EditUserForm data={data} />;
     };
 
     showModal(EditUserFn);
   };
 
+
+
   const deleteItemFn = (id: number) => {
     const DeleteFnComponent = () => {
       const deleteFn = async () => {
-        await deleteUserById(id);
+        await fetchApi({method: 'Delete', url: '/users/delete-user-by-id/'+id})
         closeModal();
         dispatch(fetchUsers());
       };
@@ -138,7 +144,7 @@ const useUserColumns = () => {
               <DropdownMenuItem
                 onClick={() => editItemFn(Number(result.userId))}
               >
-                <FaEdit /> Edit=
+                <FaEdit /> Edit
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem

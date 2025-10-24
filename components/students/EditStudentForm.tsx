@@ -21,43 +21,49 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { useTransition } from 'react';
+import { useEffect } from 'react';
 import { BeatLoader } from 'react-spinners';
-import updateStudent from '@/state/actions/students/updateStudent';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import { fetchStudents } from '@/state/redux/slice/appReducer';
+import { fetchStudents, fetchUsers } from '@/state/redux/slice/appReducer';
+import useMutations from '@/state/query/useMutations';
 const EditStudentForm = ({
   data,
 }: {
   data: z.infer<typeof editStudentFormType>;
 }) => {
+
   const { successResult, errorResult } = useFormSubmitResult();
 
   const form = useForm<z.infer<typeof editStudentFormType>>({
     resolver: zodResolver(editStudentFormType),
     defaultValues: {
-      studentId: data.studentId,
-      studentName: data.studentName,
-      level: data.level,
-      totalAttendance: data.totalAttendance,
-      score: data.score,
+      studentId: data?.studentId,
+      studentName: data?.studentName,
+      level: data?.level,
+      totalAttendance: data?.totalAttendance,
+      score: data?.score,
     },
   });
 
-  const [pending, startTransition] = useTransition();
+  const { isPending, isSuccess, isError, error, mutate } = useMutations({
+    key: 'update-student',
+    url: '/students/update-student',
+    method: 'Put',
+  });
+
+  useEffect(() => {
+    if (isError) {
+      const message = error?.message || '';
+      errorResult(message);
+    }
+    if (isSuccess) {
+      errorResult('');
+      successResult('Student updated successfully!', 'Student Updated', fetchStudents);
+    }
+  }, [isError, isSuccess]);
 
   const handleSubmit = (data: z.infer<typeof editStudentFormType>) => {
-    startTransition(() => {
-      updateStudent(data)
-        .then((res) => {
-          if (res.success) {
-            successResult(res.success, 'Student Updated', fetchStudents);
-          } else if (res.error) {
-            errorResult(res.error);
-          }
-        })
-        .catch((err) => console.log(err));
-    });
+    mutate(data);
   };
 
   return (
@@ -143,9 +149,9 @@ const EditStudentForm = ({
               )}
             />
 
-            <Button disabled={pending} variant="default">
+            <Button disabled={isPending} variant="default">
               {' '}
-              Update student {pending ? <BeatLoader /> : ''}
+              Update student {isPending ? <BeatLoader /> : ''}
             </Button>
           </form>
         </Form>
