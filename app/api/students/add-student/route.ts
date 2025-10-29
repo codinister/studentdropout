@@ -1,5 +1,5 @@
 import { db } from '@/db';
-import { studentSchema } from '@/state/schemas/schemas';
+import { studentSchema } from '@/state/schemas/validationSchemas';
 import { fromZodError } from 'zod-validation-error';
 import { NextRequest, NextResponse } from 'next/server';
 

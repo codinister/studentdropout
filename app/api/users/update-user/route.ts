@@ -1,6 +1,6 @@
 
 import { db } from '@/db';
-import { EditUserFormType } from '@/state/schemas/schemas';
+import { userSchema } from '@/state/schemas/validationSchemas';
 import { fromZodError } from 'zod-validation-error';
 import { hashPassword } from '@/utils/passwordCrypt';
 import { NextRequest, NextResponse } from 'next/server';
@@ -8,10 +8,12 @@ import { NextRequest, NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-export async function PUT(req: NextRequest) {
+export async function Patch(req: NextRequest, {param}: {param: Promise<{id: string}>}) {
   const request = await req.json();
+  const paramId = (await param).id
+  const userId = parseInt(paramId, 10)
 
-  const result = EditUserFormType.safeParse(request);
+  const result = userSchema.safeParse(request);
 
   if (!result.success) {
     return NextResponse.json(
@@ -22,7 +24,7 @@ export async function PUT(req: NextRequest) {
     );
   }
 
-  const { name, roleId, email, password, userId } = result.data;
+  const { name, roleId, email, password } = result.data;
 
   const checkEmail = await db.user.findFirst({
     where: { email, NOT: { userId } },

@@ -6,6 +6,7 @@ import LogoutButton from './logoutButton';
 
 const menuItems = [
   { name: 'Dashboard', path: '/dashboard' },
+  { name: 'Subject', path: '/subject' },
   { name: 'Students', path: '/students' },
   { name: 'Academic Records', path: '/academic-records' },
   { name: 'Attendance Records', path: '/attendance-records' },
@@ -19,7 +20,6 @@ const menuItems = [
 ];
 
 function Sidebar() {
-
   return (
     <aside className="w-64 bg-blue-800 text-white min-h-screen p-6">
       <Image

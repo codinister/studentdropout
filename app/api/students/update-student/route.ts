@@ -1,6 +1,6 @@
 
 import { db } from '@/db';
-import { editStudentFormType } from '@/state/schemas/schemas';
+import { studentSchema } from '@/state/schemas/validationSchemas';
 import { fromZodError } from 'zod-validation-error';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -8,9 +8,13 @@ import { NextRequest, NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic'
 export const revalidate = 0 
 
-export async function PUT(req: NextRequest) {
+export async function Patch(req: NextRequest, {param}: {param: Promise<{id: string}>}) {
   const request = await req.json();
-  const result = editStudentFormType.safeParse(request);
+  const paramId = (await param).id
+  const studentId = parseInt(paramId, 10)
+
+ 
+  const result = studentSchema.safeParse(request);
 
   if (!result.success) {
     return NextResponse.json(
@@ -21,7 +25,7 @@ export async function PUT(req: NextRequest) {
     );
   }
 
-  const { studentId, studentName, level, totalAttendance, score } = result.data;
+  const { studentName, level, totalAttendance, score } = result.data;
 
   const checkStudent = await db.student.findUnique({
     where: { studentName, NOT: { studentId } },

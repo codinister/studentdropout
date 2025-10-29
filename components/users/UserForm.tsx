@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
-import { registrationSchema } from '@/state/schemas/schemas';
+import { userSchema } from '@/state/schemas/validationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
@@ -21,33 +21,27 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import {  useEffect } from 'react';
-import {
-  fetchUsers
-} from '@/state/redux/slice/appReducer';
+import { useEffect } from 'react';
+import { fetchUsers } from '@/state/redux/slice/appReducer';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
 import useMutations from '@/state/query/useMutations';
+import { userFormSchema } from '@/state/schemas/formSchema';
 
 const UserForm = () => {
-
   const { mutate, isPending, isSuccess, isError, error } = useMutations({
     key: 'add-user',
     url: '/users/add-user',
   });
 
-  const form = useForm<z.infer<typeof registrationSchema>>({
-    resolver: zodResolver(registrationSchema),
+  const form = useForm<z.infer<typeof userSchema>>({
+    resolver: zodResolver(userSchema),
     defaultValues: {
-      name: '',
-      roleId: 1,
-      password: '',
-      email: '',
+      ...userFormSchema({}),
     },
   });
 
   const { successResult, errorResult } = useFormSubmitResult();
-
 
   useEffect(() => {
     if (isError) {
@@ -60,10 +54,9 @@ const UserForm = () => {
     }
   }, [isSuccess, isError]);
 
-  const handleSubmit = (data: z.infer<typeof registrationSchema>) => {
+  const handleSubmit = (data: z.infer<typeof userSchema>) => {
     mutate(data);
   };
-
 
   return (
     <>

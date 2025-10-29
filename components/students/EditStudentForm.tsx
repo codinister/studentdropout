@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
-import { editStudentFormType } from '@/state/schemas/schemas';
+import { studentSchema } from '@/state/schemas/validationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
@@ -26,29 +26,28 @@ import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
 import { fetchStudents, fetchUsers } from '@/state/redux/slice/appReducer';
 import useMutations from '@/state/query/useMutations';
+import { studentFormSchema } from '@/state/schemas/formSchema';
 const EditStudentForm = ({
   data,
 }: {
-  data: z.infer<typeof editStudentFormType>;
+  data: {studentId: number} & z.infer<typeof studentSchema>;
 }) => {
 
   const { successResult, errorResult } = useFormSubmitResult();
 
-  const form = useForm<z.infer<typeof editStudentFormType>>({
-    resolver: zodResolver(editStudentFormType),
+  const form = useForm<z.infer<typeof studentSchema>>({
+    resolver: zodResolver(studentSchema),
     defaultValues: {
-      studentId: data?.studentId,
-      studentName: data?.studentName,
-      level: data?.level,
-      totalAttendance: data?.totalAttendance,
-      score: data?.score,
+
+
+      ...studentFormSchema(data)
     },
   });
 
   const { isPending, isSuccess, isError, error, mutate } = useMutations({
     key: 'update-student',
-    url: '/students/update-student',
-    method: 'Put',
+    url: '/students/update-student/'+data?.studentId,
+    method: 'Patch',
   });
 
   useEffect(() => {
@@ -62,7 +61,7 @@ const EditStudentForm = ({
     }
   }, [isError, isSuccess]);
 
-  const handleSubmit = (data: z.infer<typeof editStudentFormType>) => {
+  const handleSubmit = (data: z.infer<typeof studentSchema>) => {
     mutate(data);
   };
 

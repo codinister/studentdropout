@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
-import { studentSchema } from '@/state/schemas/schemas';
+import { studentSchema } from '@/state/schemas/validationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
@@ -23,19 +23,16 @@ import {
 import { Button } from '@/components/ui/button';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import { fetchStudents, fetchUsers } from '@/state/redux/slice/appReducer';
-import { isPending } from '@reduxjs/toolkit';
+import { fetchStudents } from '@/state/redux/slice/appReducer';
 import useMutations from '@/state/query/useMutations';
 import { useEffect } from 'react';
+import { studentFormSchema } from '@/state/schemas/formSchema';
 
 const StudentForm = () => {
   const form = useForm<z.infer<typeof studentSchema>>({
     resolver: zodResolver(studentSchema),
     defaultValues: {
-      studentName: '',
-      level: 0,
-      totalAttendance: '',
-      score: '',
+      ...studentFormSchema({}),
     },
   });
 
@@ -52,7 +49,11 @@ const StudentForm = () => {
     }
     if (isSuccess) {
       errorResult('');
-      successResult('Student added successfully!', 'Student Added', fetchStudents);
+      successResult(
+        'Student added successfully!',
+        'Student Added',
+        fetchStudents
+      );
     }
   }, [isError, isSuccess]);
 

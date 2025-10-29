@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
-import { EditUserFormType } from '@/state/schemas/schemas';
+import { userFormSchema } from '@/state/schemas/formSchema';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
@@ -26,26 +26,25 @@ import useFormSubmitResult from '@/utils/useFormSubmitResult';
 import useMutations from '@/state/query/useMutations';
 import { useEffect } from 'react';
 import { fetchUsers } from '@/state/redux/slice/appReducer';
-const EditUserForm = ({ data }: { data: z.infer<typeof EditUserFormType> }) => {
+import { userSchema } from '@/state/schemas/validationSchemas';
+
+
+const EditUserForm = ({ data }: { data: {userId: number} & z.infer<typeof userSchema> }) => {
   const { successResult, errorResult } = useFormSubmitResult();
 
 
 
-  const form = useForm<z.infer<typeof EditUserFormType>>({
-    resolver: zodResolver(EditUserFormType),
+  const form = useForm<z.infer<typeof userSchema>>({
+    resolver: zodResolver(userSchema),
     defaultValues: {
-      userId: data.userId,
-      name: data.name,
-      roleId: data.roleId,
-      password: '',
-      email: data.email,
+      ...userFormSchema({...data,password: ''})
     },
   });
 
   const { mutate, isPending, isSuccess, isError, error } = useMutations({
     key: 'update-user',
-    url: '/users/update-user/',
-    method: 'PUT'
+    url: '/users/update-user/'+data?.userId,
+    method: 'Patch'
   });
 
   useEffect(() => {
@@ -59,7 +58,7 @@ const EditUserForm = ({ data }: { data: z.infer<typeof EditUserFormType> }) => {
     }
   }, [isError, isSuccess]);
 
-  const handleSubmit = (data: z.infer<typeof EditUserFormType>) => {
+  const handleSubmit = (data: z.infer<typeof userSchema>) => {
     mutate(data);
   };
 

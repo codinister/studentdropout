@@ -4,7 +4,7 @@ import type { NextAuthConfig } from 'next-auth';
 import { comparePassword } from './utils/passwordCrypt';
 
 import getUserByEmail from './state/actions/getUserByEmail';
-import { loginSchema } from './state/schemas/schemas';
+import { loginSchema } from './state/schemas/validationSchemas';
 import { userSchema, UserType } from './types/types';
 
 const authConfig: NextAuthConfig = {

@@ -29,13 +29,20 @@ model Student {
   @@map("Student")
 }
 
+model Subject {
+  subjectId Int      @id @default(autoincrement())
+  date  DateTime @default(now())
+  subjectName String 
+  academicRecord AcademicRecord[]
+}
+
 model AcademicRecord {
   recordId Int    @id @default(autoincrement())
-  subject  String
   level    String
   semester String
-  year     Int
-
+  year     String
+  subjectId Int 
+  subject Subject @relation(fields: [subjectId], references: [subjectId])
   studentId Int
   student   Student @relation(fields: [studentId], references: [studentId])
 
@@ -51,6 +58,21 @@ model AttendanceRecord {
   student   Student @relation(fields: [studentId], references: [studentId])
 
   @@map("AttendanceRecord")
+}
+
+
+
+
+model Settings {
+  settingsId Int      @id @default(autoincrement())
+  schoolName String
+  schoolPhone String 
+  schoolWebsite String 
+  schoolLocation String
+  schoolPostalAddress String
+  logo String 
+  date  DateTime @default(now())
+  
 }
 
 model DropoutPrediction {
