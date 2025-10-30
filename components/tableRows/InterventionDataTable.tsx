@@ -32,14 +32,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { studentTableType } from '@/types/types';
+import { interventionSchema } from '@/types/types';
 
-type DatastudentTableType = {
-  columns: ColumnDef<studentTableType>[];
-  data: studentTableType[];
+type DatainterventionSchema = {
+  columns: ColumnDef<interventionSchema>[];
+  data: interventionSchema[];
 };
 
-const StudentDataTable = ({ columns, data }: DatastudentTableType) => {
+const InterventionDataTable = ({ columns, data }: DatainterventionSchema) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -183,4 +183,5 @@ const StudentDataTable = ({ columns, data }: DatastudentTableType) => {
   );
 };
 
-export default StudentDataTable;
+
+export default InterventionDataTable

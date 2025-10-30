@@ -13,19 +13,16 @@ import {
 import { Button } from '../ui/button';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { tableType } from '@/types/types';
 import { FaEdit } from 'react-icons/fa';
 import { GoTrash } from 'react-icons/go';
 import useDispatchselector from '@/state/redux/useDispatchselector';
-import { fetchUsers, modalShow } from '@/state/redux/slice/appReducer';
 import EditUserForm from '../users/EditUserForm';
-import { EditUserFormType } from '@/state/schemas/schemas';
-import { z } from 'zod';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
 import DialogueBox from '../DialogueBox';
-import useMutaions from '@/state/query/useMutations';
-import useGetQuery from '@/state/query/useGetQuery';
 import fetchApi from '@/state/query/fetchApi';
+
+import { userSchema } from '@/types/types';
+import { fetchUsers} from '@/state/redux/slice/asyncThunkFn';
 
 const useUserColumns = () => {
   const { showModal, closeModal } = useFormSubmitResult();
@@ -60,7 +57,7 @@ const useUserColumns = () => {
     showModal(DeleteFnComponent);
   };
 
-  const userColumns: ColumnDef<tableType>[] = [
+  const userColumns: ColumnDef<userSchema>[] = [
     {
       id: 'select',
       header: ({ table }) => (

@@ -9,10 +9,12 @@ import { subjectFormSchema } from '@/state/schemas/formSchema';
 export const dynamic = 'force-dynamic'
 export const revalidate = 0 
 
-export async function Patch(req: NextRequest, {param}: {param: Promise<{id: string}>}) {
+export async function PATCH(req: NextRequest, {param}: {param: Promise<{id: string}>}) {
   const request = await req.json();
   const paramId = (await param).id
   const subjectId = parseInt(paramId, 10)
+
+  console.log('SAY', request)
 
  
   const result = subjectSchema.safeParse(request);

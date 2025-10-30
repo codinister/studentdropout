@@ -1,128 +1,44 @@
-'use client'
+'use client';
 
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { academicrecorddata } from "@/data/mockData";
+import PageHeader from '@/components/PageHeader';
+import UserForm from '@/components/users/UserForm';
+import DataTable from '@/components/tableRows/DataTable';
+import { useEffect, useState } from 'react';
+import useDispatchselector from '@/state/redux/useDispatchselector';
+import { fetchUsers } from '@/state/redux/slice/asyncThunkFn';
+import { userSchema } from '@/types/types';
+import useUserColumns from '@/components/tableColumns/useUserColumns';
 
-// ✅ Define schema
-const behaviorSchema = z.object({
-  studentId: z.string().min(1, "Student ID is required"),
-  incident: z.string().min(5, "Incident must be at least 5 characters"),
-  date: z.string().min(1, "Date is required"),
-});
+const Users = () => {
 
-// ✅ Infer type from schema
-type BehaviorForm = z.infer<typeof behaviorSchema>;
+  const { userColumns } = useUserColumns();
 
-// ✅ Record type with ID
-interface BehaviorRecord extends BehaviorForm {
-  id: number;
-}
+  const pdfFn = () => {};
 
-function BehaviorRecordsPage(): React.ReactElement {
+  const { dispatch, selector } = useDispatchselector();
 
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
+  const users = selector((state) => state?.users);
 
-  const [records, setRecords] = useState<BehaviorRecord[]>([]);
-
-
-  const academicdata = records.length > 0 ? records : academicrecorddata
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<BehaviorForm>({
-    resolver: zodResolver(behaviorSchema),
-  });
-
-  const onSubmit = (data: BehaviorForm) => {
-    setRecords((prev) => [...prev, { id: Date.now(), ...data }]);
-    reset();
-  };
+  const data: userSchema[] = users;
 
   return (
-    
-    <div className="px-10">
-      <div className="bg-white p-10 rounded-2xl mb-10">
-        <div className="w-lg">
+    <>
+      <div className="bg-white">
+        <PageHeader
+          modalButtonName="Add User"
+          component={UserForm} // ✅ pass reference
+          pdfFn={pdfFn}
+          pageTitle="Users"
+        />
 
-
-      <h1 className="text-2xl font-bold mb-4">Behavior Records</h1>
-
-      {/* Form */}
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mb-6">
-        <div>
-          <label>Student ID</label>
-          <input
-            {...register("studentId")}
-            className="border p-2 rounded w-full"
-          />
-          {errors.studentId && (
-            <p className="text-red-500">{errors.studentId.message}</p>
-          )}
-        </div>
-
-        <div>
-          <label>Incident Description</label>
-          <textarea
-            {...register("incident")}
-            className="border p-2 rounded w-full"
-          />
-          {errors.incident && (
-            <p className="text-red-500">{errors.incident.message}</p>
-          )}
-        </div>
-
-        <div>
-          <label>Date</label>
-          <input
-            type="date"
-            {...register("date")}
-            className="border p-2 rounded w-full"
-          />
-          {errors.date && <p className="text-red-500">{errors.date.message}</p>}
-        </div>
-
-        <button
-          type="submit"
-          className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700"
-        >
-          Add Record
-        </button>
-      </form>
+        <DataTable columns={userColumns} data={data} />
       </div>
-      </div>
-
-
-      {/* Table */}
-      <div className="overflow-x-auto bg-white p-4 rounded shadow">
-        <table className="min-w-full border border-gray-200">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="p-2 border">ID</th>
-              <th className="p-2 border">Student ID</th>
-              <th className="p-2 border">Incident</th>
-              <th className="p-2 border">Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {academicdata.map((r) => (
-              <tr key={r.id} className="hover:bg-gray-50">
-                <td className="p-2 border">{r.id}</td>
-                <td className="p-2 border">{r.studentId}</td>
-                <td className="p-2 border">{r.incident}</td>
-                <td className="p-2 border">{r.date}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    </>
   );
-}
+};
 
-export default BehaviorRecordsPage;
+export default Users;

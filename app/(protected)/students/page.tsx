@@ -5,8 +5,8 @@ import StudentForm from '@/components/students/StudentForm';
 import StudentDataTable from '@/components/tableRows/StudentDataTable';
 import { useEffect, useState } from 'react';
 import useDispatchselector from '@/state/redux/useDispatchselector';
-import { fetchStudents } from '@/state/redux/slice/appReducer';
-import { studentTableType} from '@/types/types';
+import { fetchStudents } from '@/state/redux/slice/asyncThunkFn';
+import { studentSchema } from '@/types/types';
 import useStudentColumn from '@/components/tableColumns/useStudentColumn';
 
 
@@ -24,7 +24,7 @@ const {studentColumn} = useStudentColumn()
 
   const students = selector((state) => state?.students);
 
-  const data: studentTableType[]  = students;
+  const data: studentSchema[]  = students;
 
   return (
     <>

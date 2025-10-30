@@ -13,21 +13,21 @@ import {
 
 import { z } from 'zod';
 
-type userSchema = z.infer<typeof userSchema> & { userId: string }[];
-type studentSchema = z.infer<typeof studentSchema> & { studentId: string }[];
-type subjectSchema = z.infer<typeof subjectSchema> & { subjectId: string }[];
-type academicRecordSchema = z.infer<typeof academicRecordSchema> &
-  { recordId: string }[];
-type attendanceRecordSchema = z.infer<typeof attendanceRecordSchema> &
-  { attendanceId: string }[];
-type settingsSchema = z.infer<typeof settingsSchema> & { settingsId: string }[];
-type dropoutPredictionSchema = z.infer<typeof dropoutPredictionSchema> &
-  { predictionId: string }[];
-type interventionSchema = z.infer<typeof interventionSchema> &
-  { interventionId: string }[];
-type demographicInfoSchema = z.infer<typeof demographicInfoSchema> &
-  { demoId: string }[];
-type roleSchema = z.infer<typeof roleSchema> & { roleId: string }[];
+export type userSchema = z.infer<typeof userSchema> & { userId: string };
+export type studentSchema = z.infer<typeof studentSchema> & { studentId: string };
+export type subjectSchema = z.infer<typeof subjectSchema> & { subjectId: string };
+export type academicRecordSchema = z.infer<typeof academicRecordSchema> &
+  { recordId: string };
+export type attendanceRecordSchema = z.infer<typeof attendanceRecordSchema> &
+  { attendanceId: string };
+export type settingsSchema = z.infer<typeof settingsSchema> & { settingsId: string };
+export type dropoutPredictionSchema = z.infer<typeof dropoutPredictionSchema> &
+  { predictionId: string };
+export type interventionSchema = z.infer<typeof interventionSchema> &
+  { interventionId: string };
+export type demographicInfoSchema = z.infer<typeof demographicInfoSchema> &
+  { demoId: string };
+export type roleSchema = z.infer<typeof roleSchema> & { roleId: string };
 
 export type AppState = {
   modalStatus: 'show' | 'hide';

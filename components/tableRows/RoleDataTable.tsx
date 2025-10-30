@@ -32,14 +32,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { studentTableType } from '@/types/types';
+import { roleSchema } from '@/types/types';
 
-type DatastudentTableType = {
-  columns: ColumnDef<studentTableType>[];
-  data: studentTableType[];
+type DataroleSchema = {
+  columns: ColumnDef<roleSchema>[];
+  data: roleSchema[];
 };
 
-const StudentDataTable = ({ columns, data }: DatastudentTableType) => {
+const RoleDataTable = ({ columns, data }: DataroleSchema) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -183,4 +183,6 @@ const StudentDataTable = ({ columns, data }: DatastudentTableType) => {
   );
 };
 
-export default StudentDataTable;
+
+
+export default RoleDataTable

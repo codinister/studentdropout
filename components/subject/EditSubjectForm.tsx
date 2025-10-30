@@ -13,24 +13,23 @@ import { subjectSchema } from '@/state/schemas/validationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import { fetchStudents, fetchUsers } from '@/state/redux/slice/appReducer';
+import { fetchSubject} from '@/state/redux/slice/asyncThunkFn';
 import useMutations from '@/state/query/useMutations';
 import { subjectFormSchema } from '@/state/schemas/formSchema';
-const EditStudentForm = ({
+
+
+
+
+
+
+const EditSubjectForm = ({
   data,
 }: {
-  data: {studentId: number} & z.infer<typeof subjectSchema>;
+  data: {subjectId: number} & z.infer<typeof subjectSchema>;
 }) => {
 
   const { successResult, errorResult } = useFormSubmitResult();
@@ -38,15 +37,13 @@ const EditStudentForm = ({
   const form = useForm<z.infer<typeof subjectSchema>>({
     resolver: zodResolver(subjectSchema),
     defaultValues: {
-
-
       ...subjectFormSchema(data)
     },
   });
 
   const { isPending, isSuccess, isError, error, mutate } = useMutations({
-    key: 'update-student',
-    url: '/students/update-student/'+data?.studentId,
+    key: 'update-subject',
+    url: '/subject/update-subject/'+data?.subjectId,
     method: 'Patch',
   });
 
@@ -57,7 +54,7 @@ const EditStudentForm = ({
     }
     if (isSuccess) {
       errorResult('');
-      successResult('Student updated successfully!', 'Student Updated', fetchStudents);
+      successResult('Subject updated successfully!', 'Subject Updated', fetchSubject);
     }
   }, [isError, isSuccess]);
 
@@ -75,73 +72,12 @@ const EditStudentForm = ({
           >
             <FormField
               control={form.control}
-              name="studentName"
+              name="subjectName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Student Name</FormLabel>
+                  <FormLabel>Subject Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter student full name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="level"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Level</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    value={field.value?.toString()}
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select level" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="100">Level 100</SelectItem>
-                      <SelectItem value="200">Level 200</SelectItem>
-                      <SelectItem value="300">Level 300</SelectItem>
-                      <SelectItem value="400">Level 400</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="totalAttendance"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Total Attendance %</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Enter total attendance"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="score"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Score</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Entter total score"
-                      {...field}
-                    />
+                    <Input placeholder="Enter subject" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -150,7 +86,7 @@ const EditStudentForm = ({
 
             <Button disabled={isPending} variant="default">
               {' '}
-              Update student {isPending ? <BeatLoader /> : ''}
+              Update subject {isPending ? <BeatLoader /> : ''}
             </Button>
           </form>
         </Form>
@@ -159,4 +95,6 @@ const EditStudentForm = ({
   );
 };
 
-export default EditStudentForm;
+
+
+export default EditSubjectForm

@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic'
 export const revalidate = 0 
 
-export async function Patch(req: NextRequest, {param}: {param: Promise<{id: string}>}) {
+export async function PATCH(req: NextRequest, {param}: {param: Promise<{id: string}>}) {
   const request = await req.json();
   const paramId = (await param).id
   const studentId = parseInt(paramId, 10)

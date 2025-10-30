@@ -1,42 +1,42 @@
 'use client';
 
 import PageHeader from '@/components/PageHeader';
-import StudentForm from '@/components/students/StudentForm';
-import StudentDataTable from '@/components/tableRows/StudentDataTable';
-import { useEffect, useState } from 'react';
+import SubjectDataTable from '@/components/tableRows/SubjectDataTable';
+import { useEffect } from 'react';
 import useDispatchselector from '@/state/redux/useDispatchselector';
-import { fetchStudents } from '@/state/redux/slice/appReducer';
-import { studentTableType} from '@/types/types';
-import useStudentColumn from '@/components/tableColumns/useStudentColumn';
+import { fetchSubject } from '@/state/redux/slice/asyncThunkFn';
+import { subjectSchema} from '@/types/types';
+import useSubjectColumn from '@/components/tableColumns/useSubjectColumn';
+import subjectForm from '@/components/subject/SubjectForm';
 
 
 const SubjectPage = () => {
 
-const {studentColumn} = useStudentColumn()
+const {subjectColumn} = useSubjectColumn()
 
   const pdfFn = () => {};
 
   const { dispatch, selector } = useDispatchselector();
 
   useEffect(() => {
-    dispatch(fetchStudents());
+    dispatch(fetchSubject());
   }, [dispatch]);
 
-  const students = selector((state) => state?.students);
+  const subjects = selector((state) => state?.subject);
 
-  const data: studentTableType[]  = students;
+  const data: subjectSchema[]  = subjects;
 
   return (
     <>
       <div className="bg-white">
         <PageHeader
           modalButtonName="Add Subject"
-          component={StudentForm} // ✅ pass reference
+          component={subjectForm} // ✅ pass reference
           pdfFn={pdfFn}
           pageTitle="Subject"
         />
 
-        <StudentDataTable columns={studentColumn} data={data} />
+        <SubjectDataTable columns={subjectColumn} data={data} />
       </div>
     </>
   );

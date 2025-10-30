@@ -1,6 +1,6 @@
 'use cliemt';
 
-import {  MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
@@ -11,40 +11,45 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '../ui/button';
+
 import { ColumnDef } from '@tanstack/react-table';
-import { studentTableType } from '@/types/types';
+
 import { FaEdit } from 'react-icons/fa';
 import { GoTrash } from 'react-icons/go';
 import useDispatchselector from '@/state/redux/useDispatchselector';
-import { fetchStudents } from '@/state/redux/slice/appReducer';
+
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
 import DialogueBox from '../DialogueBox';
-import EditStudentForm from '../students/EditStudentForm';
+import EditSubjectForm from '../subject/EditSubjectForm';
+import { subjectSchema } from '@/types/types';
+import { fetchSubject } from '@/state/redux/slice/asyncThunkFn';
 import fetchApi from '@/state/query/fetchApi';
 
-
-
-
-const useStudentColumn = () => {
+const useSubjectColumn = () => {
   const { showModal, closeModal } = useFormSubmitResult();
   const { dispatch } = useDispatchselector();
 
   const editItemFn = async (id: number) => {
-    const {data} = await fetchApi({url: '/subjects/get-subject-by-id/'+id})
+    const { data } = await fetchApi({
+      url: '/subject/get-subject-by-id/' + id,
+    });
 
-    const EditSubjectFn = () => {
+    const EditsubjectFn = () => {
       return <EditSubjectForm data={data} />;
     };
 
-    showModal(EditSubjectFn);
+    showModal(EditsubjectFn);
   };
 
   const deleteItemFn = (id: number) => {
     const DeleteFnComponent = () => {
       const deleteFn = async () => {
-        await fetchApi({method: 'Delete', url: '/students/delete-student-by-id/'+id})
+        await fetchApi({
+          method: 'Delete',
+          url: '/subject/delete-subject-by-id/' + id,
+        });
         closeModal();
-        dispatch(fetchStudents());
+        dispatch(fetchSubject());
       };
 
       return <DialogueBox deleteItemFn={deleteFn} />;
@@ -53,13 +58,7 @@ const useStudentColumn = () => {
     showModal(DeleteFnComponent);
   };
 
-
-
- 
-   
-
-
-  const studentColumn: ColumnDef<studentTableType>[] = [
+  const subjectColumn: ColumnDef<subjectSchema>[] = [
     {
       id: 'select',
       header: ({ table }) => (
@@ -83,39 +82,13 @@ const useStudentColumn = () => {
       enableHiding: false,
     },
     {
-      accessorKey: 'studentName',
-      header: 'Student Name',
+      accessorKey: 'subjectName',
+      header: 'Subject Name',
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue('studentName')}</div>
+        <div className="capitalize">{row.getValue('subjectName')}</div>
       ),
     },
-    {
-      accessorKey: 'level',
-      header: () => <div className="text-left">Level</div>,
-      cell: ({ row }) => (
-        <div className="text-left lowercase">{row.getValue('level')}</div>
-      ),
-    },
-    {
-      accessorKey: 'totalAttendance',
-      header: () => <div className="text-left">Attendance</div>,
-
-      cell: ({ row }) => {
-        return (
-          <div className="text-left font-medium">{row.getValue('totalAttendance')}</div>
-        );
-      },
-    },
-    {
-      accessorKey: 'score',
-      header: () => <div className="text-left">Score</div>,
-
-      cell: ({ row }) => {
-        return (
-          <div className="text-left font-medium">{row.getValue('score')}</div>
-        );
-      },
-    },
+    
     {
       id: 'actions',
       enableHiding: false,
@@ -133,13 +106,13 @@ const useStudentColumn = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => editItemFn(Number(result.studentId))}
+                onClick={() => editItemFn(Number(result.subjectId))}
               >
                 <FaEdit /> Edit
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => deleteItemFn(Number(result.studentId))}
+                onClick={() => deleteItemFn(Number(result.subjectId))}
               >
                 <GoTrash className="text-red-600" /> Delete
               </DropdownMenuItem>
@@ -150,7 +123,9 @@ const useStudentColumn = () => {
     },
   ];
 
-  return { studentColumn };
+  return { subjectColumn };
 };
 
-export default useStudentColumn;
+
+
+export default useSubjectColumn

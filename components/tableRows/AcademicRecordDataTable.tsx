@@ -32,14 +32,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { studentTableType } from '@/types/types';
+import { academicRecordSchema } from '@/types/types';
 
-type DatastudentTableType = {
-  columns: ColumnDef<studentTableType>[];
-  data: studentTableType[];
+type DataacademicRecordSchema = {
+  columns: ColumnDef<academicRecordSchema>[];
+  data: academicRecordSchema[];
 };
 
-const StudentDataTable = ({ columns, data }: DatastudentTableType) => {
+const AcademicRecordDataTable = ({ columns, data }: DataacademicRecordSchema) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -183,4 +183,5 @@ const StudentDataTable = ({ columns, data }: DatastudentTableType) => {
   );
 };
 
-export default StudentDataTable;
+
+export default AcademicRecordDataTable

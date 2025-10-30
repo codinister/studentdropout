@@ -32,14 +32,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { studentTableType } from '@/types/types';
+import { subjectSchema } from '@/types/types';
 
-type DatastudentTableType = {
-  columns: ColumnDef<studentTableType>[];
-  data: studentTableType[];
+type DatasubjectSchema = {
+  columns: ColumnDef<subjectSchema>[];
+  data: subjectSchema[];
 };
 
-const StudentDataTable = ({ columns, data }: DatastudentTableType) => {
+const SubjectDataTable = ({ columns, data }: DatasubjectSchema) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -71,10 +71,10 @@ const StudentDataTable = ({ columns, data }: DatastudentTableType) => {
     <div className="w-full mt-10 p-10">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter studentName..."
-          value={(table.getColumn('studentName')?.getFilterValue() as string) ?? ''}
+          placeholder="Filter subjectName..."
+          value={(table.getColumn('subjectName')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
-            table.getColumn('studentName')?.setFilterValue(event.target.value)
+            table.getColumn('subjectName')?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -183,4 +183,6 @@ const StudentDataTable = ({ columns, data }: DatastudentTableType) => {
   );
 };
 
-export default StudentDataTable;
+
+
+export default SubjectDataTable

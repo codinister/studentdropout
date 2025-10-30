@@ -5,8 +5,8 @@ import UserForm from '@/components/users/UserForm';
 import DataTable from '@/components/tableRows/DataTable';
 import { useEffect, useState } from 'react';
 import useDispatchselector from '@/state/redux/useDispatchselector';
-import { fetchUsers } from '@/state/redux/slice/appReducer';
-import { tableType, UserType } from '@/types/types';
+import { fetchUsers } from '@/state/redux/slice/asyncThunkFn';
+import { userSchema } from '@/types/types';
 import useUserColumns from '@/components/tableColumns/useUserColumns';
 
 const Users = () => {
@@ -23,7 +23,7 @@ const Users = () => {
 
   const users = selector((state) => state?.users);
 
-  const data: tableType[] = users;
+  const data: userSchema[] = users;
 
   return (
     <>

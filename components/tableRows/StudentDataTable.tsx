@@ -32,14 +32,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { studentTableType } from '@/types/types';
+import { studentSchema } from '@/types/types';
 
-type DatastudentTableType = {
-  columns: ColumnDef<studentTableType>[];
-  data: studentTableType[];
+type DatastudentSchema = {
+  columns: ColumnDef<studentSchema>[];
+  data: studentSchema[];
 };
 
-const StudentDataTable = ({ columns, data }: DatastudentTableType) => {
+const StudentDataTable = ({ columns, data }: DatastudentSchema) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});

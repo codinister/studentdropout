@@ -32,14 +32,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { studentTableType } from '@/types/types';
+import { demographicInfoSchema } from '@/types/types';
 
-type DatastudentTableType = {
-  columns: ColumnDef<studentTableType>[];
-  data: studentTableType[];
+type DatademographicInfoSchema = {
+  columns: ColumnDef<demographicInfoSchema>[];
+  data: demographicInfoSchema[];
 };
 
-const StudentDataTable = ({ columns, data }: DatastudentTableType) => {
+const DropoutPredictionDataTable = ({ columns, data }: DatademographicInfoSchema) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -183,4 +183,7 @@ const StudentDataTable = ({ columns, data }: DatastudentTableType) => {
   );
 };
 
-export default StudentDataTable;
+
+
+
+export default DropoutPredictionDataTable

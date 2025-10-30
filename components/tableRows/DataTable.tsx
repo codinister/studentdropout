@@ -32,11 +32,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { tableType, UserType } from '@/types/types';
+import { userSchema} from '@/types/types';
 
 type DataTableType = {
-  columns: ColumnDef<tableType>[];
-  data: tableType[];
+  columns: ColumnDef<userSchema>[];
+  data: userSchema[];
 };
 
 const DataTable = ({ columns, data }: DataTableType) => {
