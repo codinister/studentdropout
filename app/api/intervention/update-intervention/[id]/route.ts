@@ -1,21 +1,21 @@
 
 import { db } from '@/db';
-import { demographicInfoSchema } from '@/state/schemas/validationSchemas';
+import { interventionSchema } from '@/state/schemas/validationSchemas';
 import { fromZodError } from 'zod-validation-error';
 import { NextRequest, NextResponse } from 'next/server';
-import { demographicInfoFormSchema } from '@/state/schemas/formSchema';
+import { interventionFormSchema } from '@/state/schemas/formSchema';
 
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0 
 
-export async function Patch(req: NextRequest, {param}: {param: Promise<{id: string}>}) {
+export async function PATCH(req: NextRequest, {params}: {params: Promise<{id: string}>}) {
   const request = await req.json();
-  const paramId = (await param).id
-  const demoId = parseInt(paramId, 10)
+  const paramsId = (await params).id
+  const interventionId = parseInt(paramsId, 10)
 
  
-  const result = demographicInfoSchema.safeParse(request);
+  const result = interventionSchema.safeParse(request);
 
   if (!result.success) {
     return NextResponse.json(
@@ -30,9 +30,9 @@ export async function Patch(req: NextRequest, {param}: {param: Promise<{id: stri
 
 
   try {
-     await db.demographicInfo.update({
-      where: { demoId },
-      data: demographicInfoFormSchema(dataObj)
+     await db.intervention.update({
+      where: { interventionId },
+      data: interventionFormSchema(dataObj)
     });
 
     return NextResponse.json(

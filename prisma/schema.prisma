@@ -24,25 +24,27 @@ model Student {
   attendance      AttendanceRecord[]
   predictions     DropoutPrediction[]
   interventions   Intervention[]
+  behaviorrecords BehaviorRecords[]
   demographic     DemographicInfo?
+  healthrecord    HealthRecord[]
+  financialstatus FinancialStatus[]
 
   @@map("Student")
 }
 
 model Subject {
-  subjectId Int      @id @default(autoincrement())
-  date  DateTime @default(now())
-  subjectName String 
+  subjectId      Int              @id @default(autoincrement())
+  date           DateTime         @default(now())
+  subjectName    String
   academicRecord AcademicRecord[]
 }
 
 model AcademicRecord {
-  recordId Int    @id @default(autoincrement())
-  level    String
-  semester String
-  year     String
-  subjectId Int 
-  subject Subject @relation(fields: [subjectId], references: [subjectId])
+  recordId  Int     @id @default(autoincrement())
+  semester  String
+  year      Int
+  subjectId Int
+  subject   Subject @relation(fields: [subjectId], references: [subjectId])
   studentId Int
   student   Student @relation(fields: [studentId], references: [studentId])
 
@@ -60,19 +62,15 @@ model AttendanceRecord {
   @@map("AttendanceRecord")
 }
 
-
-
-
 model Settings {
-  settingsId Int      @id @default(autoincrement())
-  schoolName String
-  schoolPhone String 
-  schoolWebsite String 
-  schoolLocation String
+  settingsId          Int      @id @default(autoincrement())
+  schoolName          String
+  schoolPhone         String
+  schoolWebsite       String
+  schoolLocation      String
   schoolPostalAddress String
-  logo String 
-  date  DateTime @default(now())
-  
+  logo                String
+  date                DateTime @default(now())
 }
 
 model DropoutPrediction {
@@ -122,6 +120,30 @@ model User {
   image         String?
 
   @@map("User")
+}
+
+model BehaviorRecords {
+  behaviorId  Int      @id @default(autoincrement())
+  student     Student  @relation(fields: [studentId], references: [studentId])
+  studentId   Int
+  description String   @db.Text
+  date        DateTime @default(now())
+}
+
+model HealthRecord {
+  healthId  Int      @id @default(autoincrement())
+  student   Student  @relation(fields: [studentId], references: [studentId])
+  studentId Int
+  condition String   @db.Text
+  date      DateTime @default(now())
+}
+
+model FinancialStatus {
+  financialId Int     @id @default(autoincrement())
+  student     Student @relation(fields: [studentId], references: [studentId])
+  studentId   Int
+  status      String
+  amount      Int
 }
 
 model Role {

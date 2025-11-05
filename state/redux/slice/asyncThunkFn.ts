@@ -21,6 +21,13 @@ export const fetchStudents = asyncThunk(
   'fetchStudents'
 );
 
+
+export const fetchBehaviorRecord = asyncThunk(
+  '/behaviorrecord/get-behaviorrecord',
+  'fetchBehavior'
+);
+
+
 export const fetchDropoutprediction = asyncThunk(
   '/dropoutprediction/get-dropoutprediction',
   'fetchdropoutprediction'
@@ -40,3 +47,19 @@ export const fetchAcademicrecord = asyncThunk(
   '/academicrecord/get-academicrecord',
   'fetchacademicrecord'
 );
+
+
+export const fetchFinancialrecord = asyncThunk(
+  '/financialrecord/get-financialrecord',
+  'fetchfinancialrecord'
+);
+
+
+export const fetchHealthrecord = asyncThunk(
+  '/healthrecord/get-healthrecord',
+  'fetchhealthrecord'
+);
+
+
+
+

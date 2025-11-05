@@ -1,44 +1,44 @@
 'use client';
 
 import PageHeader from '@/components/PageHeader';
-import UserForm from '@/components/users/UserForm';
-import DataTable from '@/components/tableRows/DataTable';
-import { useEffect, useState } from 'react';
+import BehaviorRecordForm from '@/components/behaviorrecord/BehaviorRecordForm';
+import BehaviorRecordDataTable from '@/components/tableRows/BehaviorRecordDataTable';
+import { useEffect} from 'react';
 import useDispatchselector from '@/state/redux/useDispatchselector';
-import { fetchUsers } from '@/state/redux/slice/asyncThunkFn';
-import { userSchema } from '@/types/types';
-import useUserColumns from '@/components/tableColumns/useUserColumns';
+import { fetchBehaviorRecord } from '@/state/redux/slice/asyncThunkFn';
+import { behaviorSchema} from '@/types/types';
+import useBehaviorRecordColumns  from '@/components/tableColumns/useBehaviorRecordColumns';
 
-const Users = () => {
+const BehaviorRecord = () => {
 
-  const { userColumns } = useUserColumns();
+  const { behaviorColumn } = useBehaviorRecordColumns();
 
   const pdfFn = () => {};
 
   const { dispatch, selector } = useDispatchselector();
 
   useEffect(() => {
-    dispatch(fetchUsers());
+    dispatch(fetchBehaviorRecord());
   }, [dispatch]);
 
-  const users = selector((state) => state?.users);
+  const behavior_record = selector((state) => state?.behaviorrecord);
 
-  const data: userSchema[] = users;
+  const data: behaviorSchema[] = behavior_record;
 
   return (
     <>
       <div className="bg-white">
         <PageHeader
-          modalButtonName="Add User"
-          component={UserForm} // ✅ pass reference
+          modalButtonName="Add Behavior"
+          component={BehaviorRecordForm} // ✅ pass reference
           pdfFn={pdfFn}
-          pageTitle="Users"
+          pageTitle="Behavior Record"
         />
 
-        <DataTable columns={userColumns} data={data} />
+        <BehaviorRecordDataTable columns={behaviorColumn} data={data} />
       </div>
     </>
   );
 };
 
-export default Users;
+export default BehaviorRecord

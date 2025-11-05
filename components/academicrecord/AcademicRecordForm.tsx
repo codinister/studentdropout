@@ -1,45 +1,34 @@
 'use client';
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
-import { academicRecordSchema, academicRecordSchema } from '@/state/schemas/validationSchemas';
+import { academicRecordSchema } from '@/state/schemas/validationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import { fetchStudents } from '@/state/redux/slice/appReducer';
+import { fetchAcademicrecord } from '@/state/redux/slice/asyncThunkFn';
 import useMutations from '@/state/query/useMutations';
 import { useEffect } from 'react';
 import { academicRecordFormSchema } from '@/state/schemas/formSchema';
+import { Autocomplete } from '../Autocomplete';
+import useGetQuery from '@/state/query/useGetQuery';
+import Semester from '../Semester';
+import Year from '../Year';
+import useStudentInput from '@/utils/useStudentInput';
+import useSubjectInput from '@/utils/useSubjectInput';
 
-const StudentForm = () => {
+const AcademicRecordForm = () => {
   const form = useForm<z.infer<typeof academicRecordSchema>>({
     resolver: zodResolver(academicRecordSchema),
-    defaultValues: {
-      ...academicRecordFormSchema({}),
-    },
+    defaultValues: academicRecordFormSchema({}),
   });
 
   const { successResult, errorResult } = useFormSubmitResult();
   const { isError, isSuccess, isPending, error, mutate } = useMutations({
-    key: 'add-student',
-    url: '/students/add-student',
+    key: 'add-academicrecord',
+    url: '/academicrecord/add-academicrecord',
   });
 
   useEffect(() => {
@@ -50,9 +39,9 @@ const StudentForm = () => {
     if (isSuccess) {
       errorResult('');
       successResult(
-        'Student added successfully!',
-        'Student Added',
-        fetchStudents
+        'Academicrecord added successfully!',
+        'Academicrecord Added',
+        fetchAcademicrecord
       );
     }
   }, [isError, isSuccess]);
@@ -60,6 +49,9 @@ const StudentForm = () => {
   const handleSubmit = (data: z.infer<typeof academicRecordSchema>) => {
     mutate(data);
   };
+
+  const { StudentInput } = useStudentInput();
+  const { SubjectInput } = useSubjectInput();
 
   return (
     <>
@@ -69,84 +61,13 @@ const StudentForm = () => {
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-4"
           >
-            <FormField
-              control={form.control}
-              name="studentName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Student Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter student full name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="level"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Level</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    value={field.value?.toString()}
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select level" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="100">Level 100</SelectItem>
-                      <SelectItem value="200">Level 200</SelectItem>
-                      <SelectItem value="300">Level 300</SelectItem>
-                      <SelectItem value="400">Level 400</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="totalAttendance"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Total Attendance %</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Enter total attendance"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="score"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Score %</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Entter total score"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
+            <SubjectInput form={form} />
+            <Semester form={form} />
+            <Year form={form} />
+            <StudentInput form={form} />
             <Button disabled={isPending} variant="default">
               {' '}
-              Save student {isPending ? <BeatLoader /> : ''}
+              Save Academicrecord {isPending ? <BeatLoader /> : ''}
             </Button>
           </form>
         </Form>
@@ -155,4 +76,4 @@ const StudentForm = () => {
   );
 };
 
-export default StudentForm;
+export default AcademicRecordForm;

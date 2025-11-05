@@ -23,10 +23,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import { fetchStudents } from '@/state/redux/slice/appReducer';
+import { fetchStudents } from '@/state/redux/slice/asyncThunkFn';
 import useMutations from '@/state/query/useMutations';
 import { useEffect } from 'react';
 import { studentFormSchema } from '@/state/schemas/formSchema';
+import Levels from '../Levels';
 
 const StudentForm = () => {
   const form = useForm<z.infer<typeof studentSchema>>({
@@ -83,30 +84,7 @@ const StudentForm = () => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="level"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Level</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
-                    value={field.value?.toString()}
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select level" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="100">Level 100</SelectItem>
-                      <SelectItem value="200">Level 200</SelectItem>
-                      <SelectItem value="300">Level 300</SelectItem>
-                      <SelectItem value="400">Level 400</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <Levels form={form} />
 
             <FormField
               control={form.control}

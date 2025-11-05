@@ -9,10 +9,10 @@ import { roleFormSchema } from '@/state/schemas/formSchema';
 export const dynamic = 'force-dynamic'
 export const revalidate = 0 
 
-export async function Patch(req: NextRequest, {param}: {param: Promise<{id: string}>}) {
+export async function PATCH(req: NextRequest, {params}: {params: Promise<{id: string}>}) {
   const request = await req.json();
-  const paramId = (await param).id
-  const roleId = parseInt(paramId, 10)
+  const paramsId = (await params).id
+  const roleId = parseInt(paramsId, 10)
 
  
   const result = roleSchema.safeParse(request);

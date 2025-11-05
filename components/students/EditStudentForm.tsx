@@ -24,7 +24,7 @@ import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import { fetchStudents, fetchUsers } from '@/state/redux/slice/appReducer';
+import { fetchStudents } from '@/state/redux/slice/asyncThunkFn';
 import useMutations from '@/state/query/useMutations';
 import { studentFormSchema } from '@/state/schemas/formSchema';
 const EditStudentForm = ({

@@ -1,3 +1,4 @@
+
 import {
   userSchema,
   studentSchema,
@@ -9,12 +10,16 @@ import {
   interventionSchema,
   demographicInfoSchema,
   roleSchema,
+  behaviorRecordsSchema,
+  financialRecordSchema,
+  healthRecordSchema,
 } from '@/state/schemas/validationSchemas';
 
 import { z } from 'zod';
 
 export type userSchema = z.infer<typeof userSchema> & { userId: string };
 export type studentSchema = z.infer<typeof studentSchema> & { studentId: string };
+export type behaviorSchema = z.infer<typeof behaviorRecordsSchema> & { behaviorId: string };
 export type subjectSchema = z.infer<typeof subjectSchema> & { subjectId: string };
 export type academicRecordSchema = z.infer<typeof academicRecordSchema> &
   { recordId: string };
@@ -29,6 +34,10 @@ export type demographicInfoSchema = z.infer<typeof demographicInfoSchema> &
   { demoId: string };
 export type roleSchema = z.infer<typeof roleSchema> & { roleId: string };
 
+
+export type financialSchema = z.infer<typeof financialRecordSchema> & { financialId: string };
+export type healthSchema = z.infer<typeof healthRecordSchema> & { healthId: string };
+
 export type AppState = {
   modalStatus: 'show' | 'hide';
   modalComponent: React.ElementType | null;
@@ -42,5 +51,8 @@ export type AppState = {
   settings: settingsSchema[];
   attendancerecord: attendanceRecordSchema[];
   academicrecord: academicRecordSchema[];
+  behaviorrecord: behaviorSchema[]
+  financialrecord: financialSchema[]
+  healthrecord: healthSchema[]
   error?: any;
 };

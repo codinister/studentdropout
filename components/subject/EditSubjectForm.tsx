@@ -49,6 +49,7 @@ const EditSubjectForm = ({
 
   useEffect(() => {
     if (isError) {
+      console.log(error)
       const message = error?.message || '';
       errorResult(message);
     }

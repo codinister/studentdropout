@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
-import { fetchUsers } from '@/state/redux/slice/appReducer';
+import { fetchUsers } from '@/state/redux/slice/asyncThunkFn';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
 import useMutations from '@/state/query/useMutations';

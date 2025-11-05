@@ -1,44 +1,44 @@
 'use client';
 
 import PageHeader from '@/components/PageHeader';
-import UserForm from '@/components/users/UserForm';
-import DataTable from '@/components/tableRows/DataTable';
-import { useEffect, useState } from 'react';
+import AttendanceRecordForm from '@/components/attendancerecord/AttendanceRecordForm';
+import AttendanceRecordDataTable from '@/components/tableRows/AttendanceRecordDataTable';
+import { useEffect} from 'react';
 import useDispatchselector from '@/state/redux/useDispatchselector';
-import { fetchUsers } from '@/state/redux/slice/asyncThunkFn';
-import { userSchema } from '@/types/types';
-import useUserColumns from '@/components/tableColumns/useUserColumns';
+import { fetchAttendancerecord } from '@/state/redux/slice/asyncThunkFn';
+import { attendanceRecordSchema} from '@/types/types';
+import useAttendanceRecordColumns  from '@/components/tableColumns/useAttendanceRecordColumns ';
 
-const Users = () => {
+const AttendanceRecord = () => {
 
-  const { userColumns } = useUserColumns();
+  const { attendanceColumn } = useAttendanceRecordColumns();
 
   const pdfFn = () => {};
 
   const { dispatch, selector } = useDispatchselector();
 
   useEffect(() => {
-    dispatch(fetchUsers());
+    dispatch(fetchAttendancerecord());
   }, [dispatch]);
 
-  const users = selector((state) => state?.users);
+  const attendance_records = selector((state) => state?.attendancerecord);
 
-  const data: userSchema[] = users;
+  const data: attendanceRecordSchema[] = attendance_records;
 
   return (
     <>
       <div className="bg-white">
         <PageHeader
-          modalButtonName="Add User"
-          component={UserForm} // ✅ pass reference
+          modalButtonName="Add Attendance"
+          component={AttendanceRecordForm} // ✅ pass reference
           pdfFn={pdfFn}
-          pageTitle="Users"
+          pageTitle="Attendance Records"
         />
 
-        <DataTable columns={userColumns} data={data} />
+        <AttendanceRecordDataTable columns={attendanceColumn} data={data} />
       </div>
     </>
   );
 };
 
-export default Users;
+export default AttendanceRecord

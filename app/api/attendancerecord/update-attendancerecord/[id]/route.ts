@@ -1,21 +1,21 @@
 
 import { db } from '@/db';
-import { academicRecordSchema } from '@/state/schemas/validationSchemas';
+import { attendanceRecordSchema } from '@/state/schemas/validationSchemas';
 import { fromZodError } from 'zod-validation-error';
 import { NextRequest, NextResponse } from 'next/server';
-import { academicRecordFormSchema } from '@/state/schemas/formSchema';
+import { attendanceRecordFormSchema } from '@/state/schemas/formSchema';
 
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0 
 
-export async function Patch(req: NextRequest, {param}: {param: Promise<{id: string}>}) {
+export async function PATCH(req: NextRequest, {params}: {params: Promise<{id: string}>}) {
   const request = await req.json();
-  const paramId = (await param).id
-  const recordId = parseInt(paramId, 10)
+  const paramsId = (await params).id
+  const attendanceId = parseInt(paramsId, 10)
 
  
-  const result = academicRecordSchema.safeParse(request);
+  const result = attendanceRecordSchema.safeParse(request);
 
   if (!result.success) {
     return NextResponse.json(
@@ -26,14 +26,14 @@ export async function Patch(req: NextRequest, {param}: {param: Promise<{id: stri
     );
   }
 
-  const dataObject = result.data;
+  const dataObj = result.data;
 
 
 
   try {
-     await db.academicRecord.update({
-      where: { recordId },
-      data: academicRecordFormSchema(dataObject)
+     await db.attendanceRecord.update({
+      where: { attendanceId },
+      data: attendanceRecordFormSchema(dataObj)
     });
 
     return NextResponse.json(

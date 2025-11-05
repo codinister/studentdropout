@@ -23,12 +23,14 @@ import {
 import { Button } from '@/components/ui/button';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import { fetchStudents } from '@/state/redux/slice/appReducer';
+import { fetchAttendancerecord } from '@/state/redux/slice/asyncThunkFn';
 import useMutations from '@/state/query/useMutations';
 import { useEffect } from 'react';
 import { attendanceRecordFormSchema } from '@/state/schemas/formSchema';
+import useStudentInput from '@/utils/useStudentInput';
 
-const StudentForm = () => {
+
+const AttendanceRecordForm = () => {
   const form = useForm<z.infer<typeof attendanceRecordSchema>>({
     resolver: zodResolver(attendanceRecordSchema),
     defaultValues: {
@@ -38,8 +40,8 @@ const StudentForm = () => {
 
   const { successResult, errorResult } = useFormSubmitResult();
   const { isError, isSuccess, isPending, error, mutate } = useMutations({
-    key: 'add-student',
-    url: '/students/add-student',
+    key: 'add-attendancerecord',
+    url: '/attendancerecord/add-attendancerecord',
   });
 
   useEffect(() => {
@@ -50,9 +52,9 @@ const StudentForm = () => {
     if (isSuccess) {
       errorResult('');
       successResult(
-        'Student added successfully!',
-        'Student Added',
-        fetchStudents
+        'Attendance added successfully!',
+        'Attendance Record Added',
+        fetchAttendancerecord
       );
     }
   }, [isError, isSuccess]);
@@ -60,6 +62,10 @@ const StudentForm = () => {
   const handleSubmit = (data: z.infer<typeof attendanceRecordSchema>) => {
     mutate(data);
   };
+
+
+    const { StudentInput } = useStudentInput();
+
 
   return (
     <>
@@ -71,24 +77,27 @@ const StudentForm = () => {
           >
             <FormField
               control={form.control}
-              name="studentName"
+              name="date"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Student Name</FormLabel>
+                  <FormLabel>Date</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter student full name" {...field} />
+                    <Input type="date" placeholder="Choose date" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
+
+            <StudentInput form={form}  />
+
             <FormField
               control={form.control}
-              name="level"
+              name="status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Level</FormLabel>
+                  <FormLabel>Status</FormLabel>
                   <Select
                     onValueChange={(value) => field.onChange(Number(value))}
                     value={field.value?.toString()}
@@ -97,10 +106,8 @@ const StudentForm = () => {
                       <SelectValue placeholder="Select level" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="100">Level 100</SelectItem>
-                      <SelectItem value="200">Level 200</SelectItem>
-                      <SelectItem value="300">Level 300</SelectItem>
-                      <SelectItem value="400">Level 400</SelectItem>
+                      <SelectItem value="Present">Present</SelectItem>
+                      <SelectItem value="Absent">Absent</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -108,45 +115,11 @@ const StudentForm = () => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="totalAttendance"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Total Attendance %</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Enter total attendance"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="score"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Score %</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Entter total score"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            
 
             <Button disabled={isPending} variant="default">
               {' '}
-              Save student {isPending ? <BeatLoader /> : ''}
+              Save Attendance {isPending ? <BeatLoader /> : ''}
             </Button>
           </form>
         </Form>
@@ -155,4 +128,6 @@ const StudentForm = () => {
   );
 };
 
-export default StudentForm;
+export default AttendanceRecordForm
+
+

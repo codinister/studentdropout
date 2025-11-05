@@ -1,4 +1,3 @@
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   fetchUsers,
@@ -11,6 +10,9 @@ import {
   fetchSettings,
   fetchAttendancerecord,
   fetchAcademicrecord,
+  fetchBehaviorRecord,
+  fetchHealthrecord,
+  fetchFinancialrecord,
 } from './asyncThunkFn';
 
 import { AppState } from '@/types/types';
@@ -28,6 +30,9 @@ const initialState: AppState = {
   settings: [],
   attendancerecord: [],
   academicrecord: [],
+  behaviorrecord: [],
+  healthrecord: [],
+  financialrecord: [],
   error: null,
 };
 
@@ -79,6 +84,39 @@ const appSlice = createSlice({
         state.academicrecord = action.payload;
       })
       .addCase(fetchAcademicrecord.rejected, (state, action) => {
+        state.error = action.payload || 'Something went wrong';
+      })
+
+      .addCase(fetchBehaviorRecord.pending, (state) => {
+        state.behaviorrecord = [];
+        state.error = null;
+      })
+      .addCase(fetchBehaviorRecord.fulfilled, (state, action) => {
+        state.behaviorrecord = action.payload;
+      })
+      .addCase(fetchBehaviorRecord.rejected, (state, action) => {
+        state.error = action.payload || 'Something went wrong';
+      })
+
+      .addCase(fetchHealthrecord.pending, (state) => {
+        state.healthrecord = [];
+        state.error = null;
+      })
+      .addCase(fetchHealthrecord.fulfilled, (state, action) => {
+        state.healthrecord = action.payload;
+      })
+      .addCase(fetchHealthrecord.rejected, (state, action) => {
+        state.error = action.payload || 'Something went wrong';
+      })
+
+      .addCase(fetchFinancialrecord.pending, (state) => {
+        state.financialrecord = [];
+        state.error = null;
+      })
+      .addCase(fetchFinancialrecord.fulfilled, (state, action) => {
+        state.financialrecord = action.payload;
+      })
+      .addCase(fetchFinancialrecord.rejected, (state, action) => {
         state.error = action.payload || 'Something went wrong';
       })
 

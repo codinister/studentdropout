@@ -1,44 +1,46 @@
 'use client';
 
 import PageHeader from '@/components/PageHeader';
-import UserForm from '@/components/users/UserForm';
-import DataTable from '@/components/tableRows/DataTable';
-import { useEffect, useState } from 'react';
+import AcademicRecordForm from '@/components/academicrecord/AcademicRecordForm';
+import { useEffect} from 'react';
 import useDispatchselector from '@/state/redux/useDispatchselector';
-import { fetchUsers } from '@/state/redux/slice/asyncThunkFn';
-import { userSchema } from '@/types/types';
-import useUserColumns from '@/components/tableColumns/useUserColumns';
+import { fetchAcademicrecord } from '@/state/redux/slice/asyncThunkFn';
+import { academicRecordSchema } from '@/types/types';
+import useAcademicRecordColumns from '@/components/tableColumns/useAcademicRecordColumns';
+import AcademicRecordDataTable from '@/components/tableRows/AcademicRecordDataTable';
 
-const Users = () => {
+const AcademicRecords = () => {
 
-  const { userColumns } = useUserColumns();
+  const { academicColumn } = useAcademicRecordColumns();
 
   const pdfFn = () => {};
 
   const { dispatch, selector } = useDispatchselector();
 
   useEffect(() => {
-    dispatch(fetchUsers());
+    dispatch(fetchAcademicrecord());
   }, [dispatch]);
 
-  const users = selector((state) => state?.users);
+  const academic = selector((state) => state?.academicrecord);
 
-  const data: userSchema[] = users;
+  const data: academicRecordSchema[] = academic;
 
   return (
     <>
       <div className="bg-white">
         <PageHeader
-          modalButtonName="Add User"
-          component={UserForm} // ✅ pass reference
+          modalButtonName="Academic Records"
+          component={AcademicRecordForm} // ✅ pass reference
           pdfFn={pdfFn}
-          pageTitle="Users"
+          pageTitle="Academic Records"
         />
 
-        <DataTable columns={userColumns} data={data} />
+        <AcademicRecordDataTable columns={academicColumn} data={data} />
       </div>
     </>
   );
 };
 
-export default Users;
+export default AcademicRecords;
+
+

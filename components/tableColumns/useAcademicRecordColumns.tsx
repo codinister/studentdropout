@@ -26,19 +26,20 @@ import { fetchAcademicrecord } from '@/state/redux/slice/asyncThunkFn';
 import fetchApi from '@/state/query/fetchApi';
 
 const useAcademicRecordColumns = () => {
+  
   const { showModal, closeModal } = useFormSubmitResult();
   const { dispatch } = useDispatchselector();
 
   const editItemFn = async (id: number) => {
     const { data } = await fetchApi({
-      url: '/academicrecord/get-student-by-id/' + id,
+      url: '/academicrecord/get-academicrecord-by-id/' + id,
     });
 
-    const EditStudentFn = () => {
+    const EditAcademicRecordFn = () => {
       return <EditAcademicRecordForm data={data} />;
     };
 
-    showModal(EditStudentFn);
+    showModal(EditAcademicRecordFn);
   };
 
   const deleteItemFn = (id: number) => {
@@ -46,7 +47,7 @@ const useAcademicRecordColumns = () => {
       const deleteFn = async () => {
         await fetchApi({
           method: 'Delete',
-          url: '/academicrecord/delete-student-by-id/' + id,
+          url: '/academicrecord/delete-academicrecord-by-id/' + id,
         });
         closeModal();
         dispatch(fetchAcademicrecord());
@@ -96,27 +97,43 @@ const useAcademicRecordColumns = () => {
       ),
     },
     {
-      accessorKey: 'totalAttendance',
-      header: () => <div className="text-left">Attendance</div>,
+      accessorKey: 'subjectName',
+      header: () => <div className="text-left">Subject</div>,
 
       cell: ({ row }) => {
         return (
           <div className="text-left font-medium">
-            {row.getValue('totalAttendance')}
+            {row.getValue('subjectName')}
           </div>
         );
       },
     },
+
+
     {
-      accessorKey: 'score',
-      header: () => <div className="text-left">Score</div>,
+      accessorKey: 'semester',
+      header: () => <div className="text-left">Semester</div>,
 
       cell: ({ row }) => {
         return (
-          <div className="text-left font-medium">{row.getValue('score')}</div>
+          <div className="text-left font-medium">{row.getValue('semester')}</div>
         );
       },
     },
+
+
+    {
+      accessorKey: 'year',
+      header: () => <div className="text-left">Year</div>,
+
+      cell: ({ row }) => {
+        return (
+          <div className="text-left font-medium">{row.getValue('year')}</div>
+        );
+      },
+    },
+
+
     {
       id: 'actions',
       enableHiding: false,
@@ -134,13 +151,13 @@ const useAcademicRecordColumns = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => editItemFn(Number(result.studentId))}
+                onClick={() => editItemFn(Number(result.recordId))}
               >
                 <FaEdit /> Edit
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => deleteItemFn(Number(result.studentId))}
+                onClick={() => deleteItemFn(Number(result.recordId))}
               >
                 <GoTrash className="text-red-600" /> Delete
               </DropdownMenuItem>

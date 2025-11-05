@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema } from '@/state/schemas/schemas';
+import { loginSchema } from '@/state/schemas/validationSchemas';
 import { useEffect } from 'react';
 
 import {
