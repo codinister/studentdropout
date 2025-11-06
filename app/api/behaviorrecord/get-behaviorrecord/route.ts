@@ -19,7 +19,8 @@ export async function GET(): Promise<any> {
         behaviorId: v.behaviorId,
         date: ymd(v.date), 
         description: v.description, 
-        studentName: v.student.studentName
+        studentName: v.student.studentName, 
+        studentId: v.student.studentId
       }
     })
     return NextResponse.json(obj)

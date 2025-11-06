@@ -96,7 +96,13 @@ const useBehaviorRecordColumns = () => {
         <div className="capitalize">{row.getValue('studentName')}</div>
       ),
     },
-
+    {
+      accessorKey: 'studentId',
+      header: 'Student ID',
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue('studentId')}</div>
+      ),
+    },
     {
       accessorKey: 'description',
       header: () => <div className="text-left">Description</div>,

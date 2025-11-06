@@ -1,20 +1,21 @@
-
 import { db } from '@/db';
 import { attendanceRecordSchema } from '@/state/schemas/validationSchemas';
 import { fromZodError } from 'zod-validation-error';
 import { NextRequest, NextResponse } from 'next/server';
 import { attendanceRecordFormSchema } from '@/state/schemas/formSchema';
+import { dateTime } from '@/utils/dateFormats';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0 
-
-export async function PATCH(req: NextRequest, {params}: {params: Promise<{id: string}>}) {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const request = await req.json();
-  const paramsId = (await params).id
-  const attendanceId = parseInt(paramsId, 10)
+  const paramsId = (await params).id;
+  const attendanceId = parseInt(paramsId, 10);
 
- 
   const result = attendanceRecordSchema.safeParse(request);
 
   if (!result.success) {
@@ -28,12 +29,13 @@ export async function PATCH(req: NextRequest, {params}: {params: Promise<{id: st
 
   const dataObj = result.data;
 
-
-
   try {
-     await db.attendanceRecord.update({
+    await db.attendanceRecord.update({
       where: { attendanceId },
-      data: attendanceRecordFormSchema(dataObj)
+      data: {
+        ...attendanceRecordFormSchema(dataObj),
+        date: dateTime(dataObj.date),
+      },
     });
 
     return NextResponse.json(

@@ -90,19 +90,13 @@ const useInterventionColumns = () => {
       ),
     },
 
-
-        {
-      accessorKey: 'interventionId',
+    {
+      accessorKey: 'studentId',
       header: 'Student ID',
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue('interventionId')}</div>
+        <div className="capitalize">{row.getValue('studentId')}</div>
       ),
     },
-
-
- 
-  
-
 
     {
       accessorKey: 'type',
@@ -112,16 +106,13 @@ const useInterventionColumns = () => {
       ),
     },
 
-
     {
       accessorKey: 'outcome',
       header: () => <div className="text-left">Status</div>,
 
       cell: ({ row }) => {
         return (
-          <div className="text-left font-medium">
-            {row.getValue('outcome')}
-          </div>
+          <div className="text-left font-medium">{row.getValue('outcome')}</div>
         );
       },
     },
@@ -131,7 +122,9 @@ const useInterventionColumns = () => {
 
       cell: ({ row }) => {
         return (
-          <div className="text-left font-medium">{formatDate(row.getValue('date'))}</div>
+          <div className="text-left font-medium">
+            {formatDate(row.getValue('date'))}
+          </div>
         );
       },
     },
@@ -172,4 +165,4 @@ const useInterventionColumns = () => {
   return { interventionColumn };
 };
 
-export default useInterventionColumns 
+export default useInterventionColumns;

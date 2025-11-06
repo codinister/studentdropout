@@ -21,7 +21,7 @@ import useDispatchselector from '@/state/redux/useDispatchselector';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
 import DialogueBox from '../DialogueBox';
 import EditHealthRecordForm from '../healthrecord/EditHealthRecordForm';
-import {  fetchHealthrecord } from '@/state/redux/slice/asyncThunkFn';
+import { fetchHealthrecord } from '@/state/redux/slice/asyncThunkFn';
 import fetchApi from '@/state/query/fetchApi';
 import { healthSchema } from '@/types/types';
 import { formatDate } from '@/utils/dateFormats';
@@ -32,7 +32,7 @@ const useHealthRecordColumns = () => {
 
   const editItemFn = async (id: number) => {
     const { data } = await fetchApi({
-      url: '/healthrecord/get-healthrecord-by-id/'+id,
+      url: '/healthrecord/get-healthrecord-by-id/' + id,
     });
 
     const EditHealthRecord = () => {
@@ -47,7 +47,7 @@ const useHealthRecordColumns = () => {
       const deleteFn = async () => {
         await fetchApi({
           method: 'Delete',
-          url: '/healthrecord/delete-healthrecord-by-id/'+id,
+          url: '/healthrecord/delete-healthrecord-by-id/' + id,
         });
         closeModal();
         dispatch(fetchHealthrecord());
@@ -82,7 +82,7 @@ const useHealthRecordColumns = () => {
       enableSorting: false,
       enableHiding: false,
     },
-        {
+    {
       accessorKey: 'date',
       header: () => <div className="text-left">Date</div>,
       cell: ({ row }) => (
@@ -96,7 +96,13 @@ const useHealthRecordColumns = () => {
         <div className="capitalize">{row.getValue('studentName')}</div>
       ),
     },
-
+    {
+      accessorKey: 'studentId',
+      header: 'Student ID',
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue('studentId')}</div>
+      ),
+    },
     {
       accessorKey: 'condition',
       header: () => <div className="text-left">Condition</div>,
@@ -146,6 +152,4 @@ const useHealthRecordColumns = () => {
   return { healthColumn };
 };
 
-
-export default useHealthRecordColumns
-
+export default useHealthRecordColumns;

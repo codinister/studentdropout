@@ -55,7 +55,6 @@ model AttendanceRecord {
   attendanceId Int      @id @default(autoincrement())
   date         DateTime @default(now())
   status       String
-
   studentId Int
   student   Student @relation(fields: [studentId], references: [studentId])
 

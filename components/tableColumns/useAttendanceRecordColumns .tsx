@@ -31,8 +31,10 @@ const useAttendanceRecordColumns = () => {
 
   const editItemFn = async (id: number) => {
     const { data } = await fetchApi({
-      url: '/attendancerecord/get-student-by-id/' + id,
+      url: '/attendancerecord/get-attendancerecord-by-id/'+id,
     });
+
+    console.log('ID',id, 'REC', data)
 
     const EditStudentFn = () => {
       return <EditAttendanceRecordForm data={data} />;
@@ -46,7 +48,7 @@ const useAttendanceRecordColumns = () => {
       const deleteFn = async () => {
         await fetchApi({
           method: 'Delete',
-          url: '/attendancerecord/delete-student-by-id/' + id,
+          url: '/attendancerecord/delete-attendancerecord-by-id/'+id,
         });
         closeModal();
         dispatch(fetchAttendancerecord());
@@ -88,11 +90,18 @@ const useAttendanceRecordColumns = () => {
         <div className="capitalize">{row.getValue('studentName')}</div>
       ),
     },
-    {
-      accessorKey: 'level',
-      header: () => <div className="text-left">Level</div>,
+        {
+      accessorKey: 'studentId',
+      header: 'Student ID',
       cell: ({ row }) => (
-        <div className="text-left lowercase">{row.getValue('level')}</div>
+        <div className="capitalize">{row.getValue('studentId')}</div>
+      ),
+    },
+    {
+      accessorKey: 'status',
+      header: () => <div className="text-left">Status</div>,
+      cell: ({ row }) => (
+        <div className="text-left lowercase">{row.getValue('status')}</div>
       ),
     },
     {
@@ -134,13 +143,13 @@ const useAttendanceRecordColumns = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => editItemFn(Number(result.studentId))}
+                onClick={() => editItemFn(Number(result.attendanceId))}
               >
                 <FaEdit /> Edit
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => deleteItemFn(Number(result.studentId))}
+                onClick={() => deleteItemFn(Number(result.attendanceId))}
               >
                 <GoTrash className="text-red-600" /> Delete
               </DropdownMenuItem>

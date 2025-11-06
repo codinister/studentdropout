@@ -105,8 +105,10 @@ export const financialStatusFormSchema = ({ ...options }) => {
 export const attendanceRecordFormSchema = ({ ...options }) => {
   const { date = '', status = '', studentId = 0 } = options;
 
+  const ndate = new Date()
+  
   return {
-    date: date || '',
+    date: date || ymd(ndate),
     status: status || '',
     studentId: studentId || 0,
   };
@@ -135,9 +137,11 @@ export const dropoutPredictionFormSchema = ({ ...options }) => {
 export const interventionFormSchema = ({ ...options }) => {
   const { type = '', date = '', outcome = '', studentId = 0 } = options;
 
+  const ndate = new Date()
+  
   return {
+    date: date || ymd(ndate),
     type: type || '',
-    date: date || '',
     outcome: outcome || '',
     studentId: studentId || 0,
   };

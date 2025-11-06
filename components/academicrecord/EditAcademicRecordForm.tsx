@@ -52,7 +52,7 @@ const EditAcademicRecordForm = ({
 
   const { isPending, isSuccess, isError, error, mutate } = useMutations({
     key: 'update-academicrecord',
-    url: '/academicrecord/update-academicrecord/' + data?.recordId,
+    url: '/academicrecord/update-academicrecord/'+data?.recordId,
     method: 'Patch',
   });
 

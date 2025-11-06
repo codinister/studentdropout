@@ -21,16 +21,15 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { date, studentId, description } = result.data;
+  const dataobj = result.data;
 
-  const dates = dateTime(date);
+  const dates = dateTime(dataobj?.date);
 
   try {
     await db.behaviorRecords.create({
       data: {
+        ...behaviorRecordsFormSchema(dataobj),
         date: dates,
-        studentId,
-        description,
       },
     });
 

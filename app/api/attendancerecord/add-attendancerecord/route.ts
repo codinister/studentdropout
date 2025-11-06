@@ -3,6 +3,7 @@ import { attendanceRecordSchema } from '@/state/schemas/validationSchemas';
 import { fromZodError } from 'zod-validation-error';
 import { NextRequest, NextResponse } from 'next/server';
 import { attendanceRecordFormSchema } from '@/state/schemas/formSchema';
+import { dateTime } from '@/utils/dateFormats';
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0 
@@ -19,10 +20,13 @@ export async function POST(req: NextRequest){
 
   const dataObj = result.data;
 
-
+const dates = dateTime(dataObj?.date);
   try {
      await db.attendanceRecord.create({
-      data: attendanceRecordFormSchema(dataObj)
+      data: {
+        ...attendanceRecordFormSchema(dataObj),
+        date: dates
+      }
     });
 
     return NextResponse.json({

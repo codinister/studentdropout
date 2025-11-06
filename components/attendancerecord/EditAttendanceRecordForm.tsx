@@ -28,10 +28,11 @@ import { fetchAttendancerecord } from '@/state/redux/slice/asyncThunkFn';
 import useMutations from '@/state/query/useMutations';
 import { attendanceRecordFormSchema} from '@/state/schemas/formSchema';
 import useStudentInput from '@/utils/useStudentInput';
+import { ymd } from '@/utils/dateFormats';
 const EditAttendanceRecordForm = ({
   data,
 }: {
-  data: {studentId: number} & z.infer<typeof attendanceRecordSchema>;
+  data: {attendanceId: number} & z.infer<typeof attendanceRecordSchema>;
 }) => {
 
   const { successResult, errorResult } = useFormSubmitResult();
@@ -39,13 +40,13 @@ const EditAttendanceRecordForm = ({
   const form = useForm<z.infer<typeof attendanceRecordSchema>>({
     resolver: zodResolver(attendanceRecordSchema),
     defaultValues: {
-      ...attendanceRecordFormSchema(data)
+      ...attendanceRecordFormSchema({...data, date: ymd(new Date(data?.date))})
     },
   });
 
   const { isPending, isSuccess, isError, error, mutate } = useMutations({
     key: 'update-attendancerecord',
-    url: '/attendancerecord/update-attendancerecord',
+    url: '/attendancerecord/update-attendancerecord/'+data?.attendanceId,
     method: 'Patch',
   });
 
@@ -56,7 +57,7 @@ const EditAttendanceRecordForm = ({
     }
     if (isSuccess) {
       errorResult('');
-      successResult('Attendance updated successfully!', 'Student Updated', fetchAttendancerecord);
+      successResult('Attendance updated successfully!', 'Attendance Updated', fetchAttendancerecord);
     }
   }, [isError, isSuccess]);
 

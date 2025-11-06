@@ -35,7 +35,7 @@ const EditBehaviorRecordForm = ({
   const form = useForm<z.infer<typeof healthRecordSchema>>({
     resolver: zodResolver(healthRecordSchema),
     defaultValues: {
-      ...healthRecordsFormSchema({...data, date: ymd(new Date(data.date))})
+      ...healthRecordsFormSchema({...data, date: ymd(new Date(data?.date))})
     },
   });
 

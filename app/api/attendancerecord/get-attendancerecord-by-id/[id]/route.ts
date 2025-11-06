@@ -11,17 +11,12 @@ export async function GET(req: NextRequest, {params}: {params: Promise<{
   const param = (await params).id
   const attendanceId = parseInt(param, 10)
   try {
-    const students = await db.attendanceRecord.findFirst({
+    const attendance = await db.attendanceRecord.findFirst({
       where: { attendanceId },
     });
 
-    if (!students) {
-      return NextResponse.json({
-        error: 'Something went wrong!'
-      }, {status: 400})
-    }
 
-    return NextResponse.json(students)
+    return NextResponse.json(attendance)
   } catch (err) {
     console.log(err)
   }

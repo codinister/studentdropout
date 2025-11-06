@@ -39,7 +39,7 @@ const EditInterventionForm = ({
   const form = useForm<z.infer<typeof interventionSchema>>({
     resolver: zodResolver(interventionSchema),
     defaultValues: {
-      ...interventionFormSchema({...data, date: ymd(new Date(data.date))}),
+      ...interventionFormSchema({...data, date: ymd(new Date(data?.date))}),
     },
   });
 
