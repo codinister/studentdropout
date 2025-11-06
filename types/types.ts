@@ -56,3 +56,14 @@ export type AppState = {
   healthrecord: healthSchema[]
   error?: any;
 };
+
+
+export type userDatasetType = {
+  userId: string;
+  name: string;
+  email: string;
+  image: string | null;
+  emailVerified: Date | null;
+  password: string;
+  roleId: number;
+} | null;

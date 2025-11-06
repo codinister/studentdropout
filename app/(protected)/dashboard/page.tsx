@@ -1,6 +1,5 @@
 'use client';
 import React, { useState } from 'react';
-import Sidebar from '@/components/Sidebar';
 import AnalyticsCards from '@/components/AnalyticsCards';
 import Charts from '@/components/Charts';
 import InfoSections from '@/components/InfoSections';

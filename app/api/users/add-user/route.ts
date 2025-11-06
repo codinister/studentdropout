@@ -1,6 +1,6 @@
 import { db } from '@/db';
 import z from 'zod';
-import { registrationSchema } from '@/state/schemas/schemas';
+import { userSchema } from '@/state/schemas/validationSchemas';
 import { fromZodError } from 'zod-validation-error';
 import { hashPassword } from '@/utils/passwordCrypt';
 import { NextRequest, NextResponse } from 'next/server';
@@ -11,7 +11,7 @@ export const revalidate = 0;
 export async function POST(req: NextRequest) {
   const request = await req.json();
   
-  const result = registrationSchema.safeParse(request);
+  const result = userSchema.safeParse(request);
 
   if (!result.success) {
     return NextResponse.json(
