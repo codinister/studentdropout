@@ -1,21 +1,22 @@
-
 import { db } from '@/db';
-import { financialRecordSchema } from '@/state/schemas/validationSchemas';
+import { financialStatuschema } from '@/state/schemas/validationSchemas';
 import { fromZodError } from 'zod-validation-error';
 import { NextRequest, NextResponse } from 'next/server';
-import { financialRecordsFormSchema } from '@/state/schemas/formSchema';
+import { financialStatusFormSchema } from '@/state/schemas/formSchema';
+import { dateTime } from '@/utils/dateFormats';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0 
-
-export async function PATCH(req: NextRequest, {params}: {params: Promise<{id: string}>}) {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const request = await req.json();
-  const paramsId = (await params).id
-  const financialId = parseInt(paramsId, 10)
+  const paramsId = (await params).id;
+  const financialId = parseInt(paramsId, 10);
 
- 
-  const result = financialRecordSchema.safeParse(request);
+  const result = financialStatuschema.safeParse(request);
 
   if (!result.success) {
     return NextResponse.json(
@@ -28,12 +29,10 @@ export async function PATCH(req: NextRequest, {params}: {params: Promise<{id: st
 
   const dataObj = result.data;
 
-
-
   try {
-     await db.financialStatus.update({
+    await db.financialStatus.update({
       where: { financialId },
-      data: financialRecordsFormSchema(dataObj)
+      data: financialStatusFormSchema(dataObj)
     });
 
     return NextResponse.json(

@@ -11,7 +11,7 @@ import {
   demographicInfoSchema,
   roleSchema,
   behaviorRecordsSchema,
-  financialRecordSchema,
+  financialStatuschema,
   healthRecordSchema,
 } from '@/state/schemas/validationSchemas';
 
@@ -35,7 +35,7 @@ export type demographicInfoSchema = z.infer<typeof demographicInfoSchema> &
 export type roleSchema = z.infer<typeof roleSchema> & { roleId: string };
 
 
-export type financialSchema = z.infer<typeof financialRecordSchema> & { financialId: string };
+export type financialSchema = z.infer<typeof financialStatuschema> & { financialId: string };
 export type healthSchema = z.infer<typeof healthRecordSchema> & { healthId: string };
 
 export type AppState = {
@@ -52,7 +52,7 @@ export type AppState = {
   attendancerecord: attendanceRecordSchema[];
   academicrecord: academicRecordSchema[];
   behaviorrecord: behaviorSchema[]
-  financialrecord: financialSchema[]
+  financialstatus: financialSchema[]
   healthrecord: healthSchema[]
   error?: any;
 };

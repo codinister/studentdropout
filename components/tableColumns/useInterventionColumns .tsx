@@ -24,6 +24,7 @@ import EditInterventionForm from '../intervention/EditInterventionForm';
 import { interventionSchema } from '@/types/types';
 import { fetchIntervention } from '@/state/redux/slice/asyncThunkFn';
 import fetchApi from '@/state/query/fetchApi';
+import { formatDate } from '@/utils/dateFormats';
 
 const useInterventionColumns = () => {
   const { showModal, closeModal } = useFormSubmitResult();
@@ -31,14 +32,14 @@ const useInterventionColumns = () => {
 
   const editItemFn = async (id: number) => {
     const { data } = await fetchApi({
-      url: '/intervention/get-student-by-id/' + id,
+      url: '/intervention/get-intervention-by-id/' + id,
     });
 
-    const EditStudentFn = () => {
+    const EditInterventionFn = () => {
       return <EditInterventionForm data={data} />;
     };
 
-    showModal(EditStudentFn);
+    showModal(EditInterventionFn);
   };
 
   const deleteItemFn = (id: number) => {
@@ -46,7 +47,7 @@ const useInterventionColumns = () => {
       const deleteFn = async () => {
         await fetchApi({
           method: 'Delete',
-          url: '/intervention/delete-student-by-id/' + id,
+          url: '/intervention/delete-intervention-by-id/' + id,
         });
         closeModal();
         dispatch(fetchIntervention());
@@ -88,32 +89,49 @@ const useInterventionColumns = () => {
         <div className="capitalize">{row.getValue('studentName')}</div>
       ),
     },
-    {
-      accessorKey: 'level',
-      header: () => <div className="text-left">Level</div>,
+
+
+        {
+      accessorKey: 'interventionId',
+      header: 'Student ID',
       cell: ({ row }) => (
-        <div className="text-left lowercase">{row.getValue('level')}</div>
+        <div className="capitalize">{row.getValue('interventionId')}</div>
       ),
     },
+
+
+ 
+  
+
+
     {
-      accessorKey: 'totalAttendance',
-      header: () => <div className="text-left">Attendance</div>,
+      accessorKey: 'type',
+      header: () => <div className="text-left">Intervention Type</div>,
+      cell: ({ row }) => (
+        <div className="text-left ">{row.getValue('type')}</div>
+      ),
+    },
+
+
+    {
+      accessorKey: 'outcome',
+      header: () => <div className="text-left">Status</div>,
 
       cell: ({ row }) => {
         return (
           <div className="text-left font-medium">
-            {row.getValue('totalAttendance')}
+            {row.getValue('outcome')}
           </div>
         );
       },
     },
     {
-      accessorKey: 'score',
-      header: () => <div className="text-left">Score</div>,
+      accessorKey: 'date',
+      header: () => <div className="text-left">Date</div>,
 
       cell: ({ row }) => {
         return (
-          <div className="text-left font-medium">{row.getValue('score')}</div>
+          <div className="text-left font-medium">{formatDate(row.getValue('date'))}</div>
         );
       },
     },
@@ -134,13 +152,13 @@ const useInterventionColumns = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => editItemFn(Number(result.studentId))}
+                onClick={() => editItemFn(Number(result.interventionId))}
               >
                 <FaEdit /> Edit
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => deleteItemFn(Number(result.studentId))}
+                onClick={() => deleteItemFn(Number(result.interventionId))}
               >
                 <GoTrash className="text-red-600" /> Delete
               </DropdownMenuItem>

@@ -24,29 +24,28 @@ import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import { fetchStudents, fetchUsers } from '@/state/redux/slice/appReducer';
+import { fetchIntervention } from '@/state/redux/slice/asyncThunkFn';
 import useMutations from '@/state/query/useMutations';
 import { interventionFormSchema } from '@/state/schemas/formSchema';
-const EditStudentForm = ({
+import useStudentInput from '@/utils/useStudentInput';
+import { ymd } from '@/utils/dateFormats';
+const EditInterventionForm = ({
   data,
 }: {
-  data: {studentId: number} & z.infer<typeof interventionSchema>;
+  data: { interventionId: number } & z.infer<typeof interventionSchema>;
 }) => {
-
   const { successResult, errorResult } = useFormSubmitResult();
 
   const form = useForm<z.infer<typeof interventionSchema>>({
     resolver: zodResolver(interventionSchema),
     defaultValues: {
-
-
-      ...interventionFormSchema(data)
+      ...interventionFormSchema({...data, date: ymd(new Date(data.date))}),
     },
   });
 
   const { isPending, isSuccess, isError, error, mutate } = useMutations({
-    key: 'update-student',
-    url: '/students/update-student/'+data?.studentId,
+    key: 'update-intervention',
+    url: '/intervention/update-intervention/' + data?.interventionId,
     method: 'Patch',
   });
 
@@ -57,13 +56,19 @@ const EditStudentForm = ({
     }
     if (isSuccess) {
       errorResult('');
-      successResult('Student updated successfully!', 'Student Updated', fetchStudents);
+      successResult(
+        'Intervention updated successfully!',
+        'Intervention Updated',
+        fetchIntervention
+      );
     }
   }, [isError, isSuccess]);
 
   const handleSubmit = (data: z.infer<typeof interventionSchema>) => {
     mutate(data);
   };
+
+  const { StudentInput } = useStudentInput();
 
   return (
     <>
@@ -73,38 +78,39 @@ const EditStudentForm = ({
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-4"
           >
+            <StudentInput form={form} />
             <FormField
               control={form.control}
-              name="studentName"
+              name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Student Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter student full name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="level"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Level</FormLabel>
+                  <FormLabel>Intervention Type</FormLabel>
                   <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
+                    onValueChange={(value) => field.onChange(value)}
                     value={field.value?.toString()}
                   >
                     <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select level" />
+                      <SelectValue placeholder="Select Intervention" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="100">Level 100</SelectItem>
-                      <SelectItem value="200">Level 200</SelectItem>
-                      <SelectItem value="300">Level 300</SelectItem>
-                      <SelectItem value="400">Level 400</SelectItem>
+                      <SelectItem value="Academic Interventions">
+                        Academic Interventions
+                      </SelectItem>
+                      <SelectItem value="Behavioral & Engagement Interventions">
+                        Behavioral & Engagement Interventions
+                      </SelectItem>
+                      <SelectItem value="Financial Interventions">
+                        Financial Interventions
+                      </SelectItem>
+                      <SelectItem value="Advisory & Counseling Interventions">
+                        Advisory & Counseling Interventions
+                      </SelectItem>
+                      <SelectItem value="Institutional or System-Level">
+                        Institutional or System-Level Interventions
+                      </SelectItem>
+                      <SelectItem value="Technology-Based Interventions">
+                        Technology-Based Interventions
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -114,34 +120,36 @@ const EditStudentForm = ({
 
             <FormField
               control={form.control}
-              name="totalAttendance"
+              name="outcome"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Total Attendance %</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Enter total attendance"
-                      {...field}
-                    />
-                  </FormControl>
+                  <FormLabel>Status</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(value)}
+                    value={field.value?.toString()}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Active">Active</SelectItem>
+                      <SelectItem value="Completed">Completed</SelectItem>
+                      <SelectItem value="Pending">Pending</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
             <FormField
+              name="date"
               control={form.control}
-              name="score"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Score</FormLabel>
+                  <FormLabel>Date</FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Entter total score"
-                      {...field}
-                    />
+                    <Input type="date" {...field} placeholder="Choose date" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -150,7 +158,7 @@ const EditStudentForm = ({
 
             <Button disabled={isPending} variant="default">
               {' '}
-              Update student {isPending ? <BeatLoader /> : ''}
+              Save intervention {isPending ? <BeatLoader /> : ''}
             </Button>
           </form>
         </Form>
@@ -159,4 +167,4 @@ const EditStudentForm = ({
   );
 };
 
-export default EditStudentForm;
+export default EditInterventionForm;

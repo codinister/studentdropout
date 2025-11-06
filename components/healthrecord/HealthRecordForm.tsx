@@ -9,40 +9,33 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
-import {  behaviorRecordsSchema } from '@/state/schemas/validationSchemas';
+import { healthRecordSchema } from '@/state/schemas/validationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import {  fetchBehaviorRecord } from '@/state/redux/slice/asyncThunkFn';
+import {  fetchHealthrecord } from '@/state/redux/slice/asyncThunkFn';
 import useMutations from '@/state/query/useMutations';
 import { useEffect } from 'react';
-import {  behaviorRecordsFormSchema } from '@/state/schemas/formSchema';
+import {  healthRecordsFormSchema } from '@/state/schemas/formSchema';
 import useStudentInput from '@/utils/useStudentInput';
 import { Textarea } from '../ui/textarea';
-
+import useDatePicker from '@/utils/useDatePicker';
 
 const BehaviorRecordForm = () => {
-  const form = useForm<z.infer<typeof behaviorRecordsSchema>>({
-    resolver: zodResolver(behaviorRecordsSchema),
+  const form = useForm<z.infer<typeof healthRecordSchema>>({
+    resolver: zodResolver(healthRecordSchema),
     defaultValues: {
-      ...behaviorRecordsFormSchema({}),
+      ...healthRecordsFormSchema({}),
     },
   });
 
   const { successResult, errorResult } = useFormSubmitResult();
   const { isError, isSuccess, isPending, error, mutate } = useMutations({
-    key: 'add-attendancerecord',
-    url: '/attendancerecord/add-attendancerecord',
+    key: 'add-healthrecord',
+    url: '/healthrecord/add-healthrecord',
   });
 
   useEffect(() => {
@@ -53,20 +46,18 @@ const BehaviorRecordForm = () => {
     if (isSuccess) {
       errorResult('');
       successResult(
-        'Attendance added successfully!',
-        'Attendance Record Added',
-        fetchBehaviorRecord
+        'Health added successfully!',
+        'Health Record Added',
+        fetchHealthrecord
       );
     }
   }, [isError, isSuccess]);
 
-  const handleSubmit = (data: z.infer<typeof behaviorRecordsSchema>) => {
+  const handleSubmit = (data: z.infer<typeof healthRecordSchema>) => {
     mutate(data);
   };
 
-
-    const { StudentInput } = useStudentInput();
-
+  const { StudentInput } = useStudentInput();
 
   return (
     <>
@@ -77,39 +68,36 @@ const BehaviorRecordForm = () => {
             className="space-y-4"
           >
             <FormField
-              control={form.control}
               name="date"
+              control={form.control}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Date</FormLabel>
                   <FormControl>
-                    <Input type="date" placeholder="Choose date" {...field} />
+                    <Input  type="date" {...field} placeholder="Choose date" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-
-            <StudentInput form={form}  />
+            <StudentInput form={form} />
 
             <FormField
               control={form.control}
-              name="description"
+              name="condition"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <Textarea placeholder="Type your message here." />
+                  <FormLabel>Condition</FormLabel>
+                  <Textarea {...field} placeholder="Type your message here." />
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            
-
             <Button disabled={isPending} variant="default">
               {' '}
-              Save Behavior {isPending ? <BeatLoader /> : ''}
+              Save Health {isPending ? <BeatLoader /> : ''}
             </Button>
           </form>
         </Form>
@@ -118,9 +106,4 @@ const BehaviorRecordForm = () => {
   );
 };
 
-export default BehaviorRecordForm
-
-
-
-
-
+export default BehaviorRecordForm;

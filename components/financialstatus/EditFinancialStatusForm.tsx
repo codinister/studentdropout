@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
-import { behaviorRecordsSchema } from '@/state/schemas/validationSchemas';
+import { financialStatuschema } from '@/state/schemas/validationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
@@ -17,29 +17,29 @@ import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import {  fetchBehaviorRecord } from '@/state/redux/slice/asyncThunkFn';
+import { fetchFinancialStatus } from '@/state/redux/slice/asyncThunkFn';
 import useMutations from '@/state/query/useMutations';
-import { behaviorRecordsFormSchema} from '@/state/schemas/formSchema';
+import { financialStatusFormSchema } from '@/state/schemas/formSchema';
 import useStudentInput from '@/utils/useStudentInput';
 import { Textarea } from '../ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 const EditFinancialRecordForm = ({
   data,
 }: {
-  data: {behaviorId: number} & z.infer<typeof behaviorRecordsSchema>;
+  data: { financialId: number } & z.infer<typeof financialStatuschema>;
 }) => {
-
   const { successResult, errorResult } = useFormSubmitResult();
 
-  const form = useForm<z.infer<typeof behaviorRecordsSchema>>({
-    resolver: zodResolver(behaviorRecordsSchema),
+  const form = useForm<z.infer<typeof financialStatuschema>>({
+    resolver: zodResolver(financialStatuschema),
     defaultValues: {
-      ...behaviorRecordsFormSchema(data)
+      ...financialStatusFormSchema(data),
     },
   });
 
   const { isPending, isSuccess, isError, error, mutate } = useMutations({
-    key: 'update-behaviorrecord',
-    url: '/behaviorrecord/update-behaviorrecord/'+data?.behaviorId,
+    key: 'update-financialstatus',
+    url: '/financialstatus/update-financialstatus/' + data?.financialId,
     method: 'Patch',
   });
 
@@ -50,60 +50,68 @@ const EditFinancialRecordForm = ({
     }
     if (isSuccess) {
       errorResult('');
-      successResult('Behavior updated successfully!', 'Behavior Updated', fetchBehaviorRecord);
+      successResult(
+        'Financial status updated successfully!',
+        'Financial Status Updated',
+        fetchFinancialStatus
+      );
     }
   }, [isError, isSuccess]);
 
-  const handleSubmit = (data: z.infer<typeof behaviorRecordsSchema>) => {
+  const handleSubmit = (data: z.infer<typeof financialStatuschema>) => {
     mutate(data);
   };
 
-
-
-  const {StudentInput} = useStudentInput()
+  const { StudentInput } = useStudentInput();
 
   return (
-        <>
+    <>
       <div className="bg-white p-10 rounded-3xl w-lg">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-4"
           >
+            <StudentInput form={form} />
+
             <FormField
               control={form.control}
-              name="date"
+              name="status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date</FormLabel>
-                  <FormControl>
-                    <Input type="date" placeholder="Choose date" {...field} />
-                  </FormControl>
+                  <FormLabel>Status</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(value)}
+                    value={field.value?.toString()}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Paid">Paid</SelectItem>
+                      <SelectItem value="Pending">Pending</SelectItem>
+                      <SelectItem value="Exempt">Exempt</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-
-            <StudentInput form={form} studentId={data?.studentId}  />
-
             <FormField
               control={form.control}
-              name="description"
+              name="amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <Textarea placeholder="Type your message here." />
+                  <FormLabel>Amount</FormLabel>
+                  <Input type="number" {...field}  />
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            
 
             <Button disabled={isPending} variant="default">
               {' '}
-              Save Behavior {isPending ? <BeatLoader /> : ''}
+              Update Financial {isPending ? <BeatLoader /> : ''}
             </Button>
           </form>
         </Form>
@@ -112,12 +120,4 @@ const EditFinancialRecordForm = ({
   );
 };
 
-export default EditFinancialRecordForm
-
-
-
-
-
-
-
-
+export default EditFinancialRecordForm;

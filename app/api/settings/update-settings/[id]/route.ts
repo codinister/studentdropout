@@ -1,20 +1,18 @@
-
 import { db } from '@/db';
 import { settingsSchema } from '@/state/schemas/validationSchemas';
 import { fromZodError } from 'zod-validation-error';
 import { NextRequest, NextResponse } from 'next/server';
-import { settingsFormSchema } from '@/state/schemas/formSchema';
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
-
-export const dynamic = 'force-dynamic'
-export const revalidate = 0 
-
-export async function Patch(req: NextRequest, {param}: {param: Promise<{id: string}>}) {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const request = await req.json();
-  const paramId = (await param).id
-  const settingsId = parseInt(paramId, 10)
+  const paramId = (await params).id;
+  const settingsId = parseInt(paramId, 10);
 
- 
   const result = settingsSchema.safeParse(request);
 
   if (!result.success) {
@@ -26,12 +24,24 @@ export async function Patch(req: NextRequest, {param}: {param: Promise<{id: stri
     );
   }
 
-  const dataObj = result.data;
+  const {
+    schoolName,
+    schoolPhone,
+    schoolWebsite,
+    schoolLocation,
+    schoolPostalAddress,
+  } = result.data;
 
   try {
-     await db.settings.update({
+    await db.settings.update({
       where: { settingsId },
-      data: settingsFormSchema(dataObj)
+      data: {
+        schoolName,
+        schoolPhone,
+        schoolWebsite,
+        schoolLocation,
+        schoolPostalAddress,
+      },
     });
 
     return NextResponse.json(

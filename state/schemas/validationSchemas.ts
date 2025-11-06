@@ -45,10 +45,10 @@ export const healthRecordSchema = z.object({
   condition: z.string().min(2, 'Condition field required!'),
 });
 
-export const financialRecordSchema = z.object({
+export const financialStatuschema = z.object({
   status: z.string().min(2, 'Status field required!'),
   studentId: z.number().min(1, 'Student Name field required!'),
-  amount: z.number().min(2, 'Amount field required!'),
+  amount: z.string().min(2, 'Amount field required!'),
 });
 
 //AttendanceRecord
@@ -64,8 +64,7 @@ export const settingsSchema = z.object({
   schoolPhone: z.string().min(2, 'School Phone field required!'),
   schoolWebsite: z.string().min(2, 'School Website field required!'),
   schoolLocation: z.string().min(2, 'School Location field required!'),
-  schoolPostalAddress: z.string().min(2, 'Postal Address field required!'),
-  logo: z.string().min(2, 'Logo field required!'),
+  schoolPostalAddress: z.string().min(2, 'Postal Address field required!')
 });
 
 //DropoutPrediction

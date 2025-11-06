@@ -1,4 +1,5 @@
-import replaceDot from '@/utils/replaceDot';
+import {  ymd } from '@/utils/dateFormats';
+
 
 export const loginFormSchema = ({ ...options }) => {
   const { email = '', password = '' } = options;
@@ -65,10 +66,11 @@ export const academicRecordFormSchema = ({ ...options }) => {
 
 //Behavior Records
 export const behaviorRecordsFormSchema = ({ ...options }) => {
-  const { date = '', studentId = 0, description = '' } = options;
-
+  const { date='', studentId = 0, description = '' } = options;
+  const ndate = new Date()
+  
   return {
-    date: date || '',
+    date: date || ymd(ndate),
     description: description || '',
     studentId: studentId || 0,
   };
@@ -77,24 +79,27 @@ export const behaviorRecordsFormSchema = ({ ...options }) => {
 //Health Records
 export const healthRecordsFormSchema = ({ ...options }) => {
   const { date = '', studentId = 0, condition = '' } = options;
-
+const dates = new Date()
   return {
-    date: date || '',
+    date: date || ymd(dates),
     condition: condition || '',
     studentId: studentId || 0,
   };
 };
 
 //Financial Records
-export const financialRecordsFormSchema = ({ ...options }) => {
+export const financialStatusFormSchema = ({ ...options }) => {
   const { status = '', studentId = 0, amount = 0 } = options;
 
   return {
     status: status || '',
-    amount: amount || 0,
+    amount: amount || '',
     studentId: studentId || 0,
   };
 };
+
+
+
 
 //AttendanceRecord
 export const attendanceRecordFormSchema = ({ ...options }) => {
@@ -107,26 +112,7 @@ export const attendanceRecordFormSchema = ({ ...options }) => {
   };
 };
 
-//Settings
-export const settingsFormSchema = ({ ...options }) => {
-  const {
-    schoolName = '',
-    schoolPhone = '',
-    schoolWebsite = '',
-    schoolLocation = '',
-    schoolPostalAddress = '',
-    logo = '',
-  } = options;
 
-  return {
-    schoolName: schoolName || '',
-    schoolPhone: schoolPhone || '',
-    schoolWebsite: schoolWebsite || '',
-    schoolLocation: schoolLocation || '',
-    schoolPostalAddress: schoolPostalAddress || '',
-    logo: logo || '',
-  };
-};
 
 //DropoutPrediction
 export const dropoutPredictionFormSchema = ({ ...options }) => {

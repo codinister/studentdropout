@@ -69,7 +69,6 @@ model Settings {
   schoolWebsite       String
   schoolLocation      String
   schoolPostalAddress String
-  logo                String
   date                DateTime @default(now())
 }
 
@@ -127,7 +126,7 @@ model BehaviorRecords {
   student     Student  @relation(fields: [studentId], references: [studentId])
   studentId   Int
   description String   @db.Text
-  date        DateTime @default(now())
+  date DateTime 
 }
 
 model HealthRecord {
@@ -143,7 +142,7 @@ model FinancialStatus {
   student     Student @relation(fields: [studentId], references: [studentId])
   studentId   Int
   status      String
-  amount      Int
+  amount      String
 }
 
 model Role {

@@ -9,33 +9,39 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
-import {   financialRecordSchema } from '@/state/schemas/validationSchemas';
+import { financialStatuschema } from '@/state/schemas/validationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import {   fetchFinancialrecord } from '@/state/redux/slice/asyncThunkFn';
+import { fetchFinancialStatus } from '@/state/redux/slice/asyncThunkFn';
 import useMutations from '@/state/query/useMutations';
 import { useEffect } from 'react';
-import {   financialRecordsFormSchema } from '@/state/schemas/formSchema';
+import { financialStatusFormSchema } from '@/state/schemas/formSchema';
 import useStudentInput from '@/utils/useStudentInput';
-import { Textarea } from '../ui/textarea';
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
 
-const FinancialRecordForm = () => {
-  const form = useForm<z.infer<typeof financialRecordSchema>>({
-    resolver: zodResolver(financialRecordSchema),
+const financialstatusForm = () => {
+  const form = useForm<z.infer<typeof financialStatuschema>>({
+    resolver: zodResolver(financialStatuschema),
     defaultValues: {
-      ...financialRecordsFormSchema({}),
+      ...financialStatusFormSchema({}),
     },
   });
 
   const { successResult, errorResult } = useFormSubmitResult();
   const { isError, isSuccess, isPending, error, mutate } = useMutations({
-    key: 'add-financialrecord',
-    url: '/financialrecord/add-financialrecord',
+    key: 'add-financialstatus',
+    url: '/financialstatus/add-financialstatus',
   });
 
   useEffect(() => {
@@ -48,18 +54,16 @@ const FinancialRecordForm = () => {
       successResult(
         'Financial status added successfully!',
         'Financial Status Added',
-        fetchFinancialrecord
+        fetchFinancialStatus
       );
     }
   }, [isError, isSuccess]);
 
-  const handleSubmit = (data: z.infer<typeof financialRecordSchema>) => {
+  const handleSubmit = (data: z.infer<typeof financialStatuschema>) => {
     mutate(data);
   };
 
-
-    const { StudentInput } = useStudentInput();
-
+  const { StudentInput } = useStudentInput();
 
   return (
     <>
@@ -69,40 +73,47 @@ const FinancialRecordForm = () => {
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-4"
           >
+            <StudentInput form={form} />
+
             <FormField
               control={form.control}
-              name="date"
+              name="status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date</FormLabel>
-                  <FormControl>
-                    <Input type="date" placeholder="Choose date" {...field} />
-                  </FormControl>
+                  <FormLabel>Status</FormLabel>
+                  <Select
+                    onValueChange={(value) => field.onChange(value)}
+                    value={field.value?.toString()}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Paid">Paid</SelectItem>
+                      <SelectItem value="Pending">Pending</SelectItem>
+                      <SelectItem value="Exempt">Exempt</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-
-            <StudentInput form={form}  />
-
             <FormField
               control={form.control}
-              name="description"
+              name="amount"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <Textarea placeholder="Type your message here." />
+                  <FormLabel>Amount</FormLabel>
+                  <Input type="number" {...field}  />
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            
 
             <Button disabled={isPending} variant="default">
               {' '}
-              Save Behavior {isPending ? <BeatLoader /> : ''}
+              Save Financial {isPending ? <BeatLoader /> : ''}
             </Button>
           </form>
         </Form>
@@ -111,12 +122,4 @@ const FinancialRecordForm = () => {
   );
 };
 
-export default FinancialRecordForm
-
-
-
-
-
-
-
-
+export default financialstatusForm;

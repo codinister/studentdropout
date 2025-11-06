@@ -32,7 +32,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {  healthSchema } from '@/types/types';
+import { healthSchema } from '@/types/types';
 
 type DatahealthSchema = {
   columns: ColumnDef<healthSchema>[];
@@ -73,7 +73,7 @@ const HealthRecordDataTable = ({ columns, data }: DatahealthSchema) => {
     <div className="w-full mt-10 p-10">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter health record..."
+          placeholder="Filter health record by student name"
           value={(table.getColumn('studentName')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
             table.getColumn('studentName')?.setFilterValue(event.target.value)
@@ -185,6 +185,7 @@ const HealthRecordDataTable = ({ columns, data }: DatahealthSchema) => {
   );
 };
 
+
+
+
 export default HealthRecordDataTable
-
-

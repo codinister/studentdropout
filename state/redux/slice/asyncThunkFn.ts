@@ -49,9 +49,9 @@ export const fetchAcademicrecord = asyncThunk(
 );
 
 
-export const fetchFinancialrecord = asyncThunk(
-  '/financialrecord/get-financialrecord',
-  'fetchfinancialrecord'
+export const fetchFinancialStatus = asyncThunk(
+  '/financialstatus/get-financialstatus',
+  'fetchfinancialstatus'
 );
 
 

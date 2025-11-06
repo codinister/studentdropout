@@ -12,7 +12,7 @@ import {
   fetchAcademicrecord,
   fetchBehaviorRecord,
   fetchHealthrecord,
-  fetchFinancialrecord,
+  fetchFinancialStatus,
 } from './asyncThunkFn';
 
 import { AppState } from '@/types/types';
@@ -32,7 +32,7 @@ const initialState: AppState = {
   academicrecord: [],
   behaviorrecord: [],
   healthrecord: [],
-  financialrecord: [],
+  financialstatus: [],
   error: null,
 };
 
@@ -109,14 +109,14 @@ const appSlice = createSlice({
         state.error = action.payload || 'Something went wrong';
       })
 
-      .addCase(fetchFinancialrecord.pending, (state) => {
-        state.financialrecord = [];
+      .addCase(fetchFinancialStatus.pending, (state) => {
+        state.financialstatus = [];
         state.error = null;
       })
-      .addCase(fetchFinancialrecord.fulfilled, (state, action) => {
-        state.financialrecord = action.payload;
+      .addCase(fetchFinancialStatus.fulfilled, (state, action) => {
+        state.financialstatus = action.payload;
       })
-      .addCase(fetchFinancialrecord.rejected, (state, action) => {
+      .addCase(fetchFinancialStatus.rejected, (state, action) => {
         state.error = action.payload || 'Something went wrong';
       })
 

@@ -1,8 +1,8 @@
 import { db } from '@/db';
-import { interventionSchema } from '@/state/schemas/validationSchemas';
+import { financialStatuschema } from '@/state/schemas/validationSchemas';
 import { fromZodError } from 'zod-validation-error';
 import { NextRequest, NextResponse } from 'next/server';
-import { interventionFormSchema } from '@/state/schemas/formSchema';
+import { financialStatusFormSchema } from '@/state/schemas/formSchema';
 import { dateTime, ymd } from '@/utils/dateFormats';
 
 export const dynamic = 'force-dynamic';
@@ -10,7 +10,7 @@ export const revalidate = 0;
 
 export async function POST(req: NextRequest) {
   const request = await req.json();
-  const result = interventionSchema.safeParse(request);
+  const result = financialStatuschema.safeParse(request);
 
   if (!result.success) {
     return NextResponse.json(
@@ -23,11 +23,11 @@ export async function POST(req: NextRequest) {
 
   const dataobj = result.data;
 
-  const dates = dateTime(dataobj.date);
+
 
   try {
-    await db.intervention.create({
-      data: { ...interventionFormSchema(dataobj), date: dates },
+    await db.financialStatus.create({
+      data: financialStatusFormSchema(dataobj),
     });
 
     return NextResponse.json(

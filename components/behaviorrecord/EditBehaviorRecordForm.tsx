@@ -22,6 +22,7 @@ import useMutations from '@/state/query/useMutations';
 import { behaviorRecordsFormSchema} from '@/state/schemas/formSchema';
 import useStudentInput from '@/utils/useStudentInput';
 import { Textarea } from '../ui/textarea';
+import { ymd } from '@/utils/dateFormats';
 const EditBehaviorRecordForm = ({
   data,
 }: {
@@ -30,10 +31,11 @@ const EditBehaviorRecordForm = ({
 
   const { successResult, errorResult } = useFormSubmitResult();
 
+
   const form = useForm<z.infer<typeof behaviorRecordsSchema>>({
     resolver: zodResolver(behaviorRecordsSchema),
     defaultValues: {
-      ...behaviorRecordsFormSchema(data)
+      ...behaviorRecordsFormSchema({...data, date: ymd(new Date(data.date))})
     },
   });
 
@@ -63,7 +65,7 @@ const EditBehaviorRecordForm = ({
   const {StudentInput} = useStudentInput()
 
   return (
-        <>
+<>
       <div className="bg-white p-10 rounded-3xl w-lg">
         <Form {...form}>
           <form
@@ -71,21 +73,20 @@ const EditBehaviorRecordForm = ({
             className="space-y-4"
           >
             <FormField
-              control={form.control}
               name="date"
+              control={form.control}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Date</FormLabel>
                   <FormControl>
-                    <Input type="date" placeholder="Choose date" {...field} />
+                    <Input  type="date" {...field} placeholder="Choose date" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-
-            <StudentInput form={form} studentId={data?.studentId}  />
+            <StudentInput form={form} />
 
             <FormField
               control={form.control}
@@ -93,13 +94,11 @@ const EditBehaviorRecordForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Description</FormLabel>
-                  <Textarea placeholder="Type your message here." />
+                  <Textarea {...field} placeholder="Type your message here." />
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            
 
             <Button disabled={isPending} variant="default">
               {' '}

@@ -73,7 +73,7 @@ const BehaviorRecordDataTable = ({ columns, data }: DatabehaviorSchema) => {
     <div className="w-full mt-10 p-10">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter behavior..."
+          placeholder="Filter behavior by student name"
           value={(table.getColumn('studentName')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
             table.getColumn('studentName')?.setFilterValue(event.target.value)

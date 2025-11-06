@@ -1,20 +1,21 @@
-
 import { db } from '@/db';
 import { behaviorRecordsSchema } from '@/state/schemas/validationSchemas';
 import { fromZodError } from 'zod-validation-error';
 import { NextRequest, NextResponse } from 'next/server';
 import { behaviorRecordsFormSchema } from '@/state/schemas/formSchema';
+import { dateTime } from '@/utils/dateFormats';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0 
-
-export async function PATCH(req: NextRequest, {params}: {params: Promise<{id: string}>}) {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const request = await req.json();
-  const paramsId = (await params).id
-  const behaviorId = parseInt(paramsId, 10)
+  const paramsId = (await params).id;
+  const behaviorId = parseInt(paramsId, 10);
 
- 
   const result = behaviorRecordsSchema.safeParse(request);
 
   if (!result.success) {
@@ -28,12 +29,13 @@ export async function PATCH(req: NextRequest, {params}: {params: Promise<{id: st
 
   const dataObj = result.data;
 
-
-
   try {
-     await db.behaviorRecords.update({
+    await db.behaviorRecords.update({
       where: { behaviorId },
-      data: behaviorRecordsFormSchema(dataObj)
+      data: {
+        ...behaviorRecordsFormSchema(dataObj),
+        date: dateTime(dataObj.date),
+      },
     });
 
     return NextResponse.json(

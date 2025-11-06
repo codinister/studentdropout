@@ -3,21 +3,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import LogoutButton from './logoutButton';
-
-const menuItems = [
-  { name: 'Dashboard', path: '/dashboard' },
-  { name: 'Subject', path: '/subject' },
-  { name: 'Students', path: '/students' },
-  { name: 'Academic Records', path: '/academic-records' },
-  { name: 'Attendance Records', path: '/attendance-records' },
-  { name: 'Behavior Records', path: '/behavior-records' },
-  { name: 'Health Records', path: '/health-records' },
-  { name: 'Financial Status', path: '/financial-status' },
-  { name: 'Interventions', path: '/interventions' },
-  { name: 'Dropout Prediction', path: '/dropout-prediction' },
-  { name: 'Users', path: '/users' },
-  { name: 'Settings', path: '/settings' },
-];
+import { FaGear } from 'react-icons/fa6';
+import { IoIosHome, IoMdBook, IoMdStats } from 'react-icons/io';
+import { FiUsers } from 'react-icons/fi';
+import { PiRecordThin } from 'react-icons/pi';
+import { RiUserShared2Line } from 'react-icons/ri';
+import { MdOnlinePrediction, MdOutlineHealthAndSafety } from 'react-icons/md';
+import { CiBullhorn, CiMoneyCheck1 } from 'react-icons/ci';
+import { HiOutlineUsers } from 'react-icons/hi';
 
 function Sidebar() {
   return (
@@ -32,11 +25,86 @@ function Sidebar() {
       <h1 className="text-2xl font-bold mb-6">Dropout Dashboard</h1>
       <nav>
         <ul>
-          {menuItems.map((item) => (
-            <li key={item.name} className="mb-3 hover:bg-blue-700 p-2 rounded">
-              <Link href={item.path}>{item.name}</Link>
-            </li>
-          ))}
+          <li className="mb-3 hover:bg-blue-700 p-2 rounded">
+            <Link href="/dashboard" className="flex gap-4 items-center">
+              <IoIosHome /> Dashboard{' '}
+            </Link>
+          </li>
+
+          <li className="mb-3 hover:bg-blue-700 p-2 rounded">
+            <Link href="/subject" className="flex gap-4 items-center">
+              <IoMdBook /> Subject{' '}
+            </Link>
+          </li>
+
+          <li className="mb-3 hover:bg-blue-700 p-2 rounded">
+            <Link href="/students" className="flex gap-4 items-center">
+              <FiUsers /> Students{' '}
+            </Link>
+          </li>
+
+          <li className="mb-3 hover:bg-blue-700 p-2 rounded">
+            <Link href="/academic-records" className="flex gap-4 items-center">
+              <PiRecordThin />
+              Academic Records{' '}
+            </Link>
+          </li>
+
+          <li className="mb-3 hover:bg-blue-700 p-2 rounded">
+            <Link
+              href="/attendance-records"
+              className="flex gap-4 items-center"
+            >
+              <RiUserShared2Line />
+              Attendance Records{' '}
+            </Link>
+          </li>
+
+          <li className="mb-3 hover:bg-blue-700 p-2 rounded">
+            <Link href="/behavior-records" className="flex gap-4 items-center">
+              <IoMdStats /> Behavior Records{' '}
+            </Link>
+          </li>
+
+          <li className="mb-3 hover:bg-blue-700 p-2 rounded">
+            <Link href="/health-records" className="flex gap-4 items-center">
+              <MdOutlineHealthAndSafety /> Health Records{' '}
+            </Link>
+          </li>
+
+          <li className="mb-3 hover:bg-blue-700 p-2 rounded">
+            <Link href="/financial-status" className="flex gap-4 items-center">
+              <CiMoneyCheck1 />
+              Financial Status{' '}
+            </Link>
+          </li>
+
+          <li className="mb-3 hover:bg-blue-700 p-2 rounded">
+            <Link href="/interventions" className="flex gap-4 items-center">
+              <CiBullhorn /> Interventions
+            </Link>
+          </li>
+
+          <li className="mb-3 hover:bg-blue-700 p-2 rounded">
+            <Link
+              href="/dropout-prediction"
+              className="flex gap-4 items-center"
+            >
+              <MdOnlinePrediction /> Dropout Prediction
+            </Link>
+          </li>
+
+          <li className="mb-3 hover:bg-blue-700 p-2 rounded">
+            <Link href="/users" className="flex gap-4 items-center">
+              <HiOutlineUsers /> Users
+            </Link>
+          </li>
+          <li className="mb-3  hover:bg-blue-700 p-2 rounded">
+            <Link href="/settings" className="flex gap-4 items-center">
+              <FaGear /> Settings
+            </Link>
+          </li>
+
           <li>
             <LogoutButton />
           </li>

@@ -11,31 +11,35 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '../ui/button';
+
 import { ColumnDef } from '@tanstack/react-table';
+
 import { FaEdit } from 'react-icons/fa';
 import { GoTrash } from 'react-icons/go';
 import useDispatchselector from '@/state/redux/useDispatchselector';
+
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
 import DialogueBox from '../DialogueBox';
-import EditFinancialRecordForm from '../financialrecord/EditFinancialRecordForm';
-import {  fetchFinancialrecord } from '@/state/redux/slice/asyncThunkFn';
+import EditFinancialStatusForm from '../financialstatus/EditFinancialStatusForm';
+import {   fetchFinancialStatus } from '@/state/redux/slice/asyncThunkFn';
 import fetchApi from '@/state/query/fetchApi';
-import { financialSchema } from '@/types/types';
+import { financialSchema} from '@/types/types';
+import { formatDate } from '@/utils/dateFormats';
 
-const useFinancialRecordColumns = () => {
+const useFinancialStatus = () => {
   const { showModal, closeModal } = useFormSubmitResult();
   const { dispatch } = useDispatchselector();
 
   const editItemFn = async (id: number) => {
     const { data } = await fetchApi({
-      url: '/financialrecord/get-financialrecord-by-id/' + id,
+      url: '/financialstatus/get-financialstatus-by-id/'+id,
     });
 
-    const EditFinancialRecord = () => {
-      return <EditFinancialRecordForm data={data} />;
+    const EditFinancialStatus = () => {
+      return <EditFinancialStatusForm data={data} />;
     };
 
-    showModal(EditFinancialRecord);
+    showModal(EditFinancialStatus);
   };
 
   const deleteItemFn = (id: number) => {
@@ -43,10 +47,10 @@ const useFinancialRecordColumns = () => {
       const deleteFn = async () => {
         await fetchApi({
           method: 'Delete',
-          url: '/financialrecord/delete-financialrecord-by-id/' + id,
+          url: '/financialstatus/delete-financialstatus-by-id/'+id,
         });
         closeModal();
-        dispatch(fetchFinancialrecord());
+        dispatch(fetchFinancialStatus());
       };
 
       return <DialogueBox deleteItemFn={deleteFn} />;
@@ -54,11 +58,6 @@ const useFinancialRecordColumns = () => {
 
     showModal(DeleteFnComponent);
   };
-
-
-
-
-
 
   const financialColumn: ColumnDef<financialSchema>[] = [
     {
@@ -84,10 +83,10 @@ const useFinancialRecordColumns = () => {
       enableHiding: false,
     },
         {
-      accessorKey: 'date',
-      header: () => <div className="text-left">Date</div>,
+      accessorKey: 'status',
+      header: () => <div className="text-left">Status</div>,
       cell: ({ row }) => (
-        <div className="text-left lowercase">{row.getValue('date')}</div>
+        <div className="text-left">{row.getValue('status')}</div>
       ),
     },
     {
@@ -97,20 +96,14 @@ const useFinancialRecordColumns = () => {
         <div className="capitalize">{row.getValue('studentName')}</div>
       ),
     },
-
     {
-      accessorKey: 'status',
-      header: () => <div className="text-left">Status</div>,
-
-      cell: ({ row }) => {
-        return (
-          <div className="text-left font-medium">
-            {row.getValue('status')}
-          </div>
-        );
-      },
+      accessorKey: 'studentId',
+      header: 'Student ID',
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue('studentId')}</div>
+      ),
     },
-        {
+    {
       accessorKey: 'amount',
       header: () => <div className="text-left">Amount</div>,
 
@@ -127,6 +120,7 @@ const useFinancialRecordColumns = () => {
       enableHiding: false,
       cell: ({ row }) => {
         const result = row.original;
+
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -160,9 +154,6 @@ const useFinancialRecordColumns = () => {
 
 
 
-export default useFinancialRecordColumns
 
-
-
-
+export default useFinancialStatus
 

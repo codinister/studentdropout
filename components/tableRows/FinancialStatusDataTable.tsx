@@ -34,14 +34,14 @@ import {
 } from '@/components/ui/table';
 import { financialSchema } from '@/types/types';
 
-type DatafinancialSchema = {
+type DatahealthSchema = {
   columns: ColumnDef<financialSchema>[];
   data: financialSchema[];
 };
 
 
 
-const FinancialRecordDataTable = ({ columns, data }: DatafinancialSchema) => {
+const FinancialStatusDataTable = ({ columns, data }: DatahealthSchema) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -73,7 +73,7 @@ const FinancialRecordDataTable = ({ columns, data }: DatafinancialSchema) => {
     <div className="w-full mt-10 p-10">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter financial status..."
+          placeholder="Filter financial status by student name"
           value={(table.getColumn('studentName')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
             table.getColumn('studentName')?.setFilterValue(event.target.value)
@@ -185,7 +185,7 @@ const FinancialRecordDataTable = ({ columns, data }: DatafinancialSchema) => {
   );
 };
 
-export default FinancialRecordDataTable
 
 
 
+export default FinancialStatusDataTable

@@ -24,6 +24,7 @@ import EditBehaviorRecordForm from '../behaviorrecord/EditBehaviorRecordForm';
 import { fetchBehaviorRecord } from '@/state/redux/slice/asyncThunkFn';
 import fetchApi from '@/state/query/fetchApi';
 import { behaviorSchema } from '@/types/types';
+import { formatDate } from '@/utils/dateFormats';
 
 const useBehaviorRecordColumns = () => {
   const { showModal, closeModal } = useFormSubmitResult();
@@ -31,7 +32,7 @@ const useBehaviorRecordColumns = () => {
 
   const editItemFn = async (id: number) => {
     const { data } = await fetchApi({
-      url: '/behaviorrecord/get-student-by-id/' + id,
+      url: '/behaviorrecord/get-behaviorrecord-by-id/'+ id,
     });
 
     const EditBehaviorRecord = () => {
@@ -46,7 +47,7 @@ const useBehaviorRecordColumns = () => {
       const deleteFn = async () => {
         await fetchApi({
           method: 'Delete',
-          url: '/behaviorrecord/delete-behaviorrecord-by-id/' + id,
+          url: '/behaviorrecord/delete-behaviorrecord-by-id/'+id,
         });
         closeModal();
         dispatch(fetchBehaviorRecord());
@@ -85,7 +86,7 @@ const useBehaviorRecordColumns = () => {
       accessorKey: 'date',
       header: () => <div className="text-left">Date</div>,
       cell: ({ row }) => (
-        <div className="text-left lowercase">{row.getValue('date')}</div>
+        <div className="text-left">{formatDate(row.getValue('date'))}</div>
       ),
     },
     {

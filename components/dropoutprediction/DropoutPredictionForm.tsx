@@ -23,7 +23,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import { fetchStudents } from '@/state/redux/slice/appReducer';
+import { fetchStudents } from '@/state/redux/slice/asyncThunkFn
 import useMutations from '@/state/query/useMutations';
 import { useEffect } from 'react';
 import { dropoutPredictionFormSchema } from '@/state/schemas/formSchema';

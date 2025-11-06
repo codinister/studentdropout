@@ -23,7 +23,8 @@ import DialogueBox from '../DialogueBox';
 import EditHealthRecordForm from '../healthrecord/EditHealthRecordForm';
 import {  fetchHealthrecord } from '@/state/redux/slice/asyncThunkFn';
 import fetchApi from '@/state/query/fetchApi';
-import {  healthSchema } from '@/types/types';
+import { healthSchema } from '@/types/types';
+import { formatDate } from '@/utils/dateFormats';
 
 const useHealthRecordColumns = () => {
   const { showModal, closeModal } = useFormSubmitResult();
@@ -31,7 +32,7 @@ const useHealthRecordColumns = () => {
 
   const editItemFn = async (id: number) => {
     const { data } = await fetchApi({
-      url: '/healthrecord/get-healthrecord-by-id/' + id,
+      url: '/healthrecord/get-healthrecord-by-id/'+id,
     });
 
     const EditHealthRecord = () => {
@@ -46,7 +47,7 @@ const useHealthRecordColumns = () => {
       const deleteFn = async () => {
         await fetchApi({
           method: 'Delete',
-          url: '/healthrecord/delete-healthrecord-by-id/' + id,
+          url: '/healthrecord/delete-healthrecord-by-id/'+id,
         });
         closeModal();
         dispatch(fetchHealthrecord());
@@ -85,20 +86,8 @@ const useHealthRecordColumns = () => {
       accessorKey: 'date',
       header: () => <div className="text-left">Date</div>,
       cell: ({ row }) => (
-        <div className="text-left lowercase">{row.getValue('date')}</div>
+        <div className="text-left">{formatDate(row.getValue('date'))}</div>
       ),
-    },
-    {
-      accessorKey: 'date',
-      header: () => <div className="text-left">Date</div>,
-
-      cell: ({ row }) => {
-        return (
-          <div className="text-left font-medium">
-            {row.getValue('date')}
-          </div>
-        );
-      },
     },
     {
       accessorKey: 'studentName',
@@ -109,13 +98,13 @@ const useHealthRecordColumns = () => {
     },
 
     {
-      accessorKey: 'amount',
-      header: () => <div className="text-left">Amount</div>,
+      accessorKey: 'condition',
+      header: () => <div className="text-left">Condition</div>,
 
       cell: ({ row }) => {
         return (
           <div className="text-left font-medium">
-            {row.getValue('amount')}
+            {row.getValue('condition')}
           </div>
         );
       },
@@ -158,9 +147,5 @@ const useHealthRecordColumns = () => {
 };
 
 
-
 export default useHealthRecordColumns
-
-
-
 

@@ -9,7 +9,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
-import { behaviorRecordsSchema } from '@/state/schemas/validationSchemas';
+import {healthRecordSchema } from '@/state/schemas/validationSchemas';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
@@ -17,29 +17,31 @@ import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 import { BeatLoader } from 'react-spinners';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import {  fetchBehaviorRecord } from '@/state/redux/slice/asyncThunkFn';
+import {  fetchHealthrecord } from '@/state/redux/slice/asyncThunkFn';
 import useMutations from '@/state/query/useMutations';
-import { behaviorRecordsFormSchema} from '@/state/schemas/formSchema';
+import { healthRecordsFormSchema} from '@/state/schemas/formSchema';
 import useStudentInput from '@/utils/useStudentInput';
 import { Textarea } from '../ui/textarea';
+import { ymd } from '@/utils/dateFormats';
 const EditBehaviorRecordForm = ({
   data,
 }: {
-  data: {behaviorId: number} & z.infer<typeof behaviorRecordsSchema>;
+  data: {healthId: number} & z.infer<typeof healthRecordSchema>;
 }) => {
 
   const { successResult, errorResult } = useFormSubmitResult();
 
-  const form = useForm<z.infer<typeof behaviorRecordsSchema>>({
-    resolver: zodResolver(behaviorRecordsSchema),
+
+  const form = useForm<z.infer<typeof healthRecordSchema>>({
+    resolver: zodResolver(healthRecordSchema),
     defaultValues: {
-      ...behaviorRecordsFormSchema(data)
+      ...healthRecordsFormSchema({...data, date: ymd(new Date(data.date))})
     },
   });
 
   const { isPending, isSuccess, isError, error, mutate } = useMutations({
-    key: 'update-behaviorrecord',
-    url: '/behaviorrecord/update-behaviorrecord/'+data?.behaviorId,
+    key: 'update-healthrecord',
+    url: '/healthrecord/update-healthrecord/'+data?.healthId,
     method: 'Patch',
   });
 
@@ -50,11 +52,11 @@ const EditBehaviorRecordForm = ({
     }
     if (isSuccess) {
       errorResult('');
-      successResult('Behavior updated successfully!', 'Behavior Updated', fetchBehaviorRecord);
+      successResult('Health updated successfully!', 'Health Updated', fetchHealthrecord);
     }
   }, [isError, isSuccess]);
 
-  const handleSubmit = (data: z.infer<typeof behaviorRecordsSchema>) => {
+  const handleSubmit = (data: z.infer<typeof healthRecordSchema>) => {
     mutate(data);
   };
 
@@ -63,7 +65,7 @@ const EditBehaviorRecordForm = ({
   const {StudentInput} = useStudentInput()
 
   return (
-        <>
+<>
       <div className="bg-white p-10 rounded-3xl w-lg">
         <Form {...form}>
           <form
@@ -71,39 +73,36 @@ const EditBehaviorRecordForm = ({
             className="space-y-4"
           >
             <FormField
-              control={form.control}
               name="date"
+              control={form.control}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Date</FormLabel>
                   <FormControl>
-                    <Input type="date" placeholder="Choose date" {...field} />
+                    <Input  type="date" {...field} placeholder="Choose date" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-
-            <StudentInput form={form} studentId={data?.studentId}  />
+            <StudentInput form={form} />
 
             <FormField
               control={form.control}
-              name="description"
+              name="condition"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <Textarea placeholder="Type your message here." />
+                  <FormLabel>Condition</FormLabel>
+                  <Textarea {...field} placeholder="Type your message here." />
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            
-
             <Button disabled={isPending} variant="default">
               {' '}
-              Save Behavior {isPending ? <BeatLoader /> : ''}
+              Update Health {isPending ? <BeatLoader /> : ''}
             </Button>
           </form>
         </Form>
