@@ -17,7 +17,7 @@ datasource db {
 model Student {
   studentId       Int                 @id @default(autoincrement())
   studentName     String              @unique
-  level           Int
+  level           String
   totalAttendance String
   score           String
   academicRecords AcademicRecord[]
