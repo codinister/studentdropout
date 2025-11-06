@@ -26,6 +26,9 @@ const {studentColumn} = useStudentColumn()
 
   const data: studentSchema[]  = students;
 
+
+  console.log(data)
+
   return (
     <>
       <div className="bg-white">

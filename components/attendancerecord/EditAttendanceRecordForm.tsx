@@ -99,11 +99,11 @@ const EditAttendanceRecordForm = ({
                 <FormItem>
                   <FormLabel>Status</FormLabel>
                   <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
+                    onValueChange={(value) => field.onChange(value)}
                     value={field.value?.toString()}
                   >
                     <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select level" />
+                      <SelectValue placeholder="Select status" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Present">Present</SelectItem>
