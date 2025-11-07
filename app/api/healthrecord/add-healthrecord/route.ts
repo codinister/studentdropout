@@ -26,6 +26,21 @@ export async function POST(req: NextRequest) {
   const dates = dateTime(dataobj.date);
 
   try {
+    const finddup = await db.healthRecord.findFirst({
+      where: {
+        studentId: dataobj?.studentId,
+      },
+    });
+
+    if (finddup) {
+      return NextResponse.json(
+        {
+          error: 'Health Record already exist!',
+        },
+        { status: 400 }
+      );
+    }
+
     await db.healthRecord.create({
       data: { ...healthRecordsFormSchema(dataobj), date: dates },
     });

@@ -23,9 +23,22 @@ export async function POST(req: NextRequest) {
 
   const dataobj = result.data;
 
-
-
   try {
+    const finddup = await db.financialStatus.findFirst({
+      where: {
+        studentId: dataobj?.studentId,
+      },
+    });
+
+    if (finddup) {
+      return NextResponse.json(
+        {
+          error: 'Financial status already exist!',
+        },
+        { status: 400 }
+      );
+    }
+
     await db.financialStatus.create({
       data: financialStatusFormSchema(dataobj),
     });

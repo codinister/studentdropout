@@ -26,6 +26,21 @@ export async function POST(req: NextRequest) {
   const dates = dateTime(dataobj.date);
 
   try {
+    const finddup = await db.intervention.findFirst({
+      where: {
+        studentId: dataobj?.studentId,
+      },
+    });
+
+    if (finddup) {
+      return NextResponse.json(
+        {
+          error: 'Intervention Record already exist!',
+        },
+        { status: 400 }
+      );
+    }
+
     await db.intervention.create({
       data: { ...interventionFormSchema(dataobj), date: dates },
     });
