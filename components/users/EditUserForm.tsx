@@ -26,16 +26,16 @@ import useFormSubmitResult from '@/utils/useFormSubmitResult';
 import useMutations from '@/state/query/useMutations';
 import { useEffect } from 'react';
 import { fetchUsers } from '@/state/redux/slice/asyncThunkFn';
-import { userSchema } from '@/state/schemas/validationSchemas';
+import { userUpdateSchema } from '@/state/schemas/validationSchemas';
 
 
-const EditUserForm = ({ data }: { data: {userId: number} & z.infer<typeof userSchema> }) => {
+const EditUserForm = ({ data }: { data: {userId: number} & z.infer<typeof userUpdateSchema> }) => {
   const { successResult, errorResult } = useFormSubmitResult();
 
 
 
-  const form = useForm<z.infer<typeof userSchema>>({
-    resolver: zodResolver(userSchema),
+  const form = useForm<z.infer<typeof userUpdateSchema>>({
+    resolver: zodResolver(userUpdateSchema),
     defaultValues: {
       ...userFormSchema({...data,password: ''})
     },
@@ -58,7 +58,7 @@ const EditUserForm = ({ data }: { data: {userId: number} & z.infer<typeof userSc
     }
   }, [isError, isSuccess]);
 
-  const handleSubmit = (data: z.infer<typeof userSchema>) => {
+  const handleSubmit = (data: z.infer<typeof userUpdateSchema>) => {
     mutate(data);
   };
 

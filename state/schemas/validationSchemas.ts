@@ -12,6 +12,14 @@ export const userSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
+
+export const userUpdateSchema = z.object({
+  name: z.string().min(2, 'Name field required!'),
+  roleId: z.number().min(1, 'Role filed required!'),
+  email: z.string().email('Enter a valid email'),
+  password: z.string().optional(),
+});
+
 //STUDENTS
 export const studentSchema = z.object({
   studentName: z.string().min(1, 'Student Name field required!'),

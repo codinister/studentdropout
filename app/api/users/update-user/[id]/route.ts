@@ -1,6 +1,5 @@
-
 import { db } from '@/db';
-import { userSchema } from '@/state/schemas/validationSchemas';
+import { userUpdateSchema } from '@/state/schemas/validationSchemas';
 import { fromZodError } from 'zod-validation-error';
 import { hashPassword } from '@/utils/passwordCrypt';
 import { NextRequest, NextResponse } from 'next/server';
@@ -13,7 +12,7 @@ export async function PATCH(req: NextRequest, {params}: {params: Promise<{id: st
   const paramsId = (await params).id
   const userId = parseInt(paramsId, 10)
 
-  const result = userSchema.safeParse(request);
+  const result = userUpdateSchema.safeParse(request);
 
   if (!result.success) {
     return NextResponse.json(
