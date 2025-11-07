@@ -27,26 +27,24 @@ import useFormSubmitResult from '@/utils/useFormSubmitResult';
 import { fetchStudents } from '@/state/redux/slice/asyncThunkFn';
 import useMutations from '@/state/query/useMutations';
 import { studentFormSchema } from '@/state/schemas/formSchema';
+import Levels from '../Levels';
 const EditStudentForm = ({
   data,
 }: {
-  data: {studentId: number} & z.infer<typeof studentSchema>;
+  data: { studentId: number } & z.infer<typeof studentSchema>;
 }) => {
-
   const { successResult, errorResult } = useFormSubmitResult();
 
   const form = useForm<z.infer<typeof studentSchema>>({
     resolver: zodResolver(studentSchema),
     defaultValues: {
-
-
-      ...studentFormSchema(data)
+      ...studentFormSchema(data),
     },
   });
 
   const { isPending, isSuccess, isError, error, mutate } = useMutations({
     key: 'update-student',
-    url: '/students/update-student/'+data?.studentId,
+    url: '/students/update-student/' + data?.studentId,
     method: 'Patch',
   });
 
@@ -57,7 +55,11 @@ const EditStudentForm = ({
     }
     if (isSuccess) {
       errorResult('');
-      successResult('Student updated successfully!', 'Student Updated', fetchStudents);
+      successResult(
+        'Student updated successfully!',
+        'Student Updated',
+        fetchStudents
+      );
     }
   }, [isError, isSuccess]);
 
@@ -87,30 +89,7 @@ const EditStudentForm = ({
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="level"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Level</FormLabel>
-                  <Select
-                    onValueChange={(value) => field.onChange(value)}
-                    value={field.value?.toString()}
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select level" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="100">Level 100</SelectItem>
-                      <SelectItem value="200">Level 200</SelectItem>
-                      <SelectItem value="300">Level 300</SelectItem>
-                      <SelectItem value="400">Level 400</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <Levels form={form} />
 
             <FormField
               control={form.control}
