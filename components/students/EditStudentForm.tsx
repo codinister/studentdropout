@@ -94,7 +94,7 @@ const EditStudentForm = ({
                 <FormItem>
                   <FormLabel>Level</FormLabel>
                   <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
+                    onValueChange={(value) => field.onChange(value)}
                     value={field.value?.toString()}
                   >
                     <SelectTrigger className="w-[180px]">
