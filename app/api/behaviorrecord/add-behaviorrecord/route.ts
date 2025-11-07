@@ -26,6 +26,21 @@ export async function POST(req: NextRequest) {
   const dates = dateTime(dataobj?.date);
 
   try {
+    const finddup = await db.behaviorRecords.findFirst({
+      where: {
+        studentId: dataobj?.studentId,
+      },
+    });
+
+    if (finddup) {
+      return NextResponse.json(
+        {
+          error: 'Behavior Record already exist!',
+        },
+        { status: 400 }
+      );
+    }
+
     await db.behaviorRecords.create({
       data: {
         ...behaviorRecordsFormSchema(dataobj),
