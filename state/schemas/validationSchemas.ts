@@ -12,7 +12,6 @@ export const userSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
-
 export const userUpdateSchema = z.object({
   name: z.string().min(2, 'Name field required!'),
   roleId: z.number().min(1, 'Role filed required!'),
@@ -22,10 +21,14 @@ export const userUpdateSchema = z.object({
 
 //STUDENTS
 export const studentSchema = z.object({
-  studentName: z.string().min(1, 'Student Name field required!'),
-  totalAttendance: z.string().min(1, 'Total Attendance filed required!'),
+  studentName: z.string().min(1, 'Stundent name field required!'),
   level: z.string().min(1, 'Level field required!'),
-  score: z.string().min(1, 'Score field required!'),
+  birthdate: z.string().min(1, 'Birthdate field required!'),
+  phone: z.string().min(1, 'Phone field required!'),
+  nationality: z.string().min(1, 'Nationality field required!'),
+  residence: z.string().min(1, 'Level field required!'),
+  gender: z.string().min(1, 'Gender field required!'),
+  admissiondate: z.string().min(1, 'Admission date field required!'),
 });
 
 //SUBJECTS
@@ -39,6 +42,10 @@ export const academicRecordSchema = z.object({
   semester: z.string().min(2, 'Semester field required!'),
   year: z.number().min(2, 'Year field required!'),
   studentId: z.number().min(1, 'Student Name field required!'),
+  department: z.string().min(1, 'Department field required!'),
+  gpa: z.string().min(1, 'GPA field required!'),
+  attendance: z.string().min(1, 'Attendance field required!'),
+  score: z.string().min(1, 'Score attendance field required!'),
 });
 
 export const behaviorRecordsSchema = z.object({
@@ -59,28 +66,13 @@ export const financialStatuschema = z.object({
   amount: z.string().min(2, 'Amount field required!'),
 });
 
-//AttendanceRecord
-export const attendanceRecordSchema = z.object({
-  date: z.string().min(2, 'Date field required!'),
-  status: z.string().min(2, 'Status field required!'),
-  studentId: z.number().min(1, 'Student Name field required!'),
-});
-
 //Settings
 export const settingsSchema = z.object({
   schoolName: z.string().min(2, 'School Name field required!'),
   schoolPhone: z.string().min(2, 'School Phone field required!'),
   schoolWebsite: z.string().min(2, 'School Website field required!'),
   schoolLocation: z.string().min(2, 'School Location field required!'),
-  schoolPostalAddress: z.string().min(2, 'Postal Address field required!')
-});
-
-//DropoutPrediction
-export const dropoutPredictionSchema = z.object({
-  predictionScore: z.string().min(2, 'Prediction Score field required!'),
-  date: z.string().min(2, 'Date field required!'),
-  riskLevel: z.string().min(2, 'Risk Level field required!'),
-  studentId: z.number().min(1, 'Student Name field required!'),
+  schoolPostalAddress: z.string().min(2, 'Postal Address field required!'),
 });
 
 //intervention
@@ -89,18 +81,4 @@ export const interventionSchema = z.object({
   date: z.string().min(2, 'Date field required!'),
   outcome: z.string().min(2, 'Outcome field required!'),
   studentId: z.number().min(1, 'Student Name field required!'),
-});
-
-//DemographicInfo
-export const demographicInfoSchema = z.object({
-  parentName: z.string().min(2, ' field required!'),
-  parentContact: z.string().min(2, ' field required!'),
-  householdIncome: z.string().min(2, ' field required!'),
-  ethnicity: z.string().min(2, ' field required!'),
-  studentId: z.number().min(1, 'Student Name field required!'),
-});
-
-//Role
-export const roleSchema = z.object({
-  roleName: z.string().min(2, 'Role Name field required!'),
 });

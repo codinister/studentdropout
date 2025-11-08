@@ -14,10 +14,6 @@ export async function PATCH(req: NextRequest, {params}: {params: Promise<{id: st
   const paramId = (await params).id
   const recordId = parseInt(paramId, 10)
 
-
-  console.log('RES', request)
-  console.log('ID', recordId)
-
  
   const result = academicRecordSchema.safeParse(request);
 

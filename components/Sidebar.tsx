@@ -50,15 +50,7 @@ function Sidebar() {
             </Link>
           </li>
 
-          <li className="mb-3 hover:bg-blue-700 p-2 rounded">
-            <Link
-              href="/attendance-records"
-              className="flex gap-4 items-center"
-            >
-              <RiUserShared2Line />
-              Attendance Records{' '}
-            </Link>
-          </li>
+  
 
           <li className="mb-3 hover:bg-blue-700 p-2 rounded">
             <Link href="/behavior-records" className="flex gap-4 items-center">

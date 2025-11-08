@@ -22,7 +22,7 @@ import { useEffect, useState } from 'react';
 import { behaviorRecordsFormSchema } from '@/state/schemas/formSchema';
 import useStudentInput from '@/utils/useStudentInput';
 import { Textarea } from '../ui/textarea';
-import useDatePicker from '@/utils/useDatePicker';
+
 
 const BehaviorRecordForm = () => {
   const form = useForm<z.infer<typeof behaviorRecordsSchema>>({
@@ -58,7 +58,7 @@ const BehaviorRecordForm = () => {
   };
 
   const { StudentInput } = useStudentInput();
-  const { DatePicker } = useDatePicker();
+
   return (
     <>
       <div className="bg-white p-10 rounded-3xl w-lg">

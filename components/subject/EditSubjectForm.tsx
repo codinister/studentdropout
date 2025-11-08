@@ -87,7 +87,7 @@ const EditSubjectForm = ({
 
             <Button disabled={isPending} variant="default">
               {' '}
-              Update subject {isPending ? <BeatLoader /> : ''}
+              Update program {isPending ? <BeatLoader /> : ''}
             </Button>
           </form>
         </Form>

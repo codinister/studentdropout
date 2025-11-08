@@ -4,11 +4,8 @@ import {
   fetchStudents,
   fetchRole,
   fetchSubject,
-  fetchDemographicinfo,
   fetchIntervention,
-  fetchDropoutprediction,
   fetchSettings,
-  fetchAttendancerecord,
   fetchAcademicrecord,
   fetchBehaviorRecord,
   fetchHealthrecord,
@@ -22,13 +19,9 @@ const initialState: AppState = {
   modalComponent: null,
   users: [],
   students: [],
-  role: [],
   subject: [],
-  demographicinfo: [],
   intervention: [],
-  dropoutprediction: [],
   settings: [],
-  attendancerecord: [],
   academicrecord: [],
   behaviorrecord: [],
   healthrecord: [],
@@ -70,7 +63,7 @@ const appSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchStudents.fulfilled, (state, action) => {
-        state.students = action.payload;
+        state.students = action.payload[0]?.studentsInfo;
       })
       .addCase(fetchStudents.rejected, (state, action) => {
         state.error = action.payload || 'Something went wrong';
@@ -120,17 +113,6 @@ const appSlice = createSlice({
         state.error = action.payload || 'Something went wrong';
       })
 
-      .addCase(fetchAttendancerecord.pending, (state) => {
-        state.attendancerecord = [];
-        state.error = null;
-      })
-      .addCase(fetchAttendancerecord.fulfilled, (state, action) => {
-        state.attendancerecord = action.payload;
-      })
-      .addCase(fetchAttendancerecord.rejected, (state, action) => {
-        state.error = action.payload || 'Something went wrong';
-      })
-
       .addCase(fetchSettings.pending, (state) => {
         state.settings = [];
         state.error = null;
@@ -139,17 +121,6 @@ const appSlice = createSlice({
         state.settings = action.payload;
       })
       .addCase(fetchSettings.rejected, (state, action) => {
-        state.error = action.payload || 'Something went wrong';
-      })
-
-      .addCase(fetchDropoutprediction.pending, (state) => {
-        state.dropoutprediction = [];
-        state.error = null;
-      })
-      .addCase(fetchDropoutprediction.fulfilled, (state, action) => {
-        state.dropoutprediction = action.payload;
-      })
-      .addCase(fetchDropoutprediction.rejected, (state, action) => {
         state.error = action.payload || 'Something went wrong';
       })
 
@@ -164,17 +135,6 @@ const appSlice = createSlice({
         state.error = action.payload || 'Something went wrong';
       })
 
-      .addCase(fetchDemographicinfo.pending, (state) => {
-        state.demographicinfo = [];
-        state.error = null;
-      })
-      .addCase(fetchDemographicinfo.fulfilled, (state, action) => {
-        state.demographicinfo = action.payload;
-      })
-      .addCase(fetchDemographicinfo.rejected, (state, action) => {
-        state.error = action.payload || 'Something went wrong';
-      })
-
       .addCase(fetchSubject.pending, (state) => {
         state.subject = [];
         state.error = null;
@@ -183,17 +143,6 @@ const appSlice = createSlice({
         state.subject = action.payload;
       })
       .addCase(fetchSubject.rejected, (state, action) => {
-        state.error = action.payload || 'Something went wrong';
-      })
-
-      .addCase(fetchRole.pending, (state) => {
-        state.role = [];
-        state.error = null;
-      })
-      .addCase(fetchRole.fulfilled, (state, action) => {
-        state.role = action.payload;
-      })
-      .addCase(fetchRole.rejected, (state, action) => {
         state.error = action.payload || 'Something went wrong';
       });
   },

@@ -1,5 +1,4 @@
-import {  ymd } from '@/utils/dateFormats';
-
+import { ymd } from '@/utils/dateFormats';
 
 export const loginFormSchema = ({ ...options }) => {
   const { email = '', password = '' } = options;
@@ -22,18 +21,28 @@ export const userFormSchema = ({ ...options }) => {
 
 //STUDENTS
 export const studentFormSchema = ({ ...options }) => {
+  const ndate = new Date();
+
   const {
     studentName = '',
-    totalAttendance = '',
     level = '',
-    score = '',
+    birthdate = '',
+    phone = '',
+    nationality = '',
+    residence = '',
+    gender = '',
+    admissiondate = '',
   } = options;
 
   return {
     studentName: studentName || '',
-    totalAttendance: totalAttendance || '',
     level: level || '',
-    score: score || '',
+    birthdate: birthdate || ymd(ndate),
+    phone: phone || '',
+    nationality: nationality || '',
+    residence: residence || '',
+    gender: gender || '',
+    admissiondate: admissiondate || ymd(ndate),
   };
 };
 
@@ -50,25 +59,32 @@ export const subjectFormSchema = ({ ...options }) => {
 export const academicRecordFormSchema = ({ ...options }) => {
   const {
     subjectId = 0,
-    level = '',
     semester = '',
     year = '',
     studentId = 0,
+    department = '',
+    gpa = '',
+    attendance = '',
+    score = ''
   } = options;
 
   return {
     subjectId: subjectId || 0,
     semester: semester || '',
-    year: year || '',
+    year: year || new Date().getFullYear(),
     studentId: studentId || 0,
+    department: department || '',
+    gpa: gpa || '',
+    attendance: attendance || '',
+    score: score || ''
   };
 };
 
 //Behavior Records
 export const behaviorRecordsFormSchema = ({ ...options }) => {
-  const { date='', studentId = 0, description = '' } = options;
-  const ndate = new Date()
-  
+  const { date = '', studentId = 0, description = '' } = options;
+  const ndate = new Date();
+
   return {
     date: date || ymd(ndate),
     description: description || '',
@@ -79,7 +95,7 @@ export const behaviorRecordsFormSchema = ({ ...options }) => {
 //Health Records
 export const healthRecordsFormSchema = ({ ...options }) => {
   const { date = '', studentId = 0, condition = '' } = options;
-const dates = new Date()
+  const dates = new Date();
   return {
     date: date || ymd(dates),
     condition: condition || '',
@@ -98,79 +114,16 @@ export const financialStatusFormSchema = ({ ...options }) => {
   };
 };
 
-
-
-
-//AttendanceRecord
-export const attendanceRecordFormSchema = ({ ...options }) => {
-  const { date = '', status = '', studentId = 0 } = options;
-
-  const ndate = new Date()
-  
-  return {
-    date: date || ymd(ndate),
-    status: status || '',
-    studentId: studentId || 0,
-  };
-};
-
-
-
-//DropoutPrediction
-export const dropoutPredictionFormSchema = ({ ...options }) => {
-  const {
-    predictionScore = '',
-    date = '',
-    riskLevel = '',
-    studentId = 0,
-  } = options;
-
-  return {
-    predictionScore: predictionScore || '',
-    date: date || '',
-    riskLevel: riskLevel || '',
-    studentId: studentId || 0,
-  };
-};
-
 //intervention
 export const interventionFormSchema = ({ ...options }) => {
   const { type = '', date = '', outcome = '', studentId = 0 } = options;
 
-  const ndate = new Date()
-  
+  const ndate = new Date();
+
   return {
     date: date || ymd(ndate),
     type: type || '',
     outcome: outcome || '',
     studentId: studentId || 0,
-  };
-};
-
-//DemographicInfo
-export const demographicInfoFormSchema = ({ ...options }) => {
-  const {
-    parentName = '',
-    parentContact = '',
-    householdIncome = '',
-    ethnicity = '',
-    studentId = 0,
-  } = options;
-
-  return {
-    parentName: parentName || '',
-    parentContact: parentContact || '',
-    householdIncome: householdIncome || '',
-    ethnicity: ethnicity || '',
-    studentId: studentId || 0,
-  };
-};
-
-//Role
-export const roleFormSchema = ({ ...options }) => {
-  const { roleName = '' } = options;
-
-  return {
-    roleName: roleName || '',
   };
 };

@@ -12,7 +12,9 @@ type StudentInputType = {
 const useStudentInput = () => {
   const students = useGetQuery('students', '/students/get-students');
 
-  const studentsItems = students.map(
+  const studentData = students.length > 0 ? students[0].studentsInfo : [];
+
+  const studentsItems = studentData.map(
     (v: { studentId: number; studentName: string }) => ({
       label: v.studentName,
       value: v.studentId,

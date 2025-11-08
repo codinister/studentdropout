@@ -3,6 +3,8 @@ import { db } from '@/db';
 import { studentSchema } from '@/state/schemas/validationSchemas';
 import { fromZodError } from 'zod-validation-error';
 import { NextRequest, NextResponse } from 'next/server';
+import { studentFormSchema } from '@/state/schemas/formSchema';
+import { dateTime } from '@/utils/dateFormats';
 
 
 export const dynamic = 'force-dynamic'
@@ -25,29 +27,30 @@ export async function PATCH(req: NextRequest, {params}: {params: Promise<{id: st
     );
   }
 
-  const { studentName, level, totalAttendance, score } = result.data;
+  const dataObj = result.data;
 
   const checkStudent = await db.student.findUnique({
-    where: { studentName, NOT: { studentId } },
+    where: { studentName: dataObj?.studentName, NOT: { studentId } },
   });
 
   if (checkStudent) {
     return NextResponse.json(
       {
-        error: `${studentName} is already in use!`,
+        error: `${dataObj?.studentName} is already in use!`,
       },
       { status: 400 }
     );
   }
 
+    const admissiondate = dateTime(dataObj?.admissiondate);
+  const birthdate = dateTime(dataObj?.birthdate);
+
   try {
      await db.student.update({
       where: { studentId },
-      data: {
-        studentName,
-        level,
-        totalAttendance,
-        score,
+    data: { ...studentFormSchema(dataObj), 
+        admissiondate,
+        birthdate 
       },
     });
 

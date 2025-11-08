@@ -86,7 +86,7 @@ const subjectForm = () => {
             
             <Button disabled={isPending} variant="default">
               {' '}
-              Save subject {isPending ? <BeatLoader /> : ''}
+              Save program {isPending ? <BeatLoader /> : ''}
             </Button>
           </form>
         </Form>

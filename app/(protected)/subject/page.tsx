@@ -30,10 +30,10 @@ const {subjectColumn} = useSubjectColumn()
     <>
       <div className="bg-white">
         <PageHeader
-          modalButtonName="Add Subject"
+          modalButtonName="Add Program"
           component={subjectForm} // ✅ pass reference
           pdfFn={pdfFn}
-          pageTitle="Subject"
+          pageTitle="Program"
         />
 
         <SubjectDataTable columns={subjectColumn} data={data} />

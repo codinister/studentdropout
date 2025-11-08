@@ -97,7 +97,7 @@ const useStudentColumn = () => {
     },
     {
       accessorKey: 'totalAttendance',
-      header: () => <div className="text-left">Attendance</div>,
+      header: () => <div className="text-left">Attendance %</div>,
 
       cell: ({ row }) => {
         return (
@@ -108,12 +108,12 @@ const useStudentColumn = () => {
       },
     },
     {
-      accessorKey: 'score',
-      header: () => <div className="text-left">Score</div>,
+      accessorKey: 'gpa',
+      header: () => <div className="text-left">GPA %</div>,
 
       cell: ({ row }) => {
         return (
-          <div className="text-left font-medium">{row.getValue('score')}</div>
+          <div className="text-left font-medium">{row.getValue('gpa')}</div>
         );
       },
     },
