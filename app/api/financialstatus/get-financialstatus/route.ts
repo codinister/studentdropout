@@ -1,5 +1,4 @@
 import { db } from '@/db';
-import { formatDate, ymd } from '@/utils/dateFormats';
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -17,7 +16,6 @@ export async function GET(): Promise<any> {
       return {
         financialId: v.financialId,
         status: v.status,
-        amount: v.amount,
         studentName: v.student.studentName,
         studentId: v.studentId,
       };

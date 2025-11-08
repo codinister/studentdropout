@@ -83,7 +83,7 @@ const useSubjectColumn = () => {
     },
     {
       accessorKey: 'subjectName',
-      header: 'Subject Name',
+      header: 'Programme Name',
       cell: ({ row }) => (
         <div className="capitalize">{row.getValue('subjectName')}</div>
       ),

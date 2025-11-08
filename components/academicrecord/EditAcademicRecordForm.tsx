@@ -27,12 +27,8 @@ import useFormSubmitResult from '@/utils/useFormSubmitResult';
 import { fetchAcademicrecord } from '@/state/redux/slice/asyncThunkFn';
 import useMutations from '@/state/query/useMutations';
 import { academicRecordFormSchema } from '@/state/schemas/formSchema';
-import { Autocomplete } from '../Autocomplete';
 import Semester from '../Semester';
 import Year from '../Year';
-import useGetQuery from '@/state/query/useGetQuery';
-import replaceDot from '@/utils/replaceDot';
-import getValue from '../getValue';
 import useStudentInput from '@/utils/useStudentInput';
 import useSubjectInput from '@/utils/useSubjectInput';
 
@@ -106,7 +102,7 @@ const EditAcademicRecordForm = ({
                              value={field.value?.toString()}
                            >
                              <SelectTrigger className="w-[180px]">
-                               <SelectValue placeholder="Select level" />
+                               <SelectValue placeholder="Select department" />
                              </SelectTrigger>
                              <SelectContent>
                                <SelectItem value="School of Technology">School of Technology</SelectItem>

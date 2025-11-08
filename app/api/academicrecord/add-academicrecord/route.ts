@@ -21,9 +21,31 @@ export async function POST(req: NextRequest) {
     );
   }
 
+
+
+
   const dataobj = academicRecordFormSchema(result.data);
 
+
+
+
   try {
+
+
+  const checkStudentId = await db.academicRecord.findUnique({
+    where: { studentId: dataobj?.studentId },
+  });
+
+  if (checkStudentId) {
+    return NextResponse.json(
+      {
+        error: `Student record already exist!`,
+      },
+      { status: 400 }
+    );
+  }
+
+
     await db.academicRecord.create({
       data: {
         ...dataobj,

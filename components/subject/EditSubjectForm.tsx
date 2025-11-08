@@ -55,7 +55,7 @@ const EditSubjectForm = ({
     }
     if (isSuccess) {
       errorResult('');
-      successResult('Subject updated successfully!', 'Subject Updated', fetchSubject);
+      successResult('Programme updated successfully!', 'Programme Updated', fetchSubject);
     }
   }, [isError, isSuccess]);
 
@@ -76,9 +76,9 @@ const EditSubjectForm = ({
               name="subjectName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Subject Name</FormLabel>
+                  <FormLabel>Programme Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter subject" {...field} />
+                    <Input placeholder="Enter programme name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

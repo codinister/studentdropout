@@ -30,8 +30,8 @@ const useSubjectInput = () => {
         form={form}
         dataList={subjectItems}
         fieldName="subjectId"
-        label="Subject"
-        placeholder="Select subject..."
+        label="Programme"
+        placeholder="Enter programme..."
         defaultValue={defaultValue}
       />
     );

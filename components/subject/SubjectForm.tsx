@@ -50,8 +50,8 @@ const subjectForm = () => {
     if (isSuccess) {
       errorResult('');
       successResult(
-        'Subject added successfully!',
-        'Subject Added',
+        'Programme added successfully!',
+        'Programme Added',
         fetchSubject
       );
     }
@@ -74,9 +74,9 @@ const subjectForm = () => {
               name="subjectName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Subject Name</FormLabel>
+                  <FormLabel>Programme Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter subject name" {...field} />
+                    <Input placeholder="Enter programme name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

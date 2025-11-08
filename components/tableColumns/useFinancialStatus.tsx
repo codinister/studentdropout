@@ -104,18 +104,6 @@ const useFinancialStatus = () => {
       ),
     },
     {
-      accessorKey: 'amount',
-      header: () => <div className="text-left">Amount</div>,
-
-      cell: ({ row }) => {
-        return (
-          <div className="text-left font-medium">
-            {row.getValue('amount')}
-          </div>
-        );
-      },
-    },
-    {
       id: 'actions',
       enableHiding: false,
       cell: ({ row }) => {

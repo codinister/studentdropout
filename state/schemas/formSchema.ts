@@ -105,11 +105,10 @@ export const healthRecordsFormSchema = ({ ...options }) => {
 
 //Financial Records
 export const financialStatusFormSchema = ({ ...options }) => {
-  const { status = '', studentId = 0, amount = 0 } = options;
+  const { status = '', studentId = '' } = options;
 
   return {
     status: status || '',
-    amount: amount || '',
     studentId: studentId || 0,
   };
 };

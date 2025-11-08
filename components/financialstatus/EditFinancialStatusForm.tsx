@@ -22,7 +22,13 @@ import useMutations from '@/state/query/useMutations';
 import { financialStatusFormSchema } from '@/state/schemas/formSchema';
 import useStudentInput from '@/utils/useStudentInput';
 import { Textarea } from '../ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
 const EditFinancialRecordForm = ({
   data,
 }: {
@@ -85,25 +91,13 @@ const EditFinancialRecordForm = ({
                     value={field.value?.toString()}
                   >
                     <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select Status" />
+                      <SelectValue placeholder="Select status" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Paid">Paid</SelectItem>
-                      <SelectItem value="Pending">Pending</SelectItem>
-                      <SelectItem value="Exempt">Exempt</SelectItem>
+                      <SelectItem value="Stable">Stable</SelectItem>
+                      <SelectItem value="Needs Aid">Needs Aid</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="amount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Amount</FormLabel>
-                  <Input type="number" {...field}  />
                   <FormMessage />
                 </FormItem>
               )}

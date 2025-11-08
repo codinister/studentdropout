@@ -71,7 +71,7 @@ const SubjectDataTable = ({ columns, data }: DatasubjectSchema) => {
     <div className="w-full mt-10 p-10">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter subjectName..."
+          placeholder="Filter by Programme Name..."
           value={(table.getColumn('subjectName')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
             table.getColumn('subjectName')?.setFilterValue(event.target.value)

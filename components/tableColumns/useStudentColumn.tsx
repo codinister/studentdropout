@@ -96,13 +96,13 @@ const useStudentColumn = () => {
       ),
     },
     {
-      accessorKey: 'totalAttendance',
+      accessorKey: 'attendance',
       header: () => <div className="text-left">Attendance %</div>,
 
       cell: ({ row }) => {
         return (
           <div className="text-left font-medium">
-            {row.getValue('totalAttendance')}
+            {row.getValue('attendance')}
           </div>
         );
       },

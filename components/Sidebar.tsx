@@ -33,7 +33,7 @@ function Sidebar() {
 
           <li className="mb-3 hover:bg-blue-700 p-2 rounded">
             <Link href="/subject" className="flex gap-4 items-center">
-              <IoMdBook /> Subject{' '}
+              <IoMdBook /> Programmes
             </Link>
           </li>
 

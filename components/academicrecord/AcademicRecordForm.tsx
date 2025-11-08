@@ -94,7 +94,7 @@ const AcademicRecordForm = () => {
                           value={field.value?.toString()}
                         >
                           <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Select level" />
+                            <SelectValue placeholder="Select department" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="School of Technology">School of Technology</SelectItem>
