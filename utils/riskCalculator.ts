@@ -1,7 +1,7 @@
 // Logistic Regression Dropout Risk Calculator
 
 const riskCalculator = ({ ...options }) => {
-  const { GPA, Attendance, Score } = options;
+  const { gpa, attendance, score } = options;
 
   // Example coefficients (from a trained model)
   const b0 = -8; // intercept
@@ -15,7 +15,7 @@ const riskCalculator = ({ ...options }) => {
   }
 
   // Calculate linear combination
-  const z = b0 + b1 * GPA + b2 * Attendance + b3 * Score;
+  const z = b0 + b1 * gpa + b2 * attendance + b3 * score;
 
   // Calculate probability
   const probability = sigmoid(z);
