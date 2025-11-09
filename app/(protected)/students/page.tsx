@@ -8,13 +8,10 @@ import useDispatchselector from '@/state/redux/useDispatchselector';
 import { fetchStudents } from '@/state/redux/slice/asyncThunkFn';
 import { studentSchema } from '@/types/types';
 import useStudentColumn from '@/components/tableColumns/useStudentColumn';
-
+import useJsPdfGenerator from '@/utils/useJsPdfGenerator';
 
 const StudentsPage = () => {
-
-const {studentColumn} = useStudentColumn()
-
-  const pdfFn = () => {};
+  const { studentColumn } = useStudentColumn();
 
   const { dispatch, selector } = useDispatchselector();
 
@@ -24,10 +21,31 @@ const {studentColumn} = useStudentColumn()
 
   const students = selector((state) => state?.students);
 
-  const data: studentSchema[]  = students;
+  const data: studentSchema[] = students;
 
+  const tableColumn = [
+    'ID',
+    'Name',
+    'Level',
+    'Attendance (%)',
+    'Score (%)',
+    'GPA (%)'
+  ];
 
-  console.log(data)
+  const tableRows = data.map((student) => [
+    student.studentId,
+    student.studentName,
+    student.level,
+    student.attendance,
+    student.score,
+    student.gpa,
+  ]);
+
+  const { genPdf } = useJsPdfGenerator({
+    tableColumn,
+    tableRows,
+    reportTitle: 'Students',
+  });
 
   return (
     <>
@@ -35,7 +53,7 @@ const {studentColumn} = useStudentColumn()
         <PageHeader
           modalButtonName="Add Student"
           component={StudentForm} // ✅ pass reference
-          pdfFn={pdfFn}
+          pdfFn={genPdf}
           pageTitle="Students"
         />
 
@@ -45,4 +63,4 @@ const {studentColumn} = useStudentColumn()
   );
 };
 
-export default StudentsPage
+export default StudentsPage;

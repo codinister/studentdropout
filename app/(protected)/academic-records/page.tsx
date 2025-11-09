@@ -2,18 +2,16 @@
 
 import PageHeader from '@/components/PageHeader';
 import AcademicRecordForm from '@/components/academicrecord/AcademicRecordForm';
-import { useEffect} from 'react';
+import { useEffect } from 'react';
 import useDispatchselector from '@/state/redux/useDispatchselector';
 import { fetchAcademicrecord } from '@/state/redux/slice/asyncThunkFn';
 import { academicRecordSchema } from '@/types/types';
 import useAcademicRecordColumns from '@/components/tableColumns/useAcademicRecordColumns';
 import AcademicRecordDataTable from '@/components/tableRows/AcademicRecordDataTable';
+import useJsPdfGenerator from '@/utils/useJsPdfGenerator';
 
 const AcademicRecords = () => {
-
   const { academicColumn } = useAcademicRecordColumns();
-
-  const pdfFn = () => {};
 
   const { dispatch, selector } = useDispatchselector();
 
@@ -25,13 +23,29 @@ const AcademicRecords = () => {
 
   const data: academicRecordSchema[] = academic;
 
+  const tableColumn = ['ID', 'Name', 'Department', 'Level', 'Program'];
+
+  const tableRows = data.map((v) => [
+    v.studentId,
+    v.studentName,
+    v.department,
+    v.level,
+    v.subjectName,
+  ]);
+
+  const { genPdf } = useJsPdfGenerator({
+    tableColumn,
+    tableRows,
+    reportTitle: 'Academic Records',
+  });
+
   return (
     <>
       <div className="bg-white">
         <PageHeader
           modalButtonName="Academic Records"
           component={AcademicRecordForm} // ✅ pass reference
-          pdfFn={pdfFn}
+          pdfFn={genPdf}
           pageTitle="Academic Records"
         />
 
@@ -42,5 +56,3 @@ const AcademicRecords = () => {
 };
 
 export default AcademicRecords;
-
-

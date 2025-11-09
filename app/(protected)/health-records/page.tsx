@@ -8,12 +8,13 @@ import useDispatchselector from '@/state/redux/useDispatchselector';
 import { fetchHealthrecord } from '@/state/redux/slice/asyncThunkFn';
 import {  healthSchema} from '@/types/types';
 import useHealthRecordColumns  from '@/components/tableColumns/useHealthRecordColumns';
+import useJsPdfGenerator from '@/utils/useJsPdfGenerator';
 
 const HealthRecord = () => {
 
   const { healthColumn } = useHealthRecordColumns();
 
-  const pdfFn = () => {};
+
 
   const { dispatch, selector } = useDispatchselector();
 
@@ -25,13 +26,32 @@ const HealthRecord = () => {
 
   const data: healthSchema[] = health_record;
 
+
+    const tableColumn = [
+    'ID',
+    'Name',
+    'Condition'
+  ];
+
+  const tableRows = data.map((v) => [
+    v.studentId,
+       v.studentName,
+    v.condition
+  ]);
+
+  const { genPdf } = useJsPdfGenerator({
+    tableColumn,
+    tableRows,
+    reportTitle: 'Students',
+  });
+
   return (
     <>
       <div className="bg-white">
         <PageHeader
           modalButtonName="Add Health"
           component={HealthRecordForm} // ✅ pass reference
-          pdfFn={pdfFn}
+          pdfFn={genPdf}
           pageTitle="Health Record"
         />
 

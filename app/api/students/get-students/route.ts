@@ -19,6 +19,8 @@ export async function GET(): Promise<any> {
     });
 
     if (student) {
+      let roleView: string[] = [];
+
       const studentsInfo = student.map((v) => {
         const score = Number(v.academicRecords?.score);
         const gpa = Number(v.academicRecords?.gpa);
@@ -28,6 +30,14 @@ export async function GET(): Promise<any> {
           attendance,
           score,
         });
+
+        if (risk.riskLevel === 'High Risk') {
+          roleView = ['Administrators', 'Counselors'];
+        } else if (risk.riskLevel === 'Medium Risk') {
+          roleView = ['Administrators', 'Academic Advisors'];
+        } else if (risk.riskLevel === 'Low Risk') {
+          roleView = ['Administrators', 'Academic Advisors'];
+        }
 
         return {
           studentId: v.studentId,
@@ -42,7 +52,9 @@ export async function GET(): Promise<any> {
           score,
           gpa,
           attendance,
-          risk,
+          dropoutRisk: risk.riskLevel,
+          roleView,
+          financialStatus: v.financialstatus?.status,
           intervention: {
             interventionId: v.interventions?.interventionId,
             type: v.interventions?.type,
@@ -52,41 +64,16 @@ export async function GET(): Promise<any> {
         };
       });
 
-      const interventions = student.map((v) => {
-        return {
-          ...studentsInfo,
-          ...v.interventions,
-        };
-      });
-
-      //Total Students
-      const total_students = studentsInfo.length;
-
-      //Interventions Active
-      const total_interventions = interventions.length;
 
       //High Risk Students
-      const highRisk = studentsInfo.filter(
-        (v) => v.risk === 'High Risk'
-      )
+      const highRisk = studentsInfo.filter((v) => v.dropoutRisk === 'High Risk');
 
-      //Medium Risk Students
-      const mediumRisk = studentsInfo.filter(
-        (v) => v.risk === 'Medium Risk'
-      ).length;
-
-      //Low Risk Students
-      const lowRisk = studentsInfo.filter((v) => v.risk === 'Low Risk').length;
-
-      return NextResponse.json([{
-        studentsInfo,
-        highRiskStudents: highRisk,
-        total_students,
-        total_interventions,
-        highRisk: highRisk.length,
-        mediumRisk,
-        lowRisk,
-      }]);
+      return NextResponse.json([
+        {
+          studentsInfo,
+          highRiskStudents: highRisk
+        },
+      ]);
     }
 
     return NextResponse.json(

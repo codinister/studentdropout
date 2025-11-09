@@ -8,12 +8,10 @@ import useDispatchselector from '@/state/redux/useDispatchselector';
 import { fetchUsers } from '@/state/redux/slice/asyncThunkFn';
 import { userSchema } from '@/types/types';
 import useUserColumns from '@/components/tableColumns/useUserColumns';
+import useJsPdfGenerator from '@/utils/useJsPdfGenerator';
 
 const Users = () => {
-
   const { userColumns } = useUserColumns();
-
-  const pdfFn = () => {};
 
   const { dispatch, selector } = useDispatchselector();
 
@@ -25,13 +23,23 @@ const Users = () => {
 
   const data: userSchema[] = users;
 
+  const tableColumn = ['ID', 'Name', 'Email'];
+
+  const tableRows = data.map((v) => [v.userId, v.name, v.email]);
+
+  const { genPdf } = useJsPdfGenerator({
+    tableColumn,
+    tableRows,
+    reportTitle: 'Students',
+  });
+
   return (
     <>
       <div className="bg-white">
         <PageHeader
           modalButtonName="Add User"
           component={UserForm} // ✅ pass reference
-          pdfFn={pdfFn}
+          pdfFn={genPdf}
           pageTitle="Users"
         />
 

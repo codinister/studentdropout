@@ -1,39 +1,56 @@
-// Logistic Regression Dropout Risk Calculator
+// Dropout Prediction System
+// Based on Exam Score, GPA, and Attendance
 
-const riskCalculator = ({ ...options }) => {
-  const { gpa, attendance, score } = options;
+function getExamCoefficient(score: number) {
+  if (score >= 80) return 1;        // Excellent
+  if (score >= 50) return 2;        // Average
+  if (score >= 40) return 3;        // Pass
+  return 4;                         // Fail
+}
 
-  // Example coefficients (from a trained model)
-  const b0 = -8; // intercept
-  const b1 = -0.05; // GPA coefficient
-  const b2 = -0.04; // Attendance coefficient
-  const b3 = -0.03; // Score coefficient
+function getGPACoefficient(gpa: number) {
+  if (gpa >= 3.5) return 1;         // Excellent
+  if (gpa >= 2.5) return 2;         // Average
+  if (gpa >= 1.0) return 3;         // Pass
+  return 4;                         // Fail
+}
 
-  // Logistic (sigmoid) function
-  function sigmoid(z: number) {
-    return 1 / (1 + Math.exp(-z));
-  }
+function getAttendanceCoefficient(attendance: number) {
+  if (attendance >= 90) return 1;   // Excellent
+  if (attendance >= 75) return 2;   // Average
+  if (attendance >= 50) return 3;   // Pass
+  return 4;                         // Poor / Fail
+}
 
-  // Calculate linear combination
-  const z = b0 + b1 * gpa + b2 * attendance + b3 * score;
 
-  // Calculate probability
-  const probability = sigmoid(z);
 
-  // Classify risk level
+
+export default function riskCalculator({...options}) {
+
+const {score, gpa, attendance} = options 
+
+
+  // Get coefficients
+  const examCoeff = getExamCoefficient(score);
+  const gpaCoeff = getGPACoefficient(gpa);
+  const attendanceCoeff = getAttendanceCoefficient(attendance);
+
+  // Calculate total score
+  const total = examCoeff + gpaCoeff + attendanceCoeff;
+
+  // Determine risk level
   let riskLevel = '';
-  if (probability > 0.7) {
-    riskLevel = 'High Risk';
-  } else if (probability >= 0.4) {
-    riskLevel = 'Medium Risk';
-  } else {
-    riskLevel = 'Low Risk';
-  }
+  if (total <= 4) riskLevel = 'Low Risk';
+  else if (total <= 7) riskLevel = 'Medium Risk';
+  else riskLevel = 'High Risk';
 
-  // Output
-  //console.log(`Dropout Probability: ${(probability * 100).toFixed(2)}%`);
+  return {
+    examCoeff,
+    gpaCoeff,
+    attendanceCoeff,
+    total,
+    riskLevel,
+  };
+}
 
-  return riskLevel;
-};
 
-export default riskCalculator;

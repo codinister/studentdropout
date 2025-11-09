@@ -1,7 +1,5 @@
 import { FaExclamation } from 'react-icons/fa6';
 import { Button } from './ui/button';
-import { modalHide } from '@/state/redux/slice/appReducer';
-import useDispatchselector from '@/state/redux/useDispatchselector';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
 
 type WarningMessageType = {

@@ -3,17 +3,18 @@ import React, { useState } from 'react';
 import AnalyticsCards from '@/components/AnalyticsCards';
 import Charts from '@/components/Charts';
 import InfoSections from '@/components/InfoSections';
-import StudentTable from '@/components/StudentTable';
-
+import StudentReportTable from '@/components/tableRows/StudentReportTable';
+import useStudentReportColumn from '@/components/tableColumns/useStudentReportColumn';
+import useGetQuery from '@/state/query/useGetQuery';
 
 function DashboardPage() {
-
   const [role, setRole] = useState('Administrators');
-  const [grade, setGrade] = useState('All');
-  const [search, setSearch] = useState('');
+  const [level, setLevel] = useState('All');
+  const { studentReportColumn } = useStudentReportColumn();
 
+  const student = useGetQuery('students', '/students/get-students');
 
-
+  const studentData = student.length > 0 ? student[0].studentsInfo : [];
 
   return (
     <>
@@ -31,29 +32,22 @@ function DashboardPage() {
           </select>
           <select
             className="border border-gray-300 p-2 rounded"
-            value={grade}
-            onChange={(e) => setGrade(e.target.value)}
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
           >
             <option>All</option>
-            <option>Grade 9</option>
-            <option>Grade 10</option>
-            <option>Grade 11</option>
-            <option>Grade 12</option>
+            <option>Level 100</option>
+            <option>Level 200</option>
+            <option>Level 300</option>
+            <option>Level 400</option>
           </select>
-          <input
-            type="text"
-            placeholder="Search student..."
-            className="border border-gray-300 p-2 rounded"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
         </div>
       </header>
 
-      <AnalyticsCards role={role} grade={grade} />
-      <Charts role={role} grade={grade} />
-      <InfoSections role={role} grade={grade} />
-      <StudentTable role={role} grade={grade} search={search} />
+      <AnalyticsCards data={studentData} role={role} level={level} />
+      <Charts data={studentData} role={role} level={level} />
+      <InfoSections data={studentData} role={role} level={level} />
+      <StudentReportTable columns={studentReportColumn} data={studentData} />
     </>
   );
 }

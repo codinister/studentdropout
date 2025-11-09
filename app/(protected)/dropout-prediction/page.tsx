@@ -1,122 +1,99 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
-import { Bar } from "react-chartjs-2";
-import { dropoutdata } from "@/data/mockData";
+import useStudentReportColumn from '@/components/tableColumns/useStudentReportColumn';
+import StudentReportTable from '@/components/tableRows/StudentReportTable';
+import useGetQuery from '@/state/query/useGetQuery';
+import { useEffect, useRef } from 'react';
+import Chart, { ChartData, ChartOptions } from 'chart.js/auto';
+import useJsPdfGenerator from '@/utils/useJsPdfGenerator';
+import { Button } from '@/components/ui/button';
 
+const StudentDropoutPredictions = () => {
+  const student = useGetQuery('students', '/students/get-students');
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+  const studentData = student.length > 0 ? student[0].studentsInfo : [];
 
-// ---------------- Types ----------------
-interface DropoutRecord {
-  id: number;
-  studentName: string;
-  grade: string;
-  attendanceRate: number; // %
-  academicScore: number; // %
-  dropoutRisk: "Low" | "Medium" | "High";
-}
+  const { studentReportColumn } = useStudentReportColumn();
 
-// ---------------- Mock Data ----------------
+  const performanceRef = useRef<HTMLCanvasElement | null>(null);
 
+  useEffect(() => {
+    const perfChart =
+      performanceRef.current &&
+      new Chart(performanceRef.current, {
+        type: 'bar',
+        data: {
+          labels: studentData.map(
+            (v: { studentName: string }) => v.studentName
+          ),
+          datasets: [
+            {
+              label: 'Attendance Rate %',
+              data: studentData.map((v: { attendance: string }) =>
+                Number(v.attendance)
+              ),
+              backgroundColor: 'rgba(220, 38, 38, 0.7)',
+            },
+            {
+              label: 'Academic Score %',
+              data: studentData.map((v: { score: string }) => Number(v.score)),
+              backgroundColor: 'rgba(16, 185, 129, 0.7)',
+            },
+          ],
+        } as ChartData,
+        options: {} as ChartOptions,
+      });
 
-// ---------------- Component ----------------
-const DropoutPrediction: React.FC = () => {
+    return () => {
+      perfChart?.destroy();
+    };
+  }, [studentData]);
 
+  const tableColumn = [
+    'ID',
+    'Name',
+    'Level',
+    'Attendance (%)',
+    'Score (%)',
+    'GPA (%)',
+    'Dropout Risk',
+  ];
 
+  const tableRows = studentData.map((student: any) => [
+    student.studentId,
+    student.studentName,
+    student.level,
+    student.attendance,
+    student.score,
+    student.gpa,
+    student.dropoutRisk,
+  ]);
 
-  const [records] = useState<DropoutRecord[]>([]);
-
-
-  const mockDropoutData = records.length > 0 ? records: dropoutdata
-
-  // Chart Data
-  const chartData = {
-    labels: mockDropoutData.map((r) => r.studentName),
-    datasets: [
-      {
-        label: "Attendance Rate (%)",
-        data: mockDropoutData.map((r) => r.attendanceRate),
-        backgroundColor: "rgba(75, 192, 192, 0.6)",
-      },
-      {
-        label: "Academic Score (%)",
-        data: mockDropoutData.map((r) => r.academicScore),
-        backgroundColor: "rgba(153, 102, 255, 0.6)",
-      },
-    ],
-  };
-
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top" as const,
-      },
-      title: {
-        display: true,
-        text: "Student Performance Analytics",
-      },
-    },
-  };
+  const { genPdf } = useJsPdfGenerator({
+    tableColumn,
+    tableRows,
+    reportTitle: 'Student Dropout Predictions',
+  });
 
   return (
-    <div className="p-6 space-y-6">
-      <h2 className="text-2xl font-bold">Student Dropout Predictions</h2>
+    <>
+      <h4 className="text-center text-[26px] bold mb-6">
+        Student Dropout Predictions
+      </h4>
 
-      {/* Table */}
-      <div className="overflow-x-auto rounded-lg border shadow">
-        <table className="min-w-full border-collapse text-sm">
-          <thead className="bg-gray-100 text-left">
-            <tr>
-              <th className="p-3 border">ID</th>
-              <th className="p-3 border">Student Name</th>
-              <th className="p-3 border">Grade</th>
-              <th className="p-3 border">Attendance</th>
-              <th className="p-3 border">Academic Score</th>
-              <th className="p-3 border">Dropout Risk</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mockDropoutData.map((record) => (
-              <tr key={record.id} className="hover:bg-gray-50">
-                <td className="p-3 border">{record.id}</td>
-                <td className="p-3 border">{record.studentName}</td>
-                <td className="p-3 border">{record.grade}</td>
-                <td className="p-3 border">{record.attendanceRate}%</td>
-                <td className="p-3 border">{record.academicScore}%</td>
-                <td
-                  className={`p-3 border font-semibold ${
-                    record.dropoutRisk === "High"
-                      ? "text-red-600"
-                      : record.dropoutRisk === "Medium"
-                      ? "text-yellow-600"
-                      : "text-green-600"
-                  }`}
-                >
-                  {record.dropoutRisk}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <Button onClick={genPdf} variant="default">
+        PDF
+      </Button>
+      <StudentReportTable columns={studentReportColumn} data={studentData} />
 
-      {/* Chart */}
-      <div className="bg-white p-4 rounded-lg shadow">
-        <Bar data={chartData} options={chartOptions} />
+      <div className="mt-10">
+        <h4 className="text-center text-[26px] bold mb-6">
+          Student Performance Analytics
+        </h4>
+        <canvas ref={performanceRef} />
       </div>
-    </div>
+    </>
   );
 };
 
-export default DropoutPrediction;
+export default StudentDropoutPredictions;

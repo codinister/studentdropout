@@ -3,14 +3,14 @@
 import PageHeader from '@/components/PageHeader';
 import BehaviorRecordForm from '@/components/behaviorrecord/BehaviorRecordForm';
 import BehaviorRecordDataTable from '@/components/tableRows/BehaviorRecordDataTable';
-import { useEffect} from 'react';
+import { useEffect } from 'react';
 import useDispatchselector from '@/state/redux/useDispatchselector';
 import { fetchBehaviorRecord } from '@/state/redux/slice/asyncThunkFn';
-import { behaviorSchema} from '@/types/types';
-import useBehaviorRecordColumns  from '@/components/tableColumns/useBehaviorRecordColumns';
+import { behaviorSchema } from '@/types/types';
+import useBehaviorRecordColumns from '@/components/tableColumns/useBehaviorRecordColumns';
+import useJsPdfGenerator from '@/utils/useJsPdfGenerator';
 
 const BehaviorRecord = () => {
-
   const { behaviorColumn } = useBehaviorRecordColumns();
 
   const pdfFn = () => {};
@@ -25,13 +25,31 @@ const BehaviorRecord = () => {
 
   const data: behaviorSchema[] = behavior_record;
 
+  const tableColumn = [
+    'ID',
+    'Name',
+    'Description'
+  ];
+
+  const tableRows = data.map((v) => [
+    v.studentId,
+    v.studentName,
+    v.description,
+  ]);
+
+  const { genPdf } = useJsPdfGenerator({
+    tableColumn,
+    tableRows,
+    reportTitle: 'Students',
+  });
+
   return (
     <>
       <div className="bg-white">
         <PageHeader
           modalButtonName="Add Behavior"
           component={BehaviorRecordForm} // ✅ pass reference
-          pdfFn={pdfFn}
+          pdfFn={genPdf}
           pageTitle="Behavior Record"
         />
 
@@ -41,4 +59,4 @@ const BehaviorRecord = () => {
   );
 };
 
-export default BehaviorRecord
+export default BehaviorRecord;

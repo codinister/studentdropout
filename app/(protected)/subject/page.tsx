@@ -8,13 +8,14 @@ import { fetchSubject } from '@/state/redux/slice/asyncThunkFn';
 import { subjectSchema} from '@/types/types';
 import useSubjectColumn from '@/components/tableColumns/useSubjectColumn';
 import subjectForm from '@/components/subject/SubjectForm';
+import useJsPdfGenerator from '@/utils/useJsPdfGenerator';
 
 
 const SubjectPage = () => {
 
 const {subjectColumn} = useSubjectColumn()
 
-  const pdfFn = () => {};
+
 
   const { dispatch, selector } = useDispatchselector();
 
@@ -26,13 +27,30 @@ const {subjectColumn} = useSubjectColumn()
 
   const data: subjectSchema[]  = subjects;
 
+
+    const tableColumn = [
+      'ID',
+      'Name'
+    ];
+  
+    const tableRows = data.map((v) => [
+      v.subjectId,
+      v.subjectName
+    ]);
+  
+    const { genPdf } = useJsPdfGenerator({
+      tableColumn,
+      tableRows,
+      reportTitle: 'Students',
+    });
+
   return (
     <>
       <div className="bg-white">
         <PageHeader
           modalButtonName="Add Programme"
           component={subjectForm} // ✅ pass reference
-          pdfFn={pdfFn}
+          pdfFn={genPdf}
           pageTitle="Programme"
         />
 
