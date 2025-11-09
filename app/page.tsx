@@ -28,6 +28,8 @@ import { Eye, EyeOff } from 'lucide-react';
 import { BeatLoader } from 'react-spinners';
 import { useRouter } from 'next/navigation';
 import useMutations from '@/state/query/useMutations';
+import Image from 'next/image';
+import useGetQuery from '@/state/query/useGetQuery';
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
@@ -67,11 +69,17 @@ export default function LoginPage() {
     }
   }, [isSuccess, isError]);
 
+  const sett = useGetQuery('settings', '/settings/get-settings');
+  const setting = sett.length > 0 ? sett : [];
+  const schoolName = setting[0]?.schoolName || '';
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-blue-700">
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader>
           <CardTitle className="text-center text-2xl font-bold">
+            <Image src="/logo.jpg" alt="Logo" width={80} height={80} className="mx-auto" />
+            <p>STUDENT DROPOUT PREDICTION APP</p>
             Login
           </CardTitle>
         </CardHeader>
@@ -140,7 +148,7 @@ export default function LoginPage() {
                     {getError}
                   </div>
                 ) : redirect ? (
-                   <BeatLoader />
+                  <BeatLoader />
                 ) : (
                   ''
                 )}

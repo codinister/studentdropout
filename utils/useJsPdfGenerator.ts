@@ -23,12 +23,13 @@ const addLogoToPDF = async (doc: jsPDF) => {
 
 const useJsPdfGenerator = ({ ...options }) => {
   const sett = useGetQuery('settings', '/settings/get-settings');
-
   const setting = sett.length > 0 ? sett : [];
+  const schoolName = setting[0]?.schoolName || '';
+
 
   const { tableColumn, tableRows, reportTitle } = options;
 
-  const schoolName = setting[0]?.schoolName || '';
+
 
   const genPdf = async () => {
     const doc = new jsPDF();
