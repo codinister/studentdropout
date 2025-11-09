@@ -19,10 +19,9 @@ import { useEffect } from 'react';
 import { fetchSettings } from '@/state/redux/slice/asyncThunkFn';
 import useDispatchselector from '@/state/redux/useDispatchselector';
 import useFormSubmitResult from '@/utils/useFormSubmitResult';
-import Modal from '@/components/Modal';
 
 const Settings = () => {
-  const { dispatch, selector } = useDispatchselector();
+  const { selector } = useDispatchselector();
 
   const res = selector((state) => state.settings);
 
@@ -35,8 +34,6 @@ const Settings = () => {
   const { successResult, errorResult } = useFormSubmitResult();
 
   useEffect(() => {
-    dispatch(fetchSettings());
-
     if (isError) {
       const message = error?.message || '';
       errorResult(message);
@@ -49,7 +46,7 @@ const Settings = () => {
         fetchSettings
       );
     }
-  }, [dispatch,isError,isSuccess]);
+  }, [isError, isSuccess]);
 
   const form = useForm<z.infer<typeof settingsSchema>>({
     resolver: zodResolver(settingsSchema),
@@ -68,88 +65,88 @@ const Settings = () => {
 
   return (
     <>
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className="shadow-lg mx-auto p-10 bg-white rounded-lg w-[400px] mt-4 "
-      >
-        <h6 className="bg-gray-200 p-4 mb-6">Settings Page</h6>
-        <FormField
-          control={form.control}
-          name="schoolName"
-          render={({ field }) => (
-            <FormItem className="mb-5">
-              <FormLabel>Name of institution</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="shadow-lg mx-auto p-10 bg-white rounded-lg w-[400px] mt-4 "
+        >
+          <h6 className="bg-gray-200 p-4 mb-6">Settings Page</h6>
+          <FormField
+            control={form.control}
+            name="schoolName"
+            render={({ field }) => (
+              <FormItem className="mb-5">
+                <FormLabel>Name of institution</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="schoolPhone"
-          render={({ field }) => (
-            <FormItem className="mb-5">
-              <FormLabel>Institution Contact Number</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="schoolPhone"
+            render={({ field }) => (
+              <FormItem className="mb-5">
+                <FormLabel>Institution Contact Number</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="schoolWebsite"
-          render={({ field }) => (
-            <FormItem className="mb-5">
-              <FormLabel>Website</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="schoolWebsite"
+            render={({ field }) => (
+              <FormItem className="mb-5">
+                <FormLabel>Website</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="schoolLocation"
-          render={({ field }) => (
-            <FormItem className="mb-5">
-              <FormLabel>Location</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="schoolLocation"
+            render={({ field }) => (
+              <FormItem className="mb-5">
+                <FormLabel>Location</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="schoolPostalAddress"
-          render={({ field }) => (
-            <FormItem className="mb-5">
-              <FormLabel>Postal Address</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="schoolPostalAddress"
+            render={({ field }) => (
+              <FormItem className="mb-5">
+                <FormLabel>Postal Address</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Button disabled={isPending} variant="default">
-          {' '}
-          Save settings {isPending ? <BeatLoader /> : ''}
-        </Button>
-      </form>
-    </Form>
+          <Button disabled={isPending} variant="default">
+            {' '}
+            Save settings {isPending ? <BeatLoader /> : ''}
+          </Button>
+        </form>
+      </Form>
     </>
   );
 };

@@ -1,11 +1,13 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AnalyticsCards from '@/components/AnalyticsCards';
 import Charts from '@/components/Charts';
 import InfoSections from '@/components/InfoSections';
 import StudentReportTable from '@/components/tableRows/StudentReportTable';
 import useStudentReportColumn from '@/components/tableColumns/useStudentReportColumn';
 import useGetQuery from '@/state/query/useGetQuery';
+import useDispatchselector from '@/state/redux/useDispatchselector';
+import { fetchSettings } from '@/state/redux/slice/asyncThunkFn';
 
 function DashboardPage() {
   const [role, setRole] = useState('Administrators');
@@ -15,6 +17,12 @@ function DashboardPage() {
   const student = useGetQuery('students', '/students/get-students');
 
   const studentData = student.length > 0 ? student[0].studentsInfo : [];
+
+    const { dispatch } = useDispatchselector();
+  
+    useEffect(() => {
+      dispatch(fetchSettings());
+    }, [dispatch]);
 
   return (
     <>
