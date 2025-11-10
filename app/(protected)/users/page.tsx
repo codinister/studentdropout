@@ -30,7 +30,7 @@ const Users = () => {
   const { genPdf } = useJsPdfGenerator({
     tableColumn,
     tableRows,
-    reportTitle: 'Students',
+    reportTitle: 'Users',
   });
 
   return (

@@ -42,7 +42,7 @@ const HealthRecord = () => {
   const { genPdf } = useJsPdfGenerator({
     tableColumn,
     tableRows,
-    reportTitle: 'Students',
+    reportTitle: 'Health Record',
   });
 
   return (

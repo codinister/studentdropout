@@ -40,7 +40,7 @@ const BehaviorRecord = () => {
   const { genPdf } = useJsPdfGenerator({
     tableColumn,
     tableRows,
-    reportTitle: 'Students',
+    reportTitle: 'Behavior Record',
   });
 
   return (

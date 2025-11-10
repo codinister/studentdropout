@@ -69,9 +69,7 @@ export default function LoginPage() {
     }
   }, [isSuccess, isError]);
 
-  const sett = useGetQuery('settings', '/settings/get-settings');
-  const setting = sett.length > 0 ? sett : [];
-  const schoolName = setting[0]?.schoolName || '';
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-blue-700">

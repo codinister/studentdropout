@@ -33,7 +33,7 @@ const FinancialStatus = () => {
   const { genPdf } = useJsPdfGenerator({
     tableColumn,
     tableRows,
-    reportTitle: 'Students',
+    reportTitle: 'Financial Status',
   });
 
   return (

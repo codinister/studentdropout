@@ -41,7 +41,7 @@ const {subjectColumn} = useSubjectColumn()
     const { genPdf } = useJsPdfGenerator({
       tableColumn,
       tableRows,
-      reportTitle: 'Students',
+      reportTitle: 'Programmes',
     });
 
   return (
